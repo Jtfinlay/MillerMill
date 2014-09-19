@@ -20,22 +20,37 @@ require 'matrix'
 #
 class SparseMatrix
 	attr_accessor :coords
-	
+
 	def initialize(map)
 		@coords = map
 	end
-	
+
 	def SparseMatrix.fromMatrix(matrix)
 		map = Hash.new
-		
+
 		matrix.row_vectors().each_with_index do |row, y|
 			row.each_with_index do |v, x|
 				map["#{x},#{y}"] = v
 			end
 		end
-		
+
 		new map
 	end
+
+	def to_matrix
+		matrix = Matrix.zero(@rows, @columns)
+		@coords.each_key do |key|
+			x, y = split_xy(key)
+			Matrix[x][y] = @coords[key]
+		end
+	end
+
+	# Splits the key string into x and y values, and returns them.
+	def split_xy(key_string)
+		split_string = key_string.split(",")
+		return split_string[0], split_string[1]
+	end
+
 end
 
 m = Matrix[ [25, 93], [-1, 66] ]
