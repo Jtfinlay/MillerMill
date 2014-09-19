@@ -21,30 +21,44 @@ require 'matrix'
 class SparseMatrix
 	attr_accessor :coords
 	
-	def initialize(map)
-		@coords = map
+	#
+	# Creates a sparse matrix. Supports as parameters:
+	# Matrix
+	#
+	def initialize(*args)
+		if args.size == 1
+			fromMatrix(args[0]) if args[0].is_a? Matrix
+		end
 	end
 	
 	#
 	# Converts a matrix into the hash format, where the values are stored
 	# under the form: {"x,y", v}
 	#
-	def SparseMatrix.fromMatrix(matrix)
-		map = Hash.new
+	def fromMatrix(matrix)
+		@coords = Hash.new
 		
 		matrix.row_vectors().each_with_index do |row, y|
 			row.each_with_index do |v, x|
-				if v != 0
-					map["#{x},#{y}"] = v
-				end
+				@coords["#{x},#{y}"] = v if v != 0
 			end
 		end
-		
-		new map
 	end
+	
+	#
+	# Converts stored hash into original matrix
+	#
+	def toMatrix()
+	
+	end
+	
 end
 
+#
+# Temporary Test Code
+#
 m = Matrix[ [25, 93, 3], [-1, 66, 14], [0, 34, -554] ]
-s = SparseMatrix.fromMatrix(m)
+s = SparseMatrix.new(m)
+
 puts "#{s.coords}"
 gets
