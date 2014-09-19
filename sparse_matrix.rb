@@ -25,12 +25,18 @@ class SparseMatrix
 		@coords = map
 	end
 	
+	#
+	# Converts a matrix into the hash format, where the values are stored
+	# under the form: {"x,y", v}
+	#
 	def SparseMatrix.fromMatrix(matrix)
 		map = Hash.new
 		
 		matrix.row_vectors().each_with_index do |row, y|
 			row.each_with_index do |v, x|
-				map["#{x},#{y}"] = v
+				if v != 0
+					map["#{x},#{y}"] = v
+				end
 			end
 		end
 		
@@ -38,10 +44,7 @@ class SparseMatrix
 	end
 end
 
-m = Matrix[ [25, 93], [-1, 66] ]
-puts "Not broken yet?"
-gets
-
+m = Matrix[ [25, 93, 3], [-1, 66, 14], [0, 34, -554] ]
 s = SparseMatrix.fromMatrix(m)
 puts "#{s.coords}"
 gets
