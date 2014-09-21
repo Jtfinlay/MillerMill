@@ -27,7 +27,7 @@ class SparseMatrix
 	#
 	def initialize(*args)
 		if args.size == 1
-			fromMatrix(args[0]) if args[0].is_a? Matrix
+			from_matrix(args[0]) if args[0].is_a? Matrix
 		end
 	end
 
@@ -35,7 +35,7 @@ class SparseMatrix
 	# Converts a matrix into the hash format, where the values are stored
 	# under the form: {"x,y", v}
 	#
-	def fromMatrix(matrix)
+	def from_matrix(matrix)
 		@coords = Hash.new
 		@row_size = matrix.row_size
 		@column_size = matrix.column_size
@@ -60,7 +60,8 @@ class SparseMatrix
 	end
 
 	#
-	# Splits the key string into x and y values, and returns them as integers.
+	# Splits the key string into x and y values, and returns them as 
+	# integers.
 	#
 	def split_xy(key_string)
 		split_string = key_string.split(",")
@@ -77,6 +78,7 @@ s = SparseMatrix.new(m)
 
 puts "#{s.coords}"
 gets
+
 m = s.to_matrix
 puts m.to_s
 gets
