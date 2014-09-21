@@ -21,42 +21,62 @@ require 'matrix'
 class SparseMatrix
 	attr_accessor :coords
 
-	def initialize(map)
-		@coords = map
+	#
+	# Creates a sparse matrix. Supports as parameters:
+	# Matrix
+	#
+	def initialize(*args)
+		if args.size == 1
+			fromMatrix(args[0]) if args[0].is_a? Matrix
+		end
 	end
 
-	def SparseMatrix.fromMatrix(matrix)
-		map = Hash.new
+	#
+	# Converts a matrix into the hash format, where the values are stored
+	# under the form: {"x,y", v}
+	#
+	def fromMatrix(matrix)
+		@coords = Hash.new
+		@row_size = matrix.row_size
+		@column_size = matrix.column_size
 
 		matrix.row_vectors().each_with_index do |row, y|
 			row.each_with_index do |v, x|
-				map["#{x},#{y}"] = v
+				@coords["#{x},#{y}"] = v if v != 0
 			end
 		end
-
-		new map
 	end
 
+	#
+	# Converts stored hash into original matrix
+	#
 	def to_matrix
-		matrix = Matrix.zero(@rows, @columns)
+		rows= Matrix.zero(@row_size, @column_size).to_a
 		@coords.each_key do |key|
 			x, y = split_xy(key)
-			Matrix[x][y] = @coords[key]
+			rows[y][x] = @coords[key]
 		end
+		Matrix.rows(rows)
 	end
 
-	# Splits the key string into x and y values, and returns them.
+	#
+	# Splits the key string into x and y values, and returns them as integers.
+	#
 	def split_xy(key_string)
 		split_string = key_string.split(",")
-		return split_string[0], split_string[1]
+		return split_string[0].to_i, split_string[1].to_i
 	end
 
 end
 
-m = Matrix[ [25, 93], [-1, 66] ]
-puts "Not broken yet?"
-gets
+#
+# Temporary Test Code
+#
+m = Matrix[ [25, 93, 3], [-1, 66, 14], [0, 34, -554] ]
+s = SparseMatrix.new(m)
 
-s = SparseMatrix.fromMatrix(m)
 puts "#{s.coords}"
+gets
+m = s.to_matrix
+puts m.to_s
 gets
