@@ -20,6 +20,8 @@ require 'matrix'
 #
 class SparseMatrix
 	attr_accessor :coords
+	@row_size
+	@column_size
 
 	#
 	# Creates a sparse matrix. Supports as parameters:
@@ -29,6 +31,20 @@ class SparseMatrix
 		if args.size == 1
 			from_matrix(args[0]) if args[0].is_a? Matrix
 		end
+	end
+	
+	#
+	# Returns element (+x+,+y+) of the matrix.
+	#
+	def [](x, y)
+		return @coords["#{x},#{y}"]
+	end
+	
+	#
+	# Sets element (+x+,+y+) of the matrix to +v+.
+	#
+	def [](x, y, v)
+		@coords["#{x},#{y}"] = v if v != 0
 	end
 
 	#
@@ -42,7 +58,7 @@ class SparseMatrix
 
 		matrix.row_vectors().each_with_index do |row, y|
 			row.each_with_index do |v, x|
-				@coords["#{x},#{y}"] = v if v != 0
+				self[x,y,v]
 			end
 		end
 	end
@@ -67,18 +83,57 @@ class SparseMatrix
 		split_string = key_string.split(",")
 		return split_string[0].to_i, split_string[1].to_i
 	end
+	
+	#
+	# SparseMatrix addition.
+	#
+	def +(m)
+		return SparseMatrix.new(self.to_matrix + m)
+	end
+	
+	#
+	# SparseMatrix multiplication
+	#
+	def *(m)
+		return SparseMatrix.new(self.to_matrix * m)
+	end
+	
+	#
+	# SparseMatrix subtraction
+	#
+	def -(m)
+		return SparseMatrix.new(self.to_matrix - m)
+	end
+	
+	#
+	# SparseMatrix division
+	#
+	def /(m)
+		return SparseMatrix.new(self.to_matrix / m)
+	end
 
 end
 
 #
 # Temporary Test Code
 #
+
+puts "Testing from_matrix\n"
 m = Matrix[ [25, 93, 3], [-1, 66, 14], [0, 34, -554] ]
 s = SparseMatrix.new(m)
-
 puts "#{s.coords}"
 gets
 
+puts "Testing to_matrix\n"
 m = s.to_matrix
 puts m.to_s
 gets
+
+puts "Testing arithmetic"
+s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
+m = Matrix[ [2,2], [2,2] ]
+puts "Addition: #{(s+m).to_matrix.to_s}"
+puts "Subtraction: #{(s-m).to_matrix.to_s}"
+gets
+
+
