@@ -113,27 +113,3 @@ class SparseMatrix
 	end
 
 end
-
-#
-# Temporary Test Code
-#
-
-puts "Testing from_matrix\n"
-m = Matrix[ [25, 93, 3], [-1, 66, 14], [0, 34, -554] ]
-s = SparseMatrix.new(m)
-puts "#{s.coords}"
-gets
-
-puts "Testing to_matrix\n"
-m = s.to_matrix
-puts m.to_s
-gets
-
-puts "Testing arithmetic"
-s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
-m = Matrix[ [2,2], [2,2] ]
-puts "Addition: #{(s+m).to_matrix.to_s}"
-puts "Subtraction: #{(s-m).to_matrix.to_s}"
-gets
-
-
