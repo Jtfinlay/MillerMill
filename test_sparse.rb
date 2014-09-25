@@ -34,4 +34,20 @@ class TestSparse < Test::Unit::TestCase
 		
 		assert_equal (s-m).coords, expected.coords
 	end
+	
+	def test_Multiplication
+		s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
+		m = SparseMatrix.new(Matrix[ [2,2], [2,2] ])
+		expected = SparseMatrix.new(Matrix[ [12, 12], [28, 28] ])
+		
+		assert_equal (s*m).coords, expected.coords
+	end
+	
+	def test_Division
+		s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
+		m = SparseMatrix.new(Matrix[ [2,2], [2,2] ])
+		expected = SparseMatrix.new(Matrix[ [12, 12], [28, 28] ])
+		
+		assert_equal (s*m).coords, expected.coords
+	end
 end
