@@ -21,7 +21,7 @@ class TestSparse < Test::Unit::TestCase
 	
 	def test_Addition
 		s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
-		m = Matrix[ [2,2], [2,2] ]
+		m = SparseMatrix.new(Matrix[ [2,2], [2,2] ])
 		expected = SparseMatrix.new(Matrix[ [4, 6], [8, 10] ])
 		
 		assert_equal (s+m).coords, expected.coords
@@ -29,7 +29,7 @@ class TestSparse < Test::Unit::TestCase
 
 	def test_Subtraction
 		s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
-		m = Matrix[ [2,2], [2,2] ]
+		m = SparseMatrix.new(Matrix[ [2,2], [2,2] ])
 		expected = SparseMatrix.new(Matrix[ [0, 2], [4, 6] ])
 		
 		assert_equal (s-m).coords, expected.coords

@@ -88,28 +88,28 @@ class SparseMatrix
 	# SparseMatrix addition.
 	#
 	def +(m)
-		return SparseMatrix.new(self.to_matrix + m)
+		return SparseMatrix.new(self.to_matrix + m.to_matrix)
 	end
 	
 	#
 	# SparseMatrix multiplication
 	#
 	def *(m)
-		return SparseMatrix.new(self.to_matrix * m)
+		return SparseMatrix.new(self.to_matrix * m.to_matrix)
 	end
 	
 	#
 	# SparseMatrix subtraction
 	#
 	def -(m)
-		return SparseMatrix.new(self.to_matrix - m)
+		return SparseMatrix.new(self.to_matrix - m.to_matrix)
 	end
 	
 	#
 	# SparseMatrix division
 	#
 	def /(m)
-		return SparseMatrix.new(self.to_matrix / m)
+		return SparseMatrix.new(self.to_matrix / m.to_matrix)
 	end
 
 end
