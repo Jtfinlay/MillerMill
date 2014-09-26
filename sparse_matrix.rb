@@ -30,6 +30,8 @@ class SparseMatrix
 	def initialize(*args)
 		if args.size == 1
 			from_matrix(args[0]) if args[0].is_a? Matrix
+			from_arrays(args[0]) if args[0].is_a? Array
+			from_hash(args[0]) if args[0].is_a? Hash
 		end
 	end
 	
@@ -37,13 +39,13 @@ class SparseMatrix
 	# Returns element (+x+,+y+) of the matrix.
 	#
 	def [](x, y)
-		return @coords["#{x},#{y}"]
+		return @coords["#{x},#{y}"] || 0
 	end
 	
 	#
 	# Sets element (+x+,+y+) of the matrix to +v+.
 	#
-	def [](x, y, v)
+	def []=(x, y, v)
 		@coords["#{x},#{y}"] = v if v != 0
 	end
 
@@ -55,23 +57,36 @@ class SparseMatrix
 		@coords = Hash.new
 		@row_size = matrix.row_size
 		@column_size = matrix.column_size
-
-		matrix.row_vectors().each_with_index do |row, y|
-			row.each_with_index do |v, x|
-				self[x,y,v]
-			end
+		
+		matrix.each_with_index do |v, row, col|
+			self.[]=(col,row,v)
 		end
+	end
+	
+	def from_arrays(arrays)
+		@coords = Hash.new
+		# TODO - Row & Column size
+		
+		matrix.each_with_index{ 
+			|row, y| row.each_with_index{
+				|v, x| self.[]=(x,y,v)
+			}
+		}
+	end
+	
+	def from_hash(hash)
+		@coords = hash
+		# TODO - Row & Column size
 	end
 
 	#
 	# Converts stored hash into original matrix
 	#
 	def to_matrix
-		rows= Matrix.zero(@row_size, @column_size).to_a
-		@coords.each_key do |key|
-			x, y = split_xy(key)
-			rows[y][x] = @coords[key]
-		end
+		rows = Matrix.zero(@row_size, @column_size).to_a
+		@coords.to_enum().map{ 
+			|k,v| rows[split_xy(k).last][split_xy(k).first] = v 
+		}
 		Matrix.rows(rows)
 	end
 
@@ -114,5 +129,19 @@ class SparseMatrix
 	#
 	def SparseMatrix.method_missing(method, *args)
 		return SparseMatrix.new(Matrix.send(method, *args))
+	end
+	
+	#
+	# SparseMatrix addition
+	#
+	# def +(m)
+		# return SparseMatrix.new(@coords.merge(m.coords){|key, old, new| old + new})
+	# end
+	
+	# 
+	# Merge two sparse matrices
+	#
+	def merge(m)
+		#return SparseMatrix.new(@coords.merge(m.coords){|key, old, new|
 	end
 end

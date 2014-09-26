@@ -15,6 +15,13 @@ class TestSparse < Test::Unit::TestCase
 		assert_equal expected, s.coords
 	end
 	
+	def test_getValue
+		m = SparseMatrixFactory.create_matrix(Matrix[ [1, 0], [2, 3] ])
+		
+		assert_equal 1, m[0,0]
+		assert_equal 0, m[1,0]
+	end
+	
 	def test_createDiagonal
 		expected = {
 			"0,0" => 1,
