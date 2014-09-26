@@ -92,7 +92,7 @@ class SparseMatrix
 	def coerce(m)
 		case m
 		when Matrix
-			return m, self.to_matrix if m.is_a? Matrix
+			return m, self.to_matrix
 		end
 	end
 	
