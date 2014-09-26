@@ -75,7 +75,7 @@ class SparseMatrix
 	end
 	
 	def from_hash(hash)
-		@coords = hash
+		@coords = hash.select{|key,value| value != 0}
 		# TODO - Row & Column size
 	end
 
@@ -118,7 +118,7 @@ class SparseMatrix
 	# This specific implementation allows delegation of object methods
 	#
 	def method_missing(method, *args)
-		return SparseMatrix.new(self.to_matrix.send(method, *args))
+		return SparseMatrix.castSparse(self.to_matrix.send(method, *args))
 	end
 
 	#
@@ -128,20 +128,41 @@ class SparseMatrix
 	# This specific implementation allows delegation of class methods
 	#
 	def SparseMatrix.method_missing(method, *args)
-		return SparseMatrix.new(Matrix.send(method, *args))
+		return SparseMatrix.castSparse(Matrix.send(method, *args))
+	end
+	
+	#
+	# If Matrix, then cast to SparseMatrix
+	#
+	def SparseMatrix.castSparse(m)
+		return SparseMatrix.new(m) if m.is_a? Matrix
+		return m
 	end
 	
 	#
 	# SparseMatrix addition
 	#
-	# def +(m)
-		# return SparseMatrix.new(@coords.merge(m.coords){|key, old, new| old + new})
-	# end
+	def +(m)
+		return  merge(m, Proc.new do |key, old, new|
+			old + new
+		end)
+	end
+	
+	#
+	# SparseMatrix subtraction
+	#
+	def -(m)
+		return merge(m, Proc.new do |key, old, new|
+			old - new
+		end)
+	end
 	
 	# 
 	# Merge two sparse matrices
 	#
-	def merge(m)
-		#return SparseMatrix.new(@coords.merge(m.coords){|key, old, new|
+	def merge(m, action)
+		return SparseMatrix.new(@coords.merge(m.coords){
+			|key, old, new| action.call(key, old, new)
+		})
 	end
 end
