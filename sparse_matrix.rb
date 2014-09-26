@@ -112,7 +112,7 @@ class SparseMatrix
 	#
 	# This specific implementation allows delegation of class methods
 	#
-	def self.method_missing(method, *args)
+	def SparseMatrix.method_missing(method, *args)
 		return SparseMatrix.new(Matrix.send(method, *args))
 	end
 end

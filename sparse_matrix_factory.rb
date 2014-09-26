@@ -16,7 +16,7 @@ class SparseMatrixFactory < MatrixFactory
 
   end
 
-  def self.create_matrix(matrix)
+  def SparseMatrixFactory.create_matrix(matrix)
     if is_tridiagonal?(matrix)
       tridiag_factory = TriDiagMatrixFactory.new
       tridiag_factory.create_matrix(matrix)
@@ -25,7 +25,7 @@ class SparseMatrixFactory < MatrixFactory
     end
   end
 
-  def self.is_tridiagonal?(matrix)
+  def SparseMatrixFactory.is_tridiagonal?(matrix)
     matrix.row_vectors().each_with_index do |row, y|
       row.each_with_index do |v, x|
         if v != 0 and (x-y).abs >= 2
