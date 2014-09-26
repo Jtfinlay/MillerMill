@@ -20,8 +20,8 @@ require 'matrix'
 #
 class SparseMatrix
 	attr_accessor :coords
-	@row_size
-	@column_size
+	attr_accessor :row_size
+	attr_accessor :column_size
 
 	#
 	# Creates a sparse matrix. Supports as parameters:
@@ -34,14 +34,14 @@ class SparseMatrix
 			from_hash(args[0]) if args[0].is_a? Hash
 		end
 	end
-	
+
 	#
 	# Returns element (+x+,+y+) of the matrix.
 	#
 	def [](x, y)
 		return @coords["#{x},#{y}"] || 0
 	end
-	
+
 	#
 	# Sets element (+x+,+y+) of the matrix to +v+.
 	#
@@ -57,23 +57,23 @@ class SparseMatrix
 		@coords = Hash.new
 		@row_size = matrix.row_size
 		@column_size = matrix.column_size
-		
+
 		matrix.each_with_index do |v, row, col|
 			self.[]=(col,row,v)
 		end
 	end
-	
+
 	def from_arrays(arrays)
 		@coords = Hash.new
 		# TODO - Row & Column size
-		
-		matrix.each_with_index{ 
+
+		matrix.each_with_index{
 			|row, y| row.each_with_index{
 				|v, x| self.[]=(x,y,v)
 			}
 		}
 	end
-	
+
 	def from_hash(hash)
 		@coords = hash
 		# TODO - Row & Column size
@@ -84,21 +84,21 @@ class SparseMatrix
 	#
 	def to_matrix
 		rows = Matrix.zero(@row_size, @column_size).to_a
-		@coords.to_enum().map{ 
-			|k,v| rows[split_xy(k).last][split_xy(k).first] = v 
+		@coords.to_enum().map{
+			|k,v| rows[split_xy(k).last][split_xy(k).first] = v
 		}
 		Matrix.rows(rows)
 	end
 
 	#
-	# Splits the key string into x and y values, and returns them as 
+	# Splits the key string into x and y values, and returns them as
 	# integers.
 	#
 	def split_xy(key_string)
 		split_string = key_string.split(",")
 		return split_string[0].to_i, split_string[1].to_i
 	end
-	
+
 	#
 	# This coerce method provides support for Ruby type coercion.
 	# This coercison is used to convert to a Matrix object when
@@ -110,7 +110,7 @@ class SparseMatrix
 			return m, self.to_matrix
 		end
 	end
-	
+
 	#
 	# This method is called if a method DNE. In this case, we use
 	# the Matrix library as a delegate and try to call its function.
@@ -130,15 +130,15 @@ class SparseMatrix
 	def SparseMatrix.method_missing(method, *args)
 		return SparseMatrix.new(Matrix.send(method, *args))
 	end
-	
+
 	#
 	# SparseMatrix addition
 	#
 	# def +(m)
 		# return SparseMatrix.new(@coords.merge(m.coords){|key, old, new| old + new})
 	# end
-	
-	# 
+
+	#
 	# Merge two sparse matrices
 	#
 	def merge(m)
