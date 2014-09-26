@@ -1,10 +1,19 @@
 
 require 'test/unit'
-require './sparse_matrix'
-require 'matrix'
+#require './sparse_matrix'
+require './sparse_matrix_factory'
+#require 'matrix'
+
 
 class TestSparse < Test::Unit::TestCase
 
+	def test_CreateMatrix
+		m = Matrix[ [25, 93], [0, 13] ]
+		s = SparseMatrixFactory.create_matrix(m)
+		
+		assert_equal m, s.to_matrix
+	end
+	
 	def test_fromMatrix
 		m = Matrix[ [25, 93], [0, 13] ]
 		expected = Hash["0,0", 25, "1,0", 93, "1,1", 13]
