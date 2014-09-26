@@ -38,6 +38,13 @@ class TestSparse < Test::Unit::TestCase
 		assert_equal expected, s.coords
 	end
 	
+	def test_determinant
+		expected = 3
+		m = SparseMatrixFactory.create_matrix(Matrix[ [1, 0], [2, 3] ])
+		
+		assert_equal expected, m.determinant
+	end
+	
 	def test_fromMatrix
 		expected = {
 			"0,0" => 25,
