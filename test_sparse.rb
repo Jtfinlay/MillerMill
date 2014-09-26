@@ -6,54 +6,62 @@ require './sparse_matrix_factory'
 class TestSparse < Test::Unit::TestCase
 
 	def test_createMatrix
-		m = Matrix[ [25, 93], [0, 13] ]
-		s = SparseMatrixFactory.create_matrix(m)
+		expected = {
+			"0,0" => 25,
+			"1,0" => 93,
+			"1,1" => 13 }
+		s = SparseMatrixFactory.create_matrix(Matrix[ [25, 93], [0, 13] ])
 		
-		assert_equal m, s.to_matrix
+		assert_equal expected, s.coords
 	end
 	
 	def test_createDiagonal
-		m = SparseMatrixFactory.create_matrix(Matrix[ [1, 0], [0, 1]])
+		expected = {
+			"0,0" => 1,
+			"1,1" => 1 }
 		s = SparseMatrix.diagonal(1,1)
 		
-		assert_equal m.coords, s.coords
+		assert_equal expected, s.coords
 	end
 	
 	def test_zero
-		m = SparseMatrixFactory.create_matrix(Matrix[ [0,0],[0,0]])
+		expected = {}
 		s = SparseMatrix.zero(2)
 		
-		assert_equal m.coords, s.coords
+		assert_equal expected, s.coords
 	end
 	
 	def test_fromMatrix
+		expected = {
+			"0,0" => 25,
+			"1,0" => 93,
+			"1,1" => 13 }
 		m = Matrix[ [25, 93], [0, 13] ]
-		expected = Hash["0,0", 25, "1,0", 93, "1,1", 13]
 		
 		assert_equal expected, SparseMatrix.new(m).coords
 	end
 	
 	def test_toMatrix
-		m = Matrix[ [25, 93], [0, 13] ]
-		s = SparseMatrix.new(m)
+		expected = Matrix[ [25, 93], [0, 13] ]
+		s = SparseMatrix.new(expected)
 		
-		assert_equal m, s.to_matrix
+		assert_equal expected, s.to_matrix
 	end
 	
 	def test_Addition
-		s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
-		m = SparseMatrix.new(Matrix[ [2,2], [2,2] ])
+		a = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
+		b = SparseMatrix.new(Matrix[ [2,2], [2,2] ])
 		expected = SparseMatrix.new(Matrix[ [4, 6], [8, 10] ])
 		
-		assert_equal expected.coords, (s+m).coords
+		assert_equal expected.coords, (a+b).coords
 	end
 
 	def test_Subtraction
-		s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
-		m = SparseMatrix.new(Matrix[ [2,2], [2,2] ])
+		a = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
+		b = SparseMatrix.new(Matrix[ [2,2], [2,2] ])
 		expected = SparseMatrix.new(Matrix[ [0, 2], [4, 6] ])
 		
-		assert_equal expected.coords, (s-m).coords
+		assert_equal expected.coords, (a-b).coords
 	end
 	
 	def test_Multiplication
@@ -66,10 +74,10 @@ class TestSparse < Test::Unit::TestCase
 	end
 	
 	def test_Division
-		s = SparseMatrixFactory.create_matrix(Matrix[ [2,4], [6,8] ])
-		m = SparseMatrixFactory.create_matrix(Matrix[ [2,2], [2,2] ])
+		a = SparseMatrixFactory.create_matrix(Matrix[ [2,4], [6,8] ])
+		b = SparseMatrixFactory.create_matrix(Matrix[ [2,2], [2,2] ])
 		expected = SparseMatrixFactory.create_matrix(Matrix[ [-0.5, 0.5], [-0.5, 0.5] ])
 		
-		assert_equal expected.coords, (m/s).coords
+		assert_equal expected.coords, (b/a).coords
 	end
 end
