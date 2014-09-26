@@ -85,31 +85,34 @@ class SparseMatrix
 	end
 	
 	#
-	# SparseMatrix addition.
+	# This coerce method provides support for Ruby type coercion.
+	# This coercison is used to convert to a Matrix object when
+	# there is a conflict.
 	#
-	def +(m)
-		return SparseMatrix.new(self.to_matrix + m.to_matrix)
+	def coerce(m)
+		case m
+		when Matrix
+			return m, self.to_matrix if m.is_a? Matrix
+		end
 	end
 	
 	#
-	# SparseMatrix multiplication
+	# This method is called if a method DNE. In this case, we use
+	# the Matrix library as a delegate and try to call its function.
 	#
-	def *(m)
-		return SparseMatrix.new(self.to_matrix * m.to_matrix)
-	end
-	
+	# This specific implementation allows delegation of object methods
 	#
-	# SparseMatrix subtraction
-	#
-	def -(m)
-		return SparseMatrix.new(self.to_matrix - m.to_matrix)
-	end
-	
-	#
-	# SparseMatrix division
-	#
-	def /(m)
-		return SparseMatrix.new(self.to_matrix / m.to_matrix)
+	def method_missing(method, *args)
+		return SparseMatrix.new(self.to_matrix.send(method, *args))
 	end
 
+	#
+	# This method is called if a method DNE. In this case, we use
+	# the Matrix library as a delegate and try to call its function.
+	#
+	# This specific implementation allows delegation of class methods
+	#
+	def self.method_missing(method, *args)
+		return SparseMatrix.new(Matrix.send(method, *args))
+	end
 end
