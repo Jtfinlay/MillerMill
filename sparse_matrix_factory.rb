@@ -10,6 +10,7 @@ require 'matrix'
 require './sparse_matrix'
 require './matrix_factory'
 require './tridiag_matrix_factory'
+require './band_matrix_factory'
 
 class SparseMatrixFactory < MatrixFactory
   def initialize

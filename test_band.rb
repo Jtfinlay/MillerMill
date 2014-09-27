@@ -1,6 +1,6 @@
 
 require 'test/unit'
-require './band_matrix_factory'
+require './sparse_matrix_factory'
 
 
 class TestBand < Test::Unit::TestCase
