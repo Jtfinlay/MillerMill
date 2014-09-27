@@ -7,7 +7,7 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require './sparse_matrix'
+require './abstract_matrix'
 
 #
 # The +BandMatrix+ class represents a mathematical band sparse matrix. It
@@ -17,7 +17,7 @@ require './sparse_matrix'
 #
 # The +BandMatrix+ class inherits from the +SparseMatrix+ class.
 #
-class BandMatrix < SparseMatrix
+class BandMatrix < AbstractMatrix
 	attr_accessor :data
 	@bandwidth
 
