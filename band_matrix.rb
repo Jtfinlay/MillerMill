@@ -56,7 +56,10 @@ class BandMatrix < SparseMatrix
 	#
 	def from_matrix(matrix)
 		@bandwidth = 2 # TODO - Calculate the bandwidth
-		@data = Array.new(@bandwidth*2+1){Array.new(matrix.column_size()-1,0)}
+		@row_size = matrix.row_size
+		@column_size = matrix.column_size
+		
+		@data = Array.new(@bandwidth*2+1){Array.new(@column_size-1,0)}
 		
 		# TODO - This is nearly same as SparseMatrix's method.
 		# Perhaps we could refactor?
@@ -70,7 +73,9 @@ class BandMatrix < SparseMatrix
 	#
 	def from_arrays(arrays)
 		@bandwidth = 2 # TODO - Calculate the bandwidth
-		@data = Array.new(@bandwidth*2+1){Array.new(arrays.first.size()-1,0)}
+		@row_size = arrays.size
+		@column_size = arrays.first.size
+		@data = Array.new(@bandwidth*2+1){Array.new(@column_size-1,0)}
 		
 		# TODO - This is nearly the same as SparseMatrix' method. Perhaps
 		# we should refactor?
@@ -79,6 +84,19 @@ class BandMatrix < SparseMatrix
 				|v, x| self.[]=(x,y,v)
 			}
 		}
+	end
+	
+	#
+	# Converts compressed 3D Array into original matrix
+	#
+	def to_matrix
+		rows = Matrix.zero(@row_size, @column_size).to_a
+		rows.each_with_index{
+			|row,y| row.each_with_index{
+				|v,x| rows[y][x] = self[x,y]
+			}
+		}
+		Matrix.rows(rows)
 	end
 	
 end
