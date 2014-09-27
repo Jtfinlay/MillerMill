@@ -67,7 +67,7 @@ class SparseMatrix
 		@coords = Hash.new
 		# TODO - Row & Column size
 		
-		matrix.each_with_index{ 
+		arrays.each_with_index{ 
 			|row, y| row.each_with_index{
 				|v, x| self.[]=(x,y,v)
 			}

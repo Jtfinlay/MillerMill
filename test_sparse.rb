@@ -39,8 +39,8 @@ class TestSparse < Test::Unit::TestCase
 	end
 	
 	def test_determinant
-		expected = 3
-		m = SparseMatrixFactory.create_matrix(Matrix[ [1, 0], [2, 3] ])
+		expected = 231744
+		m = SparseMatrixFactory.create_matrix(Matrix[ [1,0,3,4,7], [5,7,2,5,77], [6,0,9,3,6], [3,8,1,0,8], [4,98,2,6,3] ])
 		
 		assert_equal expected, m.determinant
 	end
