@@ -8,7 +8,6 @@
 ##
 
 require 'matrix'
-# require './sparse_matrix_factory'
 
 #
 # The +AbstractMatrix+ class represents an sparse matrix class. It

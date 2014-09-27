@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# = BandMatrix.rb
+# = band_matrix.rb
 #
 # An implementation of Band Matrix
 #
