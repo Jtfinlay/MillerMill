@@ -4,7 +4,7 @@ require 'matrix'
 require './sparse_matrix_factory'
 require './sparse_matrix'
 require './tridiag_matrix'
-require './band_factory'
+require './band_matrix_factory'
 
 
 class TestSparse < Test::Unit::TestCase
@@ -14,7 +14,8 @@ class TestSparse < Test::Unit::TestCase
     # Input is a matrix
     m_sparse = Matrix[ [0, 0, 5], [1, 0, 5], [6, 0, 0] ]
     m_diag = Matrix[ [25, 93, 0], [1, 13, 5], [0, 7, 3] ]
-    m_band = Matrix[ [25, 93, 4, 0], [1, 13, 5, 1], [0, 5, 7, 3] ]
+    m_band = Matrix[ [25, 93, 4, 0, 0], [0, 13, 5, 1, 0], [5, 5, 5, 7, 3], \
+      [0, 3, 7, 1, 0], [0, 0, 5, 1, 6] ]
     s = SparseMatrixFactory.create_matrix(m_sparse)
     t = SparseMatrixFactory.create_matrix(m_diag)
     b = SparseMatrixFactory.create_matrix(m_band)

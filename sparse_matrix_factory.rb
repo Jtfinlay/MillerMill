@@ -19,11 +19,9 @@ class SparseMatrixFactory < MatrixFactory
 
   def SparseMatrixFactory.create_matrix(matrix)
     if is_tridiagonal?(matrix)
-      tridiag_factory = TriDiagMatrixFactory.new
-      tridiag_factory.create_matrix(matrix)
+      TriDiagMatrixFactory.create_matrix(matrix)
     elsif is_banded?(matrix)
-      band_factory = BandMatrixFactory.new
-      band_factory.create_matrix(matrix)
+      BandMatrixFactory.create_matrix(matrix)
     else
       SparseMatrix.new(matrix)
     end
@@ -42,8 +40,9 @@ class SparseMatrixFactory < MatrixFactory
 
   def SparseMatrixFactory.is_banded?(matrix)
     bandwidth = SparseMatrixFactory.calculate_bandwidth(matrix).to_f
-    if matrix.row_size.to_f / bandwidth >= 2 \
-      and matrix.column_size.to_f / bandwidth >= 2
+    #puts matrix.row_size.to_f
+    if matrix.row_size.to_f / bandwidth >= 2.0 \
+      and matrix.column_size.to_f / bandwidth >= 2.0
       return true
     else
       return false

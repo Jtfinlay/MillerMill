@@ -14,7 +14,7 @@ class TriDiagMatrixFactory < MatrixFactory
 
   end
 
-  def create_matrix(matrix)
+  def TriDiagMatrixFactory.create_matrix(matrix)
     TriDiagMatrix.new(matrix)
   end
 end
