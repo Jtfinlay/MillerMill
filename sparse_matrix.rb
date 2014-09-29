@@ -1,13 +1,13 @@
 # encoding: utf-8
 #
-# = SparseMatrix.rb
+# = sparse_matrix.rb
 #
 # An implementation of Spare Matrix
 #
 # Authors: Evan Degraff, James Finlay
 ##
 
-require 'matrix'
+require './abstract_matrix'
 
 #
 # The +SparseMatrix+ class represents a mathematical sparse matrix. It
@@ -18,10 +18,8 @@ require 'matrix'
 # The +SparseMatrix+ class relies on the +Matrix+ class to act as a delegate
 # in the event that an optimized method is not implemented.
 #
-class SparseMatrix
+class SparseMatrix < AbstractMatrix
 	attr_accessor :coords
-	@row_size
-	@column_size
 
 	#
 	# Creates a sparse matrix. Supports as parameters:
@@ -67,7 +65,7 @@ class SparseMatrix
 		@coords = Hash.new
 		# TODO - Row & Column size
 		
-		matrix.each_with_index{ 
+		arrays.each_with_index{ 
 			|row, y| row.each_with_index{
 				|v, x| self.[]=(x,y,v)
 			}
@@ -97,46 +95,6 @@ class SparseMatrix
 	def split_xy(key_string)
 		split_string = key_string.split(",")
 		return split_string[0].to_i, split_string[1].to_i
-	end
-	
-	#
-	# This coerce method provides support for Ruby type coercion.
-	# This coercison is used to convert to a Matrix object when
-	# there is a conflict.
-	#
-	def coerce(m)
-		case m
-		when Matrix
-			return m, self.to_matrix
-		end
-	end
-	
-	#
-	# This method is called if a method DNE. In this case, we use
-	# the Matrix library as a delegate and try to call its function.
-	#
-	# This specific implementation allows delegation of object methods
-	#
-	def method_missing(method, *args)
-		return SparseMatrix.castSparse(self.to_matrix.send(method, *args))
-	end
-
-	#
-	# This method is called if a method DNE. In this case, we use
-	# the Matrix library as a delegate and try to call its function.
-	#
-	# This specific implementation allows delegation of class methods
-	#
-	def SparseMatrix.method_missing(method, *args)
-		return SparseMatrix.castSparse(Matrix.send(method, *args))
-	end
-	
-	#
-	# If Matrix, then cast to SparseMatrix
-	#
-	def SparseMatrix.castSparse(m)
-		return SparseMatrix.new(m) if m.is_a? Matrix
-		return m
 	end
 	
 	#

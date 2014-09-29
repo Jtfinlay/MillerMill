@@ -10,11 +10,13 @@ require './band_matrix'
 require './matrix_factory'
 
 class BandMatrixFactory < MatrixFactory
-  def initialize:
 
+  def initialize
+  
   end
-
-  def create_matrix(matrix)
+  
+  def BandMatrixFactory.create_matrix(matrix)
     BandMatrix.new(matrix)
   end
+
 end
