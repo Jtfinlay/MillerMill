@@ -19,6 +19,9 @@ class SparseMatrixFactory < MatrixFactory
 
   end
   
+  #
+  # Checks data type and returns a sparse matrix type.
+  #
   def SparseMatrixFactory.[](matrix)
     return @factories.each.find{
       |c| c.is_valid?(matrix)
@@ -29,6 +32,13 @@ class SparseMatrixFactory < MatrixFactory
     return SparseMatrix.new(matrix)
   end
   
+  #
+  # Insert a MatrixFactory-type class into the factories list at the
+  # specified index.
+  #
+  def SparseMatrixFactory.subscribe(factory, index)
+    @factories.insert(index, factory)
+  end
 
   #
   # Returns true since all matrices can be represented as sparse,

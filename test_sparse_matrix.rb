@@ -19,11 +19,14 @@ class TestSparseMatrix < Test::Unit::TestCase
     # 0 <= y <= column_size
     x = 1
     y = 1
-    s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
+    m = SparseMatrix.new([ [1, 0], [2, 3] ])
 
     # Post
     # Returns the element at the specified indices
-    assert_equal 8, s[1,1]
+    assert_equal 1, m[0,0]
+    assert_equal 2, m[0,1]
+    assert_equal 0, m[1,0]
+    assert_equal 3, m[1,1]
   end
 
   def test_square_brackets_equals
@@ -34,7 +37,7 @@ class TestSparseMatrix < Test::Unit::TestCase
     x = 1
     y = 1
     v = 10
-    s = SparseMatrix.new(Matrix[ [2, 4], [6, 8] ])
+    s = SparseMatrix.new([ [2, 4], [6, 8] ])
 
     # Post
     # Element at specified position is set to specified value
@@ -50,8 +53,20 @@ class TestSparseMatrix < Test::Unit::TestCase
 
     # Post
     # Returns a sparse matrix
-    # Sparse matrix contains all none zero elements in hash
+    # Sparse matrix contains all non-zero elements in hash
     assert_equal expected, SparseMatrix.new(m).coords
+  end
+  
+  def test_fromArray
+    # Pre
+    # Input is a matrix
+    a = [ [25, 93], [0, 13] ]
+    expected = Hash["0,0", 25, "1,0", 93, "1,1", 13]
+    
+    # Post
+    # Returns a sparse matrix
+    # Sparse matrix contains all non-zero elements in hash
+    assert_equal expected, SparseMatrix.new(a).coords
   end
 
   def test_toMatrix
@@ -128,6 +143,48 @@ class TestSparseMatrix < Test::Unit::TestCase
     assert_equal 1, s.split_xy(key_string)[0]
     assert_equal 2, s.split_xy(key_string)[1]
   end
-
-
+  
+  def test_diagonal
+    # Pre
+    # 0 <= x
+    # 0 <= y
+    x = 1
+    y = 1
+    
+    s = SparseMatrix.diagonal(x,y)
+    
+    # Post
+    # SparseMatrix, containing 1s in diagonal
+    assert_equal Hash["0,0", 1, "1,1", 1], s.coords
+  end
+  
+  def test_zero
+    # Pre
+    # 0 <= x
+    # 0 <= y
+    x = 3
+    y = 2
+    
+    s = SparseMatrix.zero(x,y)
+    
+    # Post
+    # Empty coords, since all zeroes
+    # Row_count == x
+    # Column_count == y
+    assert_equal ({}), s.coords
+    assert_equal x, s.row_size
+    assert_equal y, s.column_size
+  end
+  
+  def test_determinant
+    # Pre
+    # SparseMatrix with pre-evaluted determinant
+    m = SparseMatrix.new([ [1,0,3,4,7], [5,7,2,5,77], [6,0,9,3,6], [3,8,1,0,8], [4,98,2,6,3] ])
+    expected = 231744
+    
+    # Post
+    # Determinant equals expected
+    assert_equal expected, m.determinant
+  end
+  
 end

@@ -9,7 +9,7 @@ class TestBandMatrixFactory < Test::Unit::TestCase
 
   def test_create_matrix
     # Pre
-    # Input is a banded matrix
+    # Input is a banded Matrix object
     m_band = Matrix[ [25, 93, 4, 0, 0], [0, 13, 5, 1, 0], [5, 5, 5, 7, 3], \
       [0, 3, 7, 1, 0], [0, 0, 5, 1, 6] ]
     b = BandMatrixFactory.create_matrix(m_band)
