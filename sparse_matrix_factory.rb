@@ -33,5 +33,6 @@ class SparseMatrixFactory < MatrixFactory
   #
   def SparseMatrixFactory.is_valid?(matrix)
     return true
+  end
 
 end
