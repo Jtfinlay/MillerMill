@@ -15,9 +15,9 @@ class TestSparseMatrixFactory < Test::Unit::TestCase
     m_diag = Matrix[ [25, 93, 0], [1, 13, 5], [0, 7, 3] ]
     m_band = Matrix[ [25, 93, 4, 0, 0], [0, 13, 5, 1, 0], [5, 5, 5, 7, 3], \
       [0, 3, 7, 1, 0], [0, 0, 5, 1, 6] ]
-    s = SparseMatrixFactory.create_matrix(m_sparse)
-    t = SparseMatrixFactory.create_matrix(m_diag)
-    b = SparseMatrixFactory.create_matrix(m_band)
+    s = SparseMatrixFactory[m_sparse]
+    t = SparseMatrixFactory[m_diag]
+    b = SparseMatrixFactory[m_band]
 
     # Post
     # Returns sparse matrix that is equivalent to matrix

@@ -13,14 +13,21 @@ require './tridiag_matrix_factory'
 require './band_matrix_factory'
 
 class SparseMatrixFactory < MatrixFactory
-  @factories = [TriDiagMatrixFactory, BandMatrixFactory]
+  @factories = [TriDiagMatrixFactory, BandMatrixFactory, SparseMatrixFactory]
   
   def initialize
 
   end
+  
+  def SparseMatrixFactory.[](matrix)
+    return @factories.find_index{
+      |c| c.is_valid?(matrix)
+    }.create_matrix(matrix)
+  end
 
   def SparseMatrixFactory.create_matrix(matrix)
-    SparseMatrix.new if @factories.take_while{|c| c.create_matrix(matrix)}.size == 0
+    return SparseMatrix.new(matrix)
   end
+  
 
 end

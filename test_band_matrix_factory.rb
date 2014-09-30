@@ -7,7 +7,7 @@ require './band_matrix_factory'
 
 class TestBandMatrixFactory < Test::Unit::TestCase
 
-  def test_createMatrix
+  def test_create_matrix
     # Pre
     # Input is a banded matrix
     m_band = Matrix[ [25, 93, 4, 0, 0], [0, 13, 5, 1, 0], [5, 5, 5, 7, 3], \
