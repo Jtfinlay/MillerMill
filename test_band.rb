@@ -5,7 +5,15 @@ require './sparse_matrix_factory'
 
 class TestBand < Test::Unit::TestCase
 
-	def test_from_matrix
+  def class_invariant(s)
+    assert(s.row_size >= 0)
+    assert(s.column_size >= 0)
+    # All elements stored are within bandwidth
+    assert(s.data.size == s.bandwidth)
+    
+  end
+  
+	def test_fromMatrix
     # Pre
     # Input is a banded Matrix
     matrix = Matrix[[1,1,1,0,0,0],[0,2,2,2,0,0],[0,0,3,3,3,0],[0,0,0,4,4,4],[0,0,0,5,5,5]]

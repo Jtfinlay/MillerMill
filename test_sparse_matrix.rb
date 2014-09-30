@@ -10,6 +10,10 @@ class TestSparseMatrix < Test::Unit::TestCase
     # No zero elements are stored
     assert(!s.coords.values.include?(0))
     # No indices are negative
+    # No indices are outside row or column
+    assert(!s.coords.to_enum.find{
+      |key, v| split_xy(key)[0] >= s.row_size or split_xy(key)[1] >= s.column_size
+    })
   end
 
   def test_square_brackets
