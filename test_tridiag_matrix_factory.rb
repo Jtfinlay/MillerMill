@@ -19,7 +19,7 @@ class TestTriDiagMatrixFactory < Test::Unit::TestCase
     assert_equal TriDiagMatrix, t.class
   end
 
-  def test_is_tridiagonal
+  def test_is_valid
     # Pre
     # Input is a matrix
     m_diag = Matrix[ [25, 93, 0], [1, 13, 5], [0, 7, 3] ]
@@ -27,8 +27,8 @@ class TestTriDiagMatrixFactory < Test::Unit::TestCase
 
     # Post
     # Returns true if tridiagonal, false if not
-    assert(TriDiagMatrixFactory.is_tridiagonal?(m_diag))
-    assert(!TriDiagMatrixFactory.is_tridiagonal?(m_not_diag))
+    assert(TriDiagMatrixFactory.is_valid?(m_diag))
+    assert(!TriDiagMatrixFactory.is_valid?(m_not_diag))
   end
 
 end

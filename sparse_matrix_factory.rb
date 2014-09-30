@@ -20,7 +20,7 @@ class SparseMatrixFactory < MatrixFactory
   end
   
   def SparseMatrixFactory.[](matrix)
-    return @factories.find_index{
+    return @factories.each.find{
       |c| c.is_valid?(matrix)
     }.create_matrix(matrix)
   end
@@ -29,5 +29,13 @@ class SparseMatrixFactory < MatrixFactory
     return SparseMatrix.new(matrix)
   end
   
+
+  #
+  # Returns true since all matrices can be represented as sparse,
+  # even if they aren't sparse.
+  #
+  def SparseMatrixFactory.is_valid?(matrix)
+    return true
+  end
 
 end

@@ -20,7 +20,7 @@ class TestBandMatrixFactory < Test::Unit::TestCase
     assert_equal BandMatrix, b.class
   end
 
-  def test_is_banded
+  def test_is_valid
     # Pre
     # Input is a matrix
     m_band = Matrix[ [25, 93, 0, 0], [0, 13, 5, 0], [0, 0, 7, 3] ]
@@ -28,8 +28,8 @@ class TestBandMatrixFactory < Test::Unit::TestCase
 
     # Post
     # Returns true if matrix is banded, false if not
-    assert(BandMatrixFactory.is_banded?(m_band))
-    assert(!BandMatrixFactory.is_banded?(m))
+    assert(BandMatrixFactory.is_valid?(m_band))
+    assert(!BandMatrixFactory.is_valid?(m))
   end
 
   def test_calculate_bandwidth

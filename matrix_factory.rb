@@ -7,11 +7,18 @@
 # Authors: Evan Degraff, James Finlay
 ##
 class MatrixFactory
-  def initialize
+  def MatrixFactory.initialize
     raise NotImplementedError.new('Abstract Class')
   end
 
-  def create_matrix
+  def MatrixFactory.create_matrix
+    raise NotImplementedError.new('Abstract Class')
+  end
+
+  #
+  # Returns true if input is valid for matrix type
+  #
+  def MatrixFactory.is_valid?(matrix)
     raise NotImplementedError.new('Abstract Class')
   end
 end
