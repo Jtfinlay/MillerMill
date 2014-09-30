@@ -7,7 +7,7 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require './abstract_matrix'
+require './delegate_matrix'
 
 #
 # The +BandMatrix+ class represents a mathematical band sparse matrix. It
@@ -17,7 +17,7 @@ require './abstract_matrix'
 #
 # The +BandMatrix+ class inherits from the +SparseMatrix+ class.
 #
-class BandMatrix < AbstractMatrix
+class BandMatrix < DelegateMatrix
 	attr_accessor :data
 	@bandwidth
 
@@ -61,11 +61,9 @@ class BandMatrix < AbstractMatrix
 		
 		@data = Array.new(@bandwidth*2+1){Array.new(@column_size-1,0)}
 		
-		# TODO - This is nearly same as SparseMatrix's method.
-		# Perhaps we could refactor?
-		matrix.each_with_index do |v, row, col|
-			self.[]=(col,row,v)
-		end
+    DelegateMatrix.iterate_matrix(matrix, Proc.new do |x,y,v|
+      self.[]=(x,y,v)
+    end)
 	end
 	
 	#
@@ -77,13 +75,9 @@ class BandMatrix < AbstractMatrix
 		@column_size = arrays.first.size
 		@data = Array.new(@bandwidth*2+1){Array.new(@column_size-1,0)}
 		
-		# TODO - This is nearly the same as SparseMatrix' method. Perhaps
-		# we should refactor?
-		arrays.each_with_index{
-			|row, y| row.each_with_index{
-				|v, x| self.[]=(x,y,v)
-			}
-		}
+    DelegateMatrix.iterate_matrix(arrays, Proc.new do |x,y,v|
+      self.[]=(x,y,v)
+    end)
 	end
 	
 	#
@@ -91,11 +85,9 @@ class BandMatrix < AbstractMatrix
 	#
 	def to_matrix
 		rows = Matrix.zero(@row_size, @column_size).to_a
-		rows.each_with_index{
-			|row,y| row.each_with_index{
-				|v,x| rows[y][x] = self[x,y]
-			}
-		}
+    DelegateMatrix.iterate_matrix(rows, Proc.new do |x,y,v|
+      rows[y][x] = self[x,y]
+    end)
 		Matrix.rows(rows)
 	end
 	

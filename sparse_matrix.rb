@@ -7,7 +7,7 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require './abstract_matrix'
+require './delegate_matrix'
 
 #
 # The +SparseMatrix+ class represents a mathematical sparse matrix. It
@@ -18,7 +18,7 @@ require './abstract_matrix'
 # The +SparseMatrix+ class relies on the +Matrix+ class to act as a delegate
 # in the event that an optimized method is not implemented.
 #
-class SparseMatrix < AbstractMatrix
+class SparseMatrix < DelegateMatrix
 	attr_accessor :coords
 
 	#
@@ -56,20 +56,18 @@ class SparseMatrix < AbstractMatrix
 		@row_size = matrix.row_size
 		@column_size = matrix.column_size
 		
-		matrix.each_with_index do |v, row, col|
-			self.[]=(col,row,v)
-		end
+    DelegateMatrix.iterate_matrix(matrix, Proc.new do |x,y,v|
+      self.[]=(x,y,v)
+    end)
 	end
 	
 	def from_arrays(arrays)
 		@coords = Hash.new
 		# TODO - Row & Column size
 		
-		arrays.each_with_index{ 
-			|row, y| row.each_with_index{
-				|v, x| self.[]=(x,y,v)
-			}
-		}
+    DelegateMatrix.iterate_matrix(arrays, Proc.new do |x,y,v|
+      self.[]=(x,y,v)
+    end)
 	end
 	
 	def from_hash(hash)
@@ -101,7 +99,7 @@ class SparseMatrix < AbstractMatrix
 	# SparseMatrix addition
 	#
 	def +(m)
-		return  merge(m, Proc.new do |key, old, new|
+		return merge(m, Proc.new do |key, old, new|
 			old + new
 		end)
 	end

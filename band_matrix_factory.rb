@@ -29,15 +29,18 @@ class BandMatrixFactory < MatrixFactory
     end
   end
 
-  def BandMatrixFactory.calculate_bandwidth(matrix)
+  #
+  # Calculates bandwidth of a band matrix. 
+  # Expects 2D array or Matrix as input
+  #
+  def BandMatrixFactory.calculate_bandwidth(array2d)
     bandwidth = 0
-    matrix.row_vectors().each_with_index do |row, y|
-      row.each_with_index do |v, x|
-        if v != 0 and (x-y).abs > bandwidth
-          bandwidth = (x-y).abs
-        end
-      end
-    end
+    DelegateMatrix.iterate_matrix(array2d, Proc.new do |x,y,v|
+      bandwidth = (x-y).abs if v != 0 and (x-y).abs > bandwidth
+    end)
     return bandwidth
   end
+  
+  
+  
 end
