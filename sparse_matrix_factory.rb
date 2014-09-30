@@ -27,4 +27,11 @@ class SparseMatrixFactory < MatrixFactory
     end
   end
 
+  #
+  # Returns true since all matrices can be represented as sparse,
+  # even if they aren't sparse.
+  #
+  def SparseMatrixFactory.is_valid?(matrix)
+    return true
+
 end

@@ -15,14 +15,13 @@ class TriDiagMatrixFactory < MatrixFactory
   end
 
   def TriDiagMatrixFactory.create_matrix(matrix)
-    if is_tridiagonal?(matrix)
       TriDiagMatrix.new(matrix)
-    else
-      return nil
-    end
   end
 
-  def TriDiagMatrixFactory.is_tridiagonal?(matrix)
+  #
+  # Returns true if input matrix is tridiagonal
+  #
+  def TriDiagMatrixFactory.is_valid?(matrix)
     matrix.row_vectors().each_with_index do |row, y|
       row.each_with_index do |v, x|
         if v != 0 and (x-y).abs >= 2

@@ -15,16 +15,14 @@ class BandMatrixFactory < MatrixFactory
   end
 
   def BandMatrixFactory.create_matrix(matrix)
-    if is_banded?(matrix)
-      BandMatrix.new(matrix)
-    else
-      return nil
-    end
+    BandMatrix.new(matrix)
   end
 
-  def BandMatrixFactory.is_banded?(matrix)
+  #
+  # Returns true if input matrix is banded
+  #
+  def self.is_valid?(matrix)
     bandwidth = BandMatrixFactory.calculate_bandwidth(matrix).to_f
-    #puts matrix.row_size.to_f
     if matrix.row_size.to_f / bandwidth >= 2.0 \
       and matrix.column_size.to_f / bandwidth >= 2.0
       return true
