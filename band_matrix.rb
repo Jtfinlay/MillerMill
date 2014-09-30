@@ -31,7 +31,7 @@ class BandMatrix < DelegateMatrix
 		# we should refactor?
 		if args.size == 1
 			from_matrix(args[0]) if args[0].is_a? Matrix
-			from_arrays(args[0]) if args[0].is_a? Array
+			from_arrays(args[0]) if args[0].is_a? Array and args[0].first
 		end
 	end
 	

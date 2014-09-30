@@ -28,7 +28,7 @@ class SparseMatrix < DelegateMatrix
 	def initialize(*args)
 		if args.size == 1
 			from_matrix(args[0]) if args[0].is_a? Matrix
-			from_arrays(args[0]) if args[0].is_a? Array
+			from_arrays(args[0]) if args[0].is_a? Array and args[0].first
 			from_hash(args[0]) if args[0].is_a? Hash
 		end
 	end
@@ -64,7 +64,7 @@ class SparseMatrix < DelegateMatrix
 	def from_arrays(arrays)
     @coords = Hash.new
     @row_size = arrays.size
-    
+    @column_size = arrays.first.size
 		
     DelegateMatrix.iterate_matrix(arrays, Proc.new do |x,y,v|
       self.[]=(x,y,v)
