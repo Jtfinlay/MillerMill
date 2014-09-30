@@ -62,8 +62,9 @@ class SparseMatrix < DelegateMatrix
 	end
 	
 	def from_arrays(arrays)
-		@coords = Hash.new
-		# TODO - Row & Column size
+    @coords = Hash.new
+    @row_size = arrays.size
+    
 		
     DelegateMatrix.iterate_matrix(arrays, Proc.new do |x,y,v|
       self.[]=(x,y,v)

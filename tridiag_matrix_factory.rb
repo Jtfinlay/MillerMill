@@ -19,13 +19,9 @@ class TriDiagMatrixFactory < MatrixFactory
   end
 
   def TriDiagMatrixFactory.is_tridiagonal?(matrix)
-    matrix.row_vectors().each_with_index do |row, y|
-      row.each_with_index do |v, x|
-        if v != 0 and (x-y).abs >= 2
-          return false
-        end
-      end
-    end
+    DelegateMatrix.iterate_matrix(matrix, Proc.new do |x,y,v|
+      return false if v != 0 and (x-y).abs >= 2
+    end)
     return true
   end
 end

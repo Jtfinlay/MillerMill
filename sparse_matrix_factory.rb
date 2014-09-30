@@ -13,18 +13,14 @@ require './tridiag_matrix_factory'
 require './band_matrix_factory'
 
 class SparseMatrixFactory < MatrixFactory
+  @factories = [TriDiagMatrixFactory, BandMatrixFactory]
+  
   def initialize
 
   end
 
   def SparseMatrixFactory.create_matrix(matrix)
-    if TriDiagMatrixFactory.is_tridiagonal?(matrix)
-      TriDiagMatrixFactory.create_matrix(matrix)
-    elsif BandMatrixFactory.is_banded?(matrix)
-      BandMatrixFactory.create_matrix(matrix)
-    else
-      SparseMatrix.new(matrix)
-    end
+    SparseMatrix.new if @factories.take_while{|c| c.create_matrix(matrix)}.size == 0
   end
 
 end

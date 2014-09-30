@@ -40,12 +40,12 @@ class TestSparse < Test::Unit::TestCase
 	
 	def test_determinant
 		expected = 231744
-		m = SparseMatrixFactory.create_matrix(Matrix[ [1,0,3,4,7], [5,7,2,5,77], [6,0,9,3,6], [3,8,1,0,8], [4,98,2,6,3] ])
+		m = SparseMatrix.new(Matrix[ [1,0,3,4,7], [5,7,2,5,77], [6,0,9,3,6], [3,8,1,0,8], [4,98,2,6,3] ])
 		
 		assert_equal expected, m.determinant
 	end
 	
-	def test_fromMatrix
+	def test_from_matrix
 		expected = {
 			"0,0" => 25,
 			"1,0" => 93,
@@ -54,6 +54,20 @@ class TestSparse < Test::Unit::TestCase
 		
 		assert_equal expected, SparseMatrix.new(m).coords
 	end
+  
+  def test_from_array2d
+    expected = {"0,0" => 25, "1,0" => 93, "1,1" => 13 }
+    a = [ [25, 93], [0, 13] ]
+    
+    assert_equal expected, SparseMatrix.new(a).coords
+  end
+  
+  def test_from_hash
+    expected = {"0,0" => 25, "1,0" => 93, "1,1" => 13 }
+    orig = {"0,0" => 25, "1,0" => 93, "0,1" => 0, "1,1" => 13 }
+    
+    assert_equal expected, SparseMatrix.new(orig).coords
+  end
 	
 	def test_toMatrix
 		expected = Matrix[ [25, 93], [0, 13] ]

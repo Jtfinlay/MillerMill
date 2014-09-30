@@ -24,7 +24,7 @@ class BandMatrix < DelegateMatrix
 	#
 	# Creates a band matrix. Supports as parameters:
 	# Matrix
-	# 3D Array
+	# 2D Array
 	#
 	def initialize(*args)
 		# TODO - This is nearly the same as SparseMatrix' method. Perhaps
@@ -52,10 +52,10 @@ class BandMatrix < DelegateMatrix
 	end
 	
 	#
-	# Converts a matrix into the compressed 3D array format.
+	# Converts a matrix into the compressed 2D array format.
 	#
 	def from_matrix(matrix)
-		@bandwidth = 2 # TODO - Calculate the bandwidth
+		@bandwidth = BandMatrixFactory.calculate_bandwidth(matrix)
 		@row_size = matrix.row_size
 		@column_size = matrix.column_size
 		
@@ -67,21 +67,21 @@ class BandMatrix < DelegateMatrix
 	end
 	
 	#
-	# Converts a 3D Array into the compressed 3D array format.
+	# Converts a 2D Array into the compressed 2D array format.
 	#
-	def from_arrays(arrays)
-		@bandwidth = 2 # TODO - Calculate the bandwidth
-		@row_size = arrays.size
-		@column_size = arrays.first.size
+	def from_arrays(array2d)
+		@bandwidth = BandMatrixFactory.calculate_bandwidth(array2d)
+		@row_size = array2d.size
+		@column_size = array2d.first.size
 		@data = Array.new(@bandwidth*2+1){Array.new(@column_size-1,0)}
 		
-    DelegateMatrix.iterate_matrix(arrays, Proc.new do |x,y,v|
+    DelegateMatrix.iterate_matrix(array2d, Proc.new do |x,y,v|
       self.[]=(x,y,v)
     end)
 	end
 	
 	#
-	# Converts compressed 3D Array into original matrix
+	# Converts compressed 2D Array into original matrix
 	#
 	def to_matrix
 		rows = Matrix.zero(@row_size, @column_size).to_a
