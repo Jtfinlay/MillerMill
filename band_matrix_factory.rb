@@ -15,7 +15,11 @@ class BandMatrixFactory < MatrixFactory
   end
 
   def BandMatrixFactory.create_matrix(matrix)
-    BandMatrix.new(matrix)
+    if is_banded?(matrix)
+      BandMatrix.new(matrix)
+    else
+      return nil
+    end
   end
 
   def BandMatrixFactory.is_banded?(matrix)
@@ -30,7 +34,7 @@ class BandMatrixFactory < MatrixFactory
   end
 
   #
-  # Calculates bandwidth of a band matrix. 
+  # Calculates bandwidth of a band matrix.
   # Expects 2D array or Matrix as input
   #
   def BandMatrixFactory.calculate_bandwidth(array2d)
@@ -40,7 +44,5 @@ class BandMatrixFactory < MatrixFactory
     end)
     return bandwidth
   end
-  
-  
-  
+
 end

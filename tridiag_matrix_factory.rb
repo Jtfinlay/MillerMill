@@ -15,7 +15,11 @@ class TriDiagMatrixFactory < MatrixFactory
   end
 
   def TriDiagMatrixFactory.create_matrix(matrix)
-    TriDiagMatrix.new(matrix)
+    if is_tridiagonal?(matrix)
+      TriDiagMatrix.new(matrix)
+    else
+      return nil
+    end
   end
 
   def TriDiagMatrixFactory.is_tridiagonal?(matrix)
