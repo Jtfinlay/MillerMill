@@ -64,6 +64,8 @@ class DelegateMatrix
 	# If Matrix, then cast to SparseMatrix
 	#
 	def DelegateMatrix.cast(m)
+    # puts "cast: #{m}"
+    # puts "Should be returning: #{SparseMatrixFactory[m].data}"
 		return SparseMatrixFactory[m] if m.is_a? Matrix
 		return m
 	end

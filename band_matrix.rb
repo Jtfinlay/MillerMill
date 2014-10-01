@@ -55,12 +55,12 @@ class BandMatrix < DelegateMatrix
 	# Converts a matrix into the compressed 2D array format.
 	#
 	def from_matrix(matrix)
-		@bandwidth = BandMatrixFactory.calculate_bandwidth(matrix)
-		@row_size = matrix.row_size
-		@column_size = matrix.column_size
-		
-		@data = Array.new(@bandwidth*2+1){Array.new(@column_size-1,0)}
-		
+    @bandwidth = BandMatrixFactory.calculate_bandwidth(matrix)
+    @row_size = matrix.row_size
+    @column_size = matrix.column_size
+    
+    @data = Array.new(@row_size){Array.new(@bandwidth*2+1,0)}
+
     DelegateMatrix.iterate_matrix(matrix, Proc.new do |x,y,v|
       self.[]=(x,y,v)
     end)
@@ -73,7 +73,8 @@ class BandMatrix < DelegateMatrix
 		@bandwidth = BandMatrixFactory.calculate_bandwidth(array2d)
 		@row_size = array2d.size
 		@column_size = array2d.first.size
-		@data = Array.new(@bandwidth*2+1){Array.new(@column_size-1,0)}
+		
+    @data = Array.new(@row_size){Array.new(@bandwidth*2+1,0)}
 		
     DelegateMatrix.iterate_matrix(array2d, Proc.new do |x,y,v|
       self.[]=(x,y,v)

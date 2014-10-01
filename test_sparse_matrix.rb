@@ -8,10 +8,10 @@ class TestSparseMatrix < Test::Unit::TestCase
     assert(s.row_size >= 0)
     assert(s.column_size >= 0)
     # No zero elements are stored
-    assert(!s.coords.values.include?(0))
+    assert(!s.data.values.include?(0))
     # No indices are negative
     # No indices are outside row or column
-    assert(!s.coords.to_enum.find{
+    assert(!s.data.to_enum.find{
       |key, v| split_xy(key)[0] >= s.row_size or split_xy(key)[1] >= s.column_size
     })
   end
@@ -58,7 +58,7 @@ class TestSparseMatrix < Test::Unit::TestCase
     # Post
     # Returns a sparse matrix
     # Sparse matrix contains all non-zero elements in hash
-    assert_equal expected, SparseMatrix.new(m).coords
+    assert_equal expected, SparseMatrix.new(m).data
   end
   
   def test_fromArray
@@ -70,7 +70,7 @@ class TestSparseMatrix < Test::Unit::TestCase
     # Post
     # Returns a sparse matrix
     # Sparse matrix contains all non-zero elements in hash
-    assert_equal expected, SparseMatrix.new(a).coords
+    assert_equal expected, SparseMatrix.new(a).data
   end
 
   def test_toMatrix
@@ -94,7 +94,7 @@ class TestSparseMatrix < Test::Unit::TestCase
     # Post
     # Returns sparse matrix whose elements are an addition of the
     # two input matrices.
-    assert_equal expected.coords, (s+m).coords
+    assert_equal expected.data, (s+m).data
   end
 
   def test_Subtraction
@@ -107,7 +107,7 @@ class TestSparseMatrix < Test::Unit::TestCase
     # Post
     # Returns sparse matrix whose elements are equal to the first
     # matrix subtracted by the second matrix
-    assert_equal expected.coords, (s-m).coords
+    assert_equal expected.data, (s-m).data
   end
 
   def test_Multiplication
@@ -120,7 +120,7 @@ class TestSparseMatrix < Test::Unit::TestCase
     # Post
     # Returns sparse matrix which is equal to the first matrix multiplied
     # by the second matrix
-    assert_equal expected.coords, (s*m).coords
+    assert_equal expected.data, (s*m).data
   end
 
   def test_Division
@@ -133,7 +133,7 @@ class TestSparseMatrix < Test::Unit::TestCase
     # Post
     # Returns sparse matrix which is equal to the first matrix divided
     # by the second matrix
-    assert_equal expected.coords, (m/s).coords
+    assert_equal expected.data, (m/s).data
   end
 
   def test_split_xy
@@ -146,38 +146,6 @@ class TestSparseMatrix < Test::Unit::TestCase
     # Returns the two integers in the string as Integers
     assert_equal 1, s.split_xy(key_string)[0]
     assert_equal 2, s.split_xy(key_string)[1]
-  end
-  
-  def test_diagonal
-    # Pre
-    # 0 <= x
-    # 0 <= y
-    x = 1
-    y = 1
-    
-    s = SparseMatrix.diagonal(x,y)
-    
-    # Post
-    # SparseMatrix, containing 1s in diagonal
-    assert_equal Hash["0,0", 1, "1,1", 1], s.coords
-  end
-  
-  def test_zero
-    # Pre
-    # 0 <= x
-    # 0 <= y
-    x = 3
-    y = 2
-    
-    s = SparseMatrix.zero(x,y)
-    
-    # Post
-    # Empty coords, since all zeroes
-    # Row_count == x
-    # Column_count == y
-    assert_equal ({}), s.coords
-    assert_equal x, s.row_size
-    assert_equal y, s.column_size
   end
   
   def test_determinant

@@ -19,7 +19,7 @@ require './delegate_matrix'
 # in the event that an optimized method is not implemented.
 #
 class SparseMatrix < DelegateMatrix
-	attr_accessor :coords
+	attr_accessor :data
 
 	#
 	# Creates a sparse matrix. Supports as parameters:
@@ -37,14 +37,14 @@ class SparseMatrix < DelegateMatrix
 	# Returns element (+x+,+y+) of the matrix.
 	#
 	def [](x, y)
-		return @coords["#{x},#{y}"] || 0
+		return @data["#{x},#{y}"] || 0
 	end
 	
 	#
 	# Sets element (+x+,+y+) of the matrix to +v+.
 	#
 	def []=(x, y, v)
-		@coords["#{x},#{y}"] = v if v != 0
+		@data["#{x},#{y}"] = v if v != 0
 	end
 
 	#
@@ -52,7 +52,7 @@ class SparseMatrix < DelegateMatrix
 	# under the form: {"x,y", v}
 	#
 	def from_matrix(matrix)
-		@coords = Hash.new
+		@data = Hash.new
 		@row_size = matrix.row_size
 		@column_size = matrix.column_size
 		
@@ -62,7 +62,7 @@ class SparseMatrix < DelegateMatrix
 	end
 	
 	def from_arrays(arrays)
-    @coords = Hash.new
+    @data = Hash.new
     @row_size = arrays.size
     @column_size = arrays.first.size
 		
@@ -72,7 +72,7 @@ class SparseMatrix < DelegateMatrix
 	end
 	
 	def from_hash(hash)
-		@coords = hash.select{|key,value| value != 0}
+		@data = hash.select{|key,value| value != 0}
 		# TODO - Row & Column size
 	end
 
@@ -81,7 +81,7 @@ class SparseMatrix < DelegateMatrix
 	#
 	def to_matrix
 		rows = Matrix.zero(@row_size, @column_size).to_a
-		@coords.to_enum().map{ 
+		@data.to_enum().map{ 
 			|k,v| rows[split_xy(k).last][split_xy(k).first] = v 
 		}
 		Matrix.rows(rows)
@@ -118,7 +118,7 @@ class SparseMatrix < DelegateMatrix
 	# Merge two sparse matrices
 	#
 	def merge(m, action)
-		return SparseMatrix.new(@coords.merge(m.coords){
+		return SparseMatrix.new(@data.merge(m.data){
 			|key, old, new| action.call(key, old, new)
 		})
 	end
