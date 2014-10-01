@@ -10,7 +10,7 @@
 require 'matrix'
 
 #
-# The +DelegateMatrix+ class represents an sparse matrix class. It
+# The +DelegateMatrix+ class represents an abstract sparse matrix class. It
 # provides enhanced features for creating matrices, operating on them
 # arithmetically and algebraically, and determining their mathematical
 # properties.
@@ -23,9 +23,11 @@ class DelegateMatrix
   @column_size
 
   def initialize(*args)
+		raise NotImplementedError.new('Abstract Class')
   end
 
   def to_matrix
+		raise NotImplementedError.new('Abstract method')
   end
 
   #
@@ -34,10 +36,7 @@ class DelegateMatrix
   # there is a conflict.
   #
   def coerce(m)
-    case m
-    when Matrix
-      return m, self.to_matrix
-    end
+      return m, self.to_matrix if m.is_a? Matrix
   end
 
   #

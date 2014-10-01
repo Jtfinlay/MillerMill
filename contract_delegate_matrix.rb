@@ -11,49 +11,64 @@ class ContractDelgateMatrix < Test::Unit::TestCase
     assert(s.column_size >= 0)
   end
 
-  def pre_coerce
-    # Pre
-    # Input is a banded Matrix
-
-    # Post
-    # Returns band matrix equivalent to input matrix
+  def pre_initialize
+    # Abstract method
   end
 
-  def pre_method_missing
-    # Pre
-    # Method does not exist in current class, but does exist in Matrix
-
-
-    # Post
-    # Calls the method in class Matrix, and returns the result
-    # Converts back to appropriate matrix type(Sparse, Band)
+  def post_initialize
+    # Abstract method
+    # Inheriting classes should set row_size and class_size
   end
 
-  def pre_static_method_missing
-    # Pre
-    # Method does not exist in current class, but does exist in Matrix
-
-    # Post
-    # Calls the method in class Matrix, and returns the result
-    # Converts back to appropriate matrix type(Sparse, Band)
+  def pre_to_matrix
+    # Abstract method
   end
 
-  def pre_cast
-    # Pre
-    # Input is a matrix
-
-    # Post
-    # If not Matrix class, return with no change
-    # If Matrix class, return as appropriate type, (Sparse, Band)
-
+  def post_to_matrix
+    # Abtract method
+    # Inheriting classes should return a matrix
   end
 
-  def pre_iterate_matrix
-    # Pre
-    # Input is 2D array or matrix
-
-    # Post
-
+  def pre_coerce(m)
   end
 
+  def post_coerce(m, result1, result2)
+    assert_equal m, result1
+    assert result2.is_a? Matrix
+  end
+
+  def pre_method_missing(method, *args)
+    assert(!DelegateMatrix.method_defined? :"#{method}")
+    assert(Matrix.method_defined? :"#{method}")
+  end
+
+  def post_method_missing(method, *args, result)
+    assert(!result.is_a? Matrix)
+    # Contracts of method called in Matrix must hold
+  end
+
+  def pre_static_method_missing(method, *args)
+    assert(!DelegateMatrix.method_defined? :"#{method}")
+    assert(Matrix.method_defined? :"#{method}")
+  end
+
+  def post_static_method_missing(method, *args, result)
+    assert(!result.is_a? Matrix)
+    # Contracts of method called in Matrix must hold
+  end
+
+  def pre_cast(matrix)
+    assert(matrix.is_a? Matrix)
+  end
+
+  def post_cast(result)
+    assert(!result.is_a? Matrix)
+  end
+
+  def pre_iterate_matrix(m, action)
+    assert(m.is_a? Matrix)
+  end
+
+  def post_iterate_matrix
+  end
 end

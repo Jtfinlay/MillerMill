@@ -7,10 +7,6 @@
 # Authors: Evan Degraff, James Finlay
 ##
 class MatrixFactory
-  def MatrixFactory.initialize
-    raise NotImplementedError.new('Abstract Class')
-  end
-
   def MatrixFactory.create_matrix
     raise NotImplementedError.new('Abstract Class')
   end

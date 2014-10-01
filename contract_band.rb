@@ -17,7 +17,7 @@ class ContractBand < Test::Unit::TestCase
   end
 
   def post_initialize(self, *args)
-
+    assert !self.bandwidth.nil?
   end
 
   def pre_square_brackets(self, x, y)
@@ -62,8 +62,8 @@ class ContractBand < Test::Unit::TestCase
     assert_equal array, result.data
   end
 
-  def pre_to_matrix(band)
-    assert_equal BandMatrix, band.class
+  def pre_to_matrix(self)
+
   end
 
   def post_to_matrix(band, result)
