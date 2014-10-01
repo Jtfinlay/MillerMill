@@ -100,18 +100,16 @@ class SparseMatrix < DelegateMatrix
   # SparseMatrix addition
   #
   def +(m)
-    return merge(m, Proc.new do |key, old, new|
-      old + new
-    end)
+    return method_missing("+", m) if not m.is_a? self.class
+    return merge(m, Proc.new do |key, old, new| old + new end)
   end
   
   #
   # SparseMatrix subtraction
   #
   def -(m)
-    return merge(m, Proc.new do |key, old, new|
-      old - new
-    end)
+    return method_missing("-", m) if not m.is_a? self.class
+    return merge(m, Proc.new do |key, old, new| old - new end)
   end
   
   # 
