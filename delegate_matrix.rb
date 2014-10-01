@@ -21,13 +21,13 @@ require 'matrix'
 class DelegateMatrix
 	@row_size
 	@column_size
-	
+
 	def initialize(*args)
 	end
 
 	def to_matrix
 	end
-	
+
 	#
 	# This coerce method provides support for Ruby type coercion.
 	# This coercison is used to convert to a Matrix object when
@@ -39,7 +39,7 @@ class DelegateMatrix
 			return m, self.to_matrix
 		end
 	end
-	
+
 	#
 	# This method is called if a method DNE. In this case, we use
 	# the Matrix library as a delegate and try to call its function.
@@ -59,15 +59,15 @@ class DelegateMatrix
 	def DelegateMatrix.method_missing(method, *args)
 		return DelegateMatrix.cast(Matrix.send(method, *args))
 	end
-	
+
 	#
-	# If Matrix, then cast to SparseMatrix
+	# If Matrix, then cast to appropriate matrix type (Sparse, Band)
 	#
 	def DelegateMatrix.cast(m)
 		return SparseMatrixFactory[m] if m.is_a? Matrix
 		return m
 	end
-  
+
   #
   # Iterate through 2d array or matrix and applies block
   #
