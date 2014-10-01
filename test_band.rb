@@ -71,4 +71,17 @@ class TestBand < Test::Unit::TestCase
     assert_equal expected.data, (array1-array2).data
   end
   
+  def test_Addition2
+    sparse = SparseMatrixFactory.create_matrix([[1,1,1],[2,2,2],[3,3,3]])
+    band = BandMatrix.diagonal(1,1,1)
+    expected = SparseMatrixFactory.create_matrix([[2,1,1],[2,3,2],[3,3,4]])
+    
+    result = sparse+band
+    
+    assert_equal SparseMatrix, sparse.class
+    assert_equal BandMatrix, band.class
+    assert_equal SparseMatrix, result.class
+    assert_equal expected.data, result.data
+  end
+  
 end
