@@ -29,17 +29,18 @@ class SparseMatrix < DelegateMatrix
     if args.size == 1
       from_matrix(args[0]) if args[0].is_a? Matrix
       from_arrays(args[0]) if args[0].is_a? Array and args[0].first
-      from_hash(args[0]) if args[0].is_a? Hash
-    end
+    elsif args.size == 3
+			from_hash(args[0], args[1], args[2]) if args[0].is_a? Hash
+		end
   end
-  
+
   #
   # Returns element (+x+,+y+) of the matrix.
   #
   def [](x, y)
     return @data["#{x},#{y}"] || 0
   end
-  
+
   #
   # Sets element (+x+,+y+) of the matrix to +v+.
   #
@@ -55,25 +56,26 @@ class SparseMatrix < DelegateMatrix
     @data = Hash.new
     @row_size = matrix.row_size
     @column_size = matrix.column_size
-    
+
     DelegateMatrix.iterate_matrix(matrix, Proc.new do |x,y,v|
       self.[]=(x,y,v)
     end)
   end
-  
+
   def from_arrays(arrays)
     @data = Hash.new
     @row_size = arrays.size
     @column_size = arrays.first.size
-    
+
     DelegateMatrix.iterate_matrix(arrays, Proc.new do |x,y,v|
       self.[]=(x,y,v)
     end)
   end
-  
-  def from_hash(hash)
+
+  def from_hash(hash, row_size, column_size)
     @data = hash.select{|key,value| value != 0}
-    # TODO - Row & Column size
+    @row_size = row_size
+		@column_size = column_size
   end
 
   #
@@ -81,21 +83,21 @@ class SparseMatrix < DelegateMatrix
   #
   def to_matrix
     rows = Matrix.zero(@row_size, @column_size).to_a
-    @data.to_enum().map{ 
-      |k,v| rows[split_xy(k).last][split_xy(k).first] = v 
+    @data.to_enum().map{
+      |k,v| rows[split_xy(k).last][split_xy(k).first] = v
     }
     Matrix.rows(rows)
   end
 
   #
-  # Splits the key string into x and y values, and returns them as 
+  # Splits the key string into x and y values, and returns them as
   # integers.
   #
   def split_xy(key_string)
     split_string = key_string.split(",")
     return split_string[0].to_i, split_string[1].to_i
   end
-  
+
   #
   # SparseMatrix addition
   #
@@ -103,7 +105,7 @@ class SparseMatrix < DelegateMatrix
     return method_missing("+", m) if not m.is_a? self.class
     return merge(m, Proc.new do |key, old, new| old + new end)
   end
-  
+
   #
   # SparseMatrix subtraction
   #
@@ -111,13 +113,13 @@ class SparseMatrix < DelegateMatrix
     return method_missing("-", m) if not m.is_a? self.class
     return merge(m, Proc.new do |key, old, new| old - new end)
   end
-  
-  # 
+
+  #
   # Merge two sparse matrices
   #
   def merge(m, action)
     return SparseMatrix.new(@data.merge(m.data){
       |key, old, new| action.call(key, old, new)
-    })
+    }, m.row_size, m.column_size)
   end
 end
