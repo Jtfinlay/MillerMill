@@ -92,8 +92,7 @@ class SparseMatrix < DelegateMatrix
   # integers.
   #
   def split_xy(key_string)
-    split_string = key_string.split(",")
-    return split_string[0].to_i, split_string[1].to_i
+    return key_string.split(",").map{|v|v.to_i}
   end
   
   #

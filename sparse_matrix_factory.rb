@@ -44,7 +44,7 @@ class SparseMatrixFactory < MatrixFactory
   # even if they aren't sparse.
   #
   def SparseMatrixFactory.is_valid?(matrix)
-    return true
+    return matrix.is_a? Matrix or matrix.is_a? Array
   end
 
 end
