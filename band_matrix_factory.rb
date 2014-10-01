@@ -23,8 +23,8 @@ class BandMatrixFactory < MatrixFactory
   #
   def self.is_valid?(matrix)
     bandwidth = BandMatrixFactory.calculate_bandwidth(matrix).to_f
-    return (matrix.row_size.to_f / bandwidth >= 2.0 \
-      and matrix.column_size.to_f / bandwidth >= 2.0)
+    return (matrix.row_size.to_f / bandwidth > 2.0 \
+      and matrix.column_size.to_f / bandwidth > 2.0)
   end
 
   #
