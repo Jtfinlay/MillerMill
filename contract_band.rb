@@ -1,5 +1,7 @@
 require './band_matrix_factory'
 require './band_matrix'
+require "test/unit"
+require 'matrix'
 
 
 class ContractBand < Test::Unit::TestCase
@@ -16,7 +18,7 @@ class ContractBand < Test::Unit::TestCase
       |r| (not r.is_a? Array) or (r.index{
         |v| not v.is_a? Numeric
       }
-    ).nil?}
+    ).nil?})
   end
 
   def pre_initialize(*args)
@@ -24,41 +26,37 @@ class ContractBand < Test::Unit::TestCase
     assert(args[0].is_a? Matrix || (args[0].is_a? Array and args[0].first.is_a? Array))
   end
 
-  def post_initialize(self, *args)
-    assert !self.bandwidth.nil?
+  def post_initialize(selF, *args)
+    assert !selF.bandwidth.nil?
   end
 
-  def pre_square_brackets(self, x, y)
-    assert(0 <= x <= self.row_size)
-    assert(0 <= y <= self.column_size)
+  def pre_square_brackets(selF, x, y)
+    assert(0 <= x <= selF.row_size)
+    assert(0 <= y <= selF.column_size)
   end
 
-  def post_square_brackets(self, x, y, result)
-    if (x-y).between?(-self.bandwidth,self.bandwidth)
-      assert_equal self.data[y][self.bandwidth+x-y], result
+  def post_square_brackets(selF, x, y, result)
+    if (x-y).between?(-selF.bandwidth,selF.bandwidth)
+      assert_equal selF.data[y][selF.bandwidth+x-y], result
     else
       assert_equal 0, result
+    end
   end
 
-  def pre_square_brackets_equals(self, x, y, v)
-    assert(0 <= x <= self.row_size)
-    assert(0 <= x <= self.column_size)
-    assert((x-y).between?(-self.bandwidth,self.bandwidth))
+  def pre_square_brackets_equals(selF, x, y, v)
+    assert(0 <= x <= selF.row_size)
+    assert(0 <= x <= selF.column_size)
+    assert((x-y).between?(-selF.bandwidth,selF.bandwidth))
     assert(v.is_a? Numeric)
   end
 
-  def post_square_brackets_equals(self, x, y, v, result)
-    assert_equal v, self.data[y][self.bandwidth+x-y]
+  def post_square_brackets_equals(selF, x, y, v, result)
+    assert_equal v, selF.data[y][selF.bandwidth+x-y]
   end
 
   def pre_fromMatrix(matrix)
     assert matrix.is_a? Matrix
     assert BandMatrixFactory.is_valid?(matrix)
-    assert matrix.row_vectors.index{
-      |r| (not r.is_a? Array) or (r.index{
-        |v| not.is_a? Numeric
-      }
-    }.nil?
   end
 
   def post_fromMatrix(matrix, result)
@@ -69,11 +67,6 @@ class ContractBand < Test::Unit::TestCase
   def pre_from_arrays(array)
     assert array.is_a? Array
     assert assert BandMatrixFactory.is_valid?(array)
-    assert array.index{
-      |r| (not r.is_a? Array) or (r.index{
-        |v| not.is_a? Numeric
-      }
-    }.nil?
   end
 
   def post_from_arrays(array, result)
@@ -81,7 +74,7 @@ class ContractBand < Test::Unit::TestCase
     assert_equal array, result.data
   end
 
-  def pre_to_matrix(self)
+  def pre_to_matrix(selF)
 
   end
 

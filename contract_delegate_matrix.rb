@@ -2,6 +2,7 @@
 require 'test/unit'
 require './sparse_matrix_factory'
 require './delegate_matrix'
+require 'matrix'
 
 
 class ContractDelgateMatrix < Test::Unit::TestCase
@@ -38,35 +39,35 @@ class ContractDelgateMatrix < Test::Unit::TestCase
   end
 
   def pre_method_missing(method, *args)
-    assert(!DelegateMatrix.method_defined? :"#{method}")
-    assert(Matrix.method_defined? :"#{method}")
+    assert(!DelegateMatrix.method_defined?(:"#{method}"))
+    assert(Matrix.method_defined?(:"#{method}"))
   end
 
   def post_method_missing(method, *args, result)
-    assert(!result.is_a? Matrix)
+    assert(!result.is_a?(Matrix))
     # Contracts of method called in Matrix must hold
   end
 
   def pre_static_method_missing(method, *args)
-    assert(!DelegateMatrix.method_defined? :"#{method}")
-    assert(Matrix.method_defined? :"#{method}")
+    assert(!DelegateMatrix.method_defined?(:"#{method}"))
+    assert(Matrix.method_defined?(:"#{method}"))
   end
 
   def post_static_method_missing(method, *args, result)
-    assert(!result.is_a? Matrix)
+    assert(!result.is_a?(Matrix))
     # Contracts of method called in Matrix must hold
   end
 
   def pre_cast(matrix)
-    assert(matrix.is_a? Matrix)
+    assert(!result.is_a?(Matrix))
   end
 
   def post_cast(result)
-    assert(!result.is_a? Matrix)
+    assert(!result.is_a?(Matrix))
   end
 
   def pre_iterate_matrix(m, action)
-    assert(m.is_a? Matrix)
+    assert(!result.is_a?(Matrix))
   end
 
   def post_iterate_matrix

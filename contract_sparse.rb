@@ -1,5 +1,6 @@
-require './band_matrix_factory'
-require './band_matrix'
+require './sparse_matrix'
+require 'matrix'
+require 'test/unit'
 
 
 class ContractBand < Test::Unit::TestCase
@@ -19,39 +20,39 @@ class ContractBand < Test::Unit::TestCase
   def pre_initialize(*args)
     assert(args.size == 1 || args.size == 3)
     if args.size == 1
-      assert(args[0]is_a? Matrix || (args[0]is_a? Array and args[0].first))
+      assert(args[0].is_a?(Matrix) || (args[0].is_a?(Array) && args[0].first))
     elsif args.size == 3
-      assert(args[0]is_a? Hash)
-      assert args[1].is_a? Numeric
-      assert args[2].is_a? Numeric
-      assert 0 <= args[1]
-      assert 0 <= args[2]
+      assert(args[0].is_a?(Hash))
+      assert(args[1].is_a?(Numeric))
+      assert(args[2].is_a?(Numeric))
+      assert(0 <= args[1])
+      assert(0 <= args[2])
     end
   end
 
-  def post_initialize(self, *args)
-    assert(!self.data.nil?)
-    assert(!self.row_size.nil?)
-    assert(!self.column_size.nil?)
+  def post_initialize(selF, *args)
+    assert(!selF.data.nil?)
+    assert(!selF.row_size.nil?)
+    assert(!selF.column_size.nil?)
   end
 
-  def pre_square_brackets(self, x, y)
-    assert(0 <= x <= self.row_size)
-    assert(0 <= x <= self.column_size)
+  def pre_square_brackets(selF, x, y)
+    assert(0 <= x <= selF.row_size)
+    assert(0 <= x <= selF.column_size)
   end
 
-  def post_square_brackets(self, x, y, result)
-    assert_equal self.data["#{x},#{y}"], result
+  def post_square_brackets(selF, x, y, result)
+    assert_equal selF.data["#{x},#{y}"], result
   end
 
-  def pre_square_brackets_equals(self, x, y, v)
-    assert(0 <= x <= self.row_size)
-    assert(0 <= x <= self.column_size)
+  def pre_square_brackets_equals(selF, x, y, v)
+    assert(0 <= x <= selF.row_size)
+    assert(0 <= x <= selF.column_size)
     assert(v.is_a? Numeric)
   end
 
-  def post_square_brackets_equals(self, x, y, v, result)
-    assert_equal v, self.data["#{x},#{y}"]
+  def post_square_brackets_equals(selF, x, y, v, result)
+    assert_equal v, selF.data["#{x},#{y}"]
   end
 
   def pre_fromMatrix(matrix)
@@ -72,7 +73,7 @@ class ContractBand < Test::Unit::TestCase
     assert_equal array, result.data
   end
 
-  def pre_to_matrix(self)
+  def pre_to_matrix(selF)
 
   end
 
@@ -91,38 +92,38 @@ class ContractBand < Test::Unit::TestCase
     assert result[1].is_a? Numeric
   end
 
-  def pre_plus(self, m)
-    assert_equal self.row_size, m.row_size
-    assert_equal self.column_size, m.row_size
+  def pre_plus(selF, m)
+    assert_equal selF.row_size, m.row_size
+    assert_equal selF.column_size, m.row_size
   end
 
-  def post_plus(self, m, result)
-    assert_equal self.row_size, result.row_size
-    assert_equal self.column_size, result.row_size
-    assert_equal(self.to_matrix + m.to_matrix, result.to_matrix)
+  def post_plus(selF, m, result)
+    assert_equal selF.row_size, result.row_size
+    assert_equal selF.column_size, result.row_size
+    assert_equal(selF.to_matrix + m.to_matrix, result.to_matrix)
     assert result.is_a? SparseMatrix
   end
 
-  def pre_subtract(self, m)
-    assert_equal self.row_size, m.row_size
-    assert_equal self.column_size, m.row_size
+  def pre_subtract(selF, m)
+    assert_equal selF.row_size, m.row_size
+    assert_equal selF.column_size, m.row_size
   end
 
-  def post_subtract(self, m, result)
-    assert_equal self.row_size, result.row_size
-    assert_equal self.column_size, result.row_size
-    assert_equal(self.to_matrix - m.to_matrix, result.to_matrix)
+  def post_subtract(selF, m, result)
+    assert_equal selF.row_size, result.row_size
+    assert_equal selF.column_size, result.row_size
+    assert_equal(selF.to_matrix - m.to_matrix, result.to_matrix)
     assert result.is_a? SparseMatrix
   end
 
-  def pre_merge(self, m, action)
-    assert_equal self.row_size, m.row_size
-    assert_equal self.column_size, m.row_size
+  def pre_merge(selF, m, action)
+    assert_equal selF.row_size, m.row_size
+    assert_equal selF.column_size, m.row_size
   end
 
-  def post_merge(self, m, action, result)
-    assert_equal self.row_size, result.row_size
-    assert_equal self.column_size, result.row_size
+  def post_merge(selF, m, action, result)
+    assert_equal selF.row_size, result.row_size
+    assert_equal selF.column_size, result.row_size
     assert result.is_a? SparseMatrix
   end
 end

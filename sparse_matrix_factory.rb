@@ -13,11 +13,11 @@ require './band_matrix_factory'
 
 class SparseMatrixFactory < MatrixFactory
   @factories = [BandMatrixFactory, SparseMatrixFactory]
-  
+
   def initialize
 
   end
-  
+
   #
   # Checks data type and returns a sparse matrix type.
   #
@@ -30,7 +30,7 @@ class SparseMatrixFactory < MatrixFactory
   def SparseMatrixFactory.create_matrix(matrix)
     return SparseMatrix.new(matrix)
   end
-  
+
   #
   # Insert a MatrixFactory-type class into the factories list at the
   # specified index.
@@ -44,7 +44,7 @@ class SparseMatrixFactory < MatrixFactory
   # even if they aren't sparse.
   #
   def SparseMatrixFactory.is_valid?(matrix)
-    return matrix.is_a? Matrix or matrix.is_a? Array
+    return (matrix.is_a?(Matrix) or matrix.is_a?(Array))
   end
 
 end
