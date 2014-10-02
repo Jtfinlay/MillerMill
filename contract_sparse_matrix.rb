@@ -3,7 +3,7 @@ require 'matrix'
 require 'test/unit'
 
 
-class ContractBand < Test::Unit::TestCase
+class ContractSparseMatrix < Test::Unit::TestCase
 
   def class_invariant(s)
     assert(s.row_size >= 0)
