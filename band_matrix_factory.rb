@@ -24,10 +24,11 @@ class BandMatrixFactory < MatrixFactory
   #
   # Returns true if input matrix is banded
   #
-  def self.is_valid?(matrix)
-    bandwidth = BandMatrixFactory.calculate_bandwidth(matrix).to_f
-    return (matrix.row_size.to_f / bandwidth > 2.0 \
-      and matrix.column_size.to_f / bandwidth > 2.0)
+  def self.is_valid?(m)
+    m = m.row_vectors if m.is_a? Matrix
+    bandwidth = BandMatrixFactory.calculate_bandwidth(m).to_f
+    return (m.size.to_f / bandwidth > 2.0 \
+      and m.first.size.to_f / bandwidth > 2.0)
   end
 
   #

@@ -78,4 +78,14 @@ class DelegateMatrix
     }
   end
 
+  #
+  # Returns a string representation
+  #
+  def to_s
+    s = super + "\n"
+    self.instance_variables.each do |x|
+      s = s + x.to_s + ": " + instance_variable_get(x).to_s + "\n"
+    end
+    return s
+  end
 end

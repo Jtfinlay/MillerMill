@@ -7,19 +7,19 @@ require 'test/unit'
 class ContractSparseFactory < Test::Unit::TestCase
 
   def class_invariant(selF)
-    assert(f.factories.is_a?(Array))
-    assert(!f.factories.empty?)
-    assert(f.factories.index{|v| !v.is_a?(Class)}.nil?)
-    assert(f.factories.index{|v| !v.method_defined?(:create_matrix)}.nil?)
-    assert(f.factories.index{|v| !v.method_defined?(:is_valid?)}.nil?)
+    assert(selF.factories.is_a?(Array))
+    assert(!selF.factories.empty?)
+    assert(selF.factories.index{|v| !v.is_a?(Class)}.nil?)
+    assert(selF.factories.index{|v| !v.method_defined?(:create_matrix)}.nil?)
+    assert(selF.factories.index{|v| !v.method_defined?(:is_valid?)}.nil?)
   end
 
   def pre_square_brackets(selF, matrix)
-    assert(f.factories.index{|c| c.is_valid?(matrix)})
+    assert(selF.factories.index{|c| c.is_valid?(matrix)})
   end
 
   def post_square_brackets(selF, matrix, result)
-    assert(f.factories.index{|c| result.is_a?(c)})
+    assert(selF.factories.index{|c| result.is_a?(c)})
   end
 
   def pre_create_matrix(matrix)
@@ -52,7 +52,7 @@ class ContractSparseFactory < Test::Unit::TestCase
   end
 
   def pre_subscribe(selF, factory, index)
-    assert(index <= f.factories.size)
+    assert(index <= selF.factories.size)
     assert(index >= 0)
     assert(factory.is_a? Class)
     assert(factory.method_defined? :create_matrix)
@@ -60,8 +60,8 @@ class ContractSparseFactory < Test::Unit::TestCase
   end
 
   def post_subscribe(selF, factory, index)
-    assert(!f.factories.empty?)
-    assert(f.factories[index] == factory)
+    assert(!selF.factories.empty?)
+    assert(selF.factories[index] == factory)
   end
 
 end

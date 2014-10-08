@@ -60,13 +60,13 @@ class TestSparseMatrix < Test::Unit::TestCase
     # Sparse matrix contains all non-zero elements in hash
     assert_equal expected, SparseMatrix.new(m).data
   end
-  
+
   def test_fromArray
     # Pre
     # Input is a matrix
     a = [ [25, 93], [0, 13] ]
     expected = Hash["0,0", 25, "1,0", 93, "1,1", 13]
-    
+
     # Post
     # Returns a sparse matrix
     # Sparse matrix contains all non-zero elements in hash
@@ -147,16 +147,16 @@ class TestSparseMatrix < Test::Unit::TestCase
     assert_equal 1, s.split_xy(key_string)[0]
     assert_equal 2, s.split_xy(key_string)[1]
   end
-  
+
   def test_determinant
     # Pre
     # SparseMatrix with pre-evaluted determinant
     m = SparseMatrix.new([ [1,0,3,4,7], [5,7,2,5,77], [6,0,9,3,6], [3,8,1,0,8], [4,98,2,6,3] ])
     expected = 231744
-    
+
     # Post
     # Determinant equals expected
     assert_equal expected, m.determinant
   end
-  
+
 end
