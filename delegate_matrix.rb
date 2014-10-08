@@ -19,8 +19,7 @@ require 'matrix'
 # in the event that an optimized method is not implemented.
 #
 class DelegateMatrix
-  @row_size
-  @column_size
+  attr_accessor :row_size, :column_size
 
   def initialize(*args)
 		raise NotImplementedError.new('Abstract Class')
@@ -63,8 +62,6 @@ class DelegateMatrix
   # If Matrix, then cast to SparseMatrix
   #
   def DelegateMatrix.cast(m)
-    # puts "cast: #{m}"
-    # puts "Should be returning: #{SparseMatrixFactory[m].data}"
     return SparseMatrixFactory[m] if m.is_a? Matrix
     return m
   end
