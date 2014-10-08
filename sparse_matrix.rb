@@ -62,6 +62,10 @@ class SparseMatrix < DelegateMatrix
     end)
   end
 
+  #
+  # Converts a 2d array into the hash format, where the values are stored
+  # under the form: {"x,y", v}
+  #
   def from_arrays(arrays)
     @data = Hash.new
     @row_size = arrays.size
@@ -72,6 +76,9 @@ class SparseMatrix < DelegateMatrix
     end)
   end
 
+  #
+  # Internal method that fills the hash format from an existing hash.
+  #
   def from_hash(hash, row_size, column_size)
     @data = hash.select{|key,value| value != 0}
     @row_size = row_size

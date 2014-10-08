@@ -27,6 +27,9 @@ class SparseMatrixFactory < MatrixFactory
     }.create_matrix(matrix)
   end
 
+  #
+  # Creates sparse matrix from supplied data
+  #
   def SparseMatrixFactory.create_matrix(matrix)
     return SparseMatrix.new(matrix)
   end

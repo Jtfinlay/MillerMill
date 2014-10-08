@@ -14,6 +14,9 @@ class BandMatrixFactory < MatrixFactory
 
   end
 
+  #
+  # Creates banded matrix from given data
+  #
   def BandMatrixFactory.create_matrix(matrix)
     BandMatrix.new(matrix)
   end

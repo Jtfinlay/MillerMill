@@ -7,6 +7,10 @@
 # Authors: Evan Degraff, James Finlay
 ##
 class MatrixFactory
+
+  #
+  # Create matrix from given params
+  #
   def MatrixFactory.create_matrix
     raise NotImplementedError.new('Abstract Class')
   end
