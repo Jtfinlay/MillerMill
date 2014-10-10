@@ -7,6 +7,8 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
+require './shell.rb'
+
 # loop
   # get_command
   # create child/worker process

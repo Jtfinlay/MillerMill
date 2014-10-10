@@ -9,7 +9,7 @@
 
 class Shell
 
-  # TODO Create list of valid commands
+  # TODO Create list of valid commands. A lot of existing commands exist in /bin/
 
   #
   # Creates shell object.
@@ -25,13 +25,20 @@ class Shell
     # TODO
     # TODO Input could be invalid
     # TODO Input could be multi-line (separated by '\')
-    # TODO Input could be multi-command (separated by '|')
+    # TODO Input could be piped (separated by '|')
   end
 
   #
   # Execute single command
   #
   def execute_single_command(cmd)
+    # TODO
+  end
+
+  #
+  # Return whether given command is valid
+  #
+  def valid?(cmd)
     # TODO
   end
 
