@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# = main.rb
+# = driver.rb
 #
 # Driver that takes inputs and passes it through to the shell.
 #

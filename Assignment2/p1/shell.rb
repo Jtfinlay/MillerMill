@@ -10,6 +10,15 @@
 class Shell
 
   # TODO Create list of valid commands. A lot of existing commands exist in /bin/
+  # cat
+  # cp
+  # echo
+  # grep
+  # ln
+  # ls
+  # mkdir
+  # rm
+  # rmdir
 
   #
   # Creates shell object.
