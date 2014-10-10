@@ -8,47 +8,61 @@
 ##
 
 class Shell
+  #TODO Remove 'dir'
+  @@default = ["dir", "cat", "cp", "echo", "grep", "ln", "ls", \
+                "mkdir", "rm", "rmdir"]
+  attr_accessor :whitelist
 
-  # TODO Create list of valid commands. A lot of existing commands exist in /bin/
-  # cat
-  # cp
-  # echo
-  # grep
-  # ln
-  # ls
-  # mkdir
-  # rm
-  # rmdir
-
-  #
-  # Creates shell object.
-  #
+  # Store all commands in Hash as {"name",&method}
   def initialize()
-    # TODO
+    @whitelist = {}
+    @@default.each{
+      |c| @whitelist[c] = Proc.new {
+        |*args| exec(c, args)
+        }
+    }
+  end
+
+  #
+  # Add a custom command to the shell commands
+  #
+  def register(name, &method)
+    @whitelist[name] = method
   end
 
   #
   # Manage input and execute given commands
   #
   def execute(cmd)
-    # TODO
-    # TODO Input could be invalid
-    # TODO Input could be multi-line (separated by '\')
-    # TODO Input could be piped (separated by '|')
+    cmd = cmd.split('|').map{|v| v.split}
+
+    cmd.reverse.each{
+      |c| execute_single_command(c)
+    }
+  end
+
+  #
+  # Prompt to display
+  #
+  def prompt
+    return "8==>"
   end
 
   #
   # Execute single command
   #
   def execute_single_command(cmd)
-    # TODO
+    raise NotImplementedError, cmd[0] if !valid? cmd
+
+    # TODO Threading shit.
+    @whitelist[cmd[0]]
   end
 
   #
   # Return whether given command is valid
   #
   def valid?(cmd)
-    # TODO
+    return @whitelist.include? cmd[0]
   end
 
 end

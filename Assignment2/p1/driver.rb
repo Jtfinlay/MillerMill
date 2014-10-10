@@ -9,10 +9,15 @@
 
 require './shell.rb'
 
-# loop
-  # get_command
-  # create child/worker process
-  # Parent: Wait for worker (child) to finish
-  # Child: change job
-  # Parent: report results
-# end_loop
+exits = ["exit", "quit", "q", "close", "fuckoff"]
+shell = Shell.new
+
+while true
+  print shell.prompt
+  cmd = gets.chomp
+
+  exit! if exits.include? cmd
+
+  shell.execute cmd
+
+end
