@@ -18,8 +18,8 @@ class Shell
     @whitelist = {}
     @@default.each{
       |c| @whitelist[c] = Proc.new {
-        |*args| exec(c, args)
-        }
+        |args| exec(c, *args)
+      }
     }
   end
 
@@ -42,20 +42,20 @@ class Shell
   end
 
   #
-  # Prompt to display
-  #
-  def prompt
-    return "8==>"
-  end
-
-  #
   # Execute single command
   #
   def execute_single_command(cmd)
     raise NotImplementedError, cmd[0] if !valid? cmd
 
     # TODO Threading shit.
-    @whitelist[cmd[0]]
+    @whitelist[cmd[0]].call(cmd[1..-1])
+  end
+
+  #
+  # Prompt to display
+  #
+  def prompt
+    return "8==>"
   end
 
   #
