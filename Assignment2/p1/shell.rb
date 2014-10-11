@@ -11,7 +11,7 @@ class Shell
   #TODO Remove 'dir'
   @@default = ["dir", "cat", "cp", "echo", "grep", "ln", "ls", \
                 "mkdir", "rm", "rmdir"]
-  attr_accessor :whitelist
+  @whitelist
 
   # Store all commands in Hash as {"name",&method}
   def initialize()
@@ -33,22 +33,47 @@ class Shell
   #
   # Manage input and execute given commands
   #
+  # Pipe code inspired from following. We made it prettier.
+  # http://www.jstorimer.com/blogs/workingwithcode/7766099-a-unix-shell-in-ruby
+  # -part-4-pipes
+  #
   def execute(cmd)
-    cmd = cmd.split('|').map{|v| v.split}
+    cmd = split_on_pipes(cmd).map{|v| v.split}
 
-    cmd.reverse.each{
-      |c| execute_single_command(c)
+    pipe_in = $stdin
+    pipe_out = $stdout
+    pipe = []
+
+    cmd.each_with_index { |c,i|
+
+      pipe = IO.pipe if (i+1 < cmd.size)
+      pipe_out = (i+1 < cmd.size) ? pipe.last : $stdout
+
+      execute_single_command(c[0], c[1..-1], pipe_in, pipe_out)
+
+      pipe_out.close unless pipe_out == $stdout
+      pipe_in.close unless pipe_in == $stdin
+      pipe_in = pipe.first
     }
+
+    Process.waitall
   end
 
   #
   # Execute single command
   #
-  def execute_single_command(cmd)
-    raise NotImplementedError, cmd[0] if !valid? cmd
+  def execute_single_command(cmd, args, pipe_in, pipe_out)
+    raise NotImplementedError, cmd if !valid? cmd
 
-    # TODO Threading shit.
-    @whitelist[cmd[0]].call(cmd[1..-1])
+    fork {
+        $stdout.reopen(pipe_out)
+        $stdin.reopen(pipe_in)
+        pipe_out.close unless pipe_out == $stdout
+        pipe_in.close unless pipe_in == $stdin
+
+
+        @whitelist[cmd].call args
+    }
   end
 
   #
@@ -62,7 +87,22 @@ class Shell
   # Return whether given command is valid
   #
   def valid?(cmd)
-    return @whitelist.include? cmd[0]
+    return @whitelist.include? cmd
   end
+
+  #
+  # Takes line of inputs and splits it using '|' as a delimeter. This prevents
+  # splitting lines that have a pipe character within a quoted string.
+  #
+  # http://stackoverflow.com/questions/4970064/how-to-split-a-string-by-colons-
+  # not-in-quotes/4970136#4970136
+  #
+  # We apologize to Prof Miller for using StackOverflow, but we're bad at regex.
+  #
+  def split_on_pipes(line)
+    line.scan( /([^"'|]+)|["']([^"']+)["']/ ).flatten.compact
+  end
+
+
 
 end
