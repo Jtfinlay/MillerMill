@@ -7,7 +7,11 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
+require './contract_shell'
+
 class Shell
+  include ContractShell
+
   #TODO Remove 'dir'
   @@default = ["dir", "cat", "cp", "echo", "grep", "ln", "ls", \
                 "mkdir", "rm", "rmdir"]
@@ -66,11 +70,15 @@ class Shell
     raise NotImplementedError, cmd if !valid? cmd
 
     fork {
-        $stdout.reopen(pipe_out)
-        $stdin.reopen(pipe_in)
-        pipe_out.close unless pipe_out == $stdout
-        pipe_in.close unless pipe_in == $stdin
+        unless pipe_out == $stdout
+          $stdout.reopen(pipe_out)
+          pipe_out.close
+        end
 
+        unless pipe_in == $stdin
+          $stdin.reopen(pipe_in)
+          pipe_in.close
+        end
 
         @whitelist[cmd].call args
     }
@@ -80,14 +88,21 @@ class Shell
   # Prompt to display
   #
   def prompt
-    return "8==>"
+    return "=>"
   end
 
   #
   # Return whether given command is valid
   #
   def valid?(cmd)
-    return @whitelist.include? cmd
+    return @whitelist.has_key? cmd
+  end
+
+  #
+  # Return array of known commands
+  #
+  def valid_commands
+    return @whitelist.keys
   end
 
   #
@@ -100,6 +115,8 @@ class Shell
   # We apologize to Prof Miller for using StackOverflow, but we're bad at regex.
   #
   def split_on_pipes(line)
+    # TODO - Make this suck less. It tends to separate arguments as well :(
+    # TODO - Remove quotes around parameters
     line.scan( /([^"'|]+)|["']([^"']+)["']/ ).flatten.compact
   end
 

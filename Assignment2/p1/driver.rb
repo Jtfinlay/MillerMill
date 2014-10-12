@@ -8,9 +8,15 @@
 ##
 
 require './shell.rb'
+require './custom_commands.rb'
 
-exits = ["exit", "quit", "q", "close", "fuckoff"]
+include CustomCommands
+
+exits = ["exit", "quit", "q", "close"]
 shell = Shell.new
+shell.register("cd", &:change_directory)
+shell.register("help", &:help)
+shell.register("pwd", &:present_working_directory)
 
 while true
   print shell.prompt
