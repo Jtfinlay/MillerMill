@@ -24,14 +24,6 @@ module ContractCustomCommands
     # No post conditions
   end
 
-  def pre_help(shell)
-    assert shell.is_a? Shell, "Must be a Shell"
-  end
-
-  def post_help
-    # No post conditions
-  end
-
   def pre_present_working_directory(shell)
     assert shell.is_a? Shell, "Must be a Shell"
   end

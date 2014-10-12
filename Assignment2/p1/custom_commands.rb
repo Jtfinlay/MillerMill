@@ -7,8 +7,6 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require './shell'
-
 module CustomCommands
 
   #
@@ -19,21 +17,10 @@ module CustomCommands
   end
 
   #
-  # List available commands
-  #
-  def help(shell)
-    result = "Available commands:\n"
-    shell.valid_commands.each{
-      |c| result << "#{c}\n"
-    }
-    shell.execute("echo #{result}")
-  end
-
-  #
   # Implementation of 'pwd' command
   #
-  def present_working_directory(shell)
-    shell.execute("echo #{Dir.pwd}")
+  def present_working_directory
+    $stdout << Dir.pwd
   end
 
 end
