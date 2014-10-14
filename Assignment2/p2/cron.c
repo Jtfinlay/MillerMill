@@ -2,13 +2,14 @@
 // and shit.
 #include <stdio.h>
 #include <signal.h>
+#include <unistd.h>
 
 char * m;
 
 void alarm_handler(int sig)
 {
   signal(SIGALRM, SIG_IGN);          /* ignore this signal       */
-  printf("Message:%s\n", message);
+  printf("Message:%s\n", m);
   signal(SIGALRM, alarm_handler);     /* reinstall the handler    */
 }
 

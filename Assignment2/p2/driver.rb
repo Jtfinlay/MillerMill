@@ -19,4 +19,7 @@ if ARGV.length < 2
   exit
 end
 
-Cron.timed_message(ARGV[0].to_i, ARGV[1])
+fork do
+  Cron.timed_message(ARGV[0].to_i, ARGV[1])
+  sleep(ARGV[0].to_i)
+end
