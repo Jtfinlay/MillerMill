@@ -1802,7 +1802,71 @@ static VALUE mCron;
 #define SWIG_as_voidptrptr(a) ((void)SWIG_as_voidptr(*a),(void**)(a)) 
 
 
-  #include "cron.c"
+  #include <stdio.h>
+  #include <windows.h>
+  void timed_message(int t, char * message);
+
+
+#include <limits.h>
+#if !defined(SWIG_NO_LLONG_MAX)
+# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
+#   define LLONG_MAX __LONG_LONG_MAX__
+#   define LLONG_MIN (-LLONG_MAX - 1LL)
+#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
+# endif
+#endif
+
+
+SWIGINTERN VALUE
+SWIG_ruby_failed(void)
+{
+  return Qnil;
+} 
+
+
+/*@SWIG:E:\Downloads\swigwin-3.0.2\swigwin-3.0.2\Lib\ruby\rubyprimtypes.swg,19,%ruby_aux_method@*/
+SWIGINTERN VALUE SWIG_AUX_NUM2LONG(VALUE *args)
+{
+  VALUE obj = args[0];
+  VALUE type = TYPE(obj);
+  long *res = (long *)(args[1]);
+  *res = type == T_FIXNUM ? NUM2LONG(obj) : rb_big2long(obj);
+  return obj;
+}
+/*@SWIG@*/
+
+SWIGINTERN int
+SWIG_AsVal_long (VALUE obj, long* val)
+{
+  VALUE type = TYPE(obj);
+  if ((type == T_FIXNUM) || (type == T_BIGNUM)) {
+    long v;
+    VALUE a[2];
+    a[0] = obj;
+    a[1] = (VALUE)(&v);
+    if (rb_rescue(RUBY_METHOD_FUNC(SWIG_AUX_NUM2LONG), (VALUE)a, RUBY_METHOD_FUNC(SWIG_ruby_failed), 0) != Qnil) {
+      if (val) *val = v;
+      return SWIG_OK;
+    }
+  }
+  return SWIG_TypeError;
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_int (VALUE obj, int *val)
+{
+  long v;
+  int res = SWIG_AsVal_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < INT_MIN || v > INT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = (int)(v);
+    }
+  }  
+  return res;
+}
 
 
 SWIGINTERN swig_type_info*
@@ -1855,25 +1919,33 @@ SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
 
 
 SWIGINTERN VALUE
-_wrap_print(int argc, VALUE *argv, VALUE self) {
-  char *arg1 = (char *) 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
+_wrap_timed_message(int argc, VALUE *argv, VALUE self) {
+  int arg1 ;
+  char *arg2 = (char *) 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
-  res1 = SWIG_AsCharPtrAndSize(argv[0], &buf1, NULL, &alloc1);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "char *","print", 1, argv[0] ));
+  ecode1 = SWIG_AsVal_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","timed_message", 1, argv[0] ));
+  } 
+  arg1 = (int)(val1);
+  res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","timed_message", 2, argv[1] ));
   }
-  arg1 = (char *)(buf1);
-  print(arg1);
-  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  arg2 = (char *)(buf2);
+  timed_message(arg1,arg2);
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return Qnil;
 fail:
-  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return Qnil;
 }
 
@@ -2149,6 +2221,6 @@ SWIGEXPORT void Init_cron(void) {
   }
   
   SWIG_RubyInitializeTrackings();
-  rb_define_module_function(mCron, "print", _wrap_print, -1);
+  rb_define_module_function(mCron, "timed_message", _wrap_timed_message, -1);
 }
 

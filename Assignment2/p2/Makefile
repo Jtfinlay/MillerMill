@@ -12,8 +12,8 @@ ECHO = $(ECHO1:0=@echo)
 #### Start of system configuration section. ####
 
 srcdir = .
-topdir = /C/Ruby193/include/ruby-1.9.1
-hdrdir = /C/Ruby193/include/ruby-1.9.1
+topdir = C:/Ruby193/include/ruby-1.9.1
+hdrdir = C:/Ruby193/include/ruby-1.9.1
 arch_hdrdir = C:/Ruby193/include/ruby-1.9.1/$(arch)
 VPATH = $(srcdir):$(arch_hdrdir)/ruby:$(hdrdir)/ruby
 
@@ -65,18 +65,18 @@ empty =
 OUTFLAG = -o $(empty)
 COUTFLAG = -o $(empty)
 
-RUBY_EXTCONF_H = 
+RUBY_EXTCONF_H =
 cflags   =  $(optflags) $(debugflags) $(warnflags)
 optflags = -O3 -fno-omit-frame-pointer
 debugflags = -g
 warnflags = -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration
 CFLAGS   =  $(cflags) $(ARCH_FLAG)
 INCFLAGS = -I. -I$(arch_hdrdir) -I$(hdrdir)/ruby/backward -I$(hdrdir) -I$(srcdir)
-DEFS     = 
+DEFS     =
 CPPFLAGS =  -DFD_SETSIZE=2048 $(DEFS) $(cppflags)
 CXXFLAGS = $(CFLAGS) $(cxxflags)
-ldflags  = -L. 
-dldflags =  -Wl,--enable-auto-image-base,--enable-auto-import $(DEFFILE) 
+ldflags  = -L.
+dldflags =  -Wl,--enable-auto-image-base,--enable-auto-import $(DEFFILE)
 ARCH_FLAG = -march=i486
 DLDFLAGS = $(ldflags) $(dldflags) $(ARCH_FLAG)
 LDSHARED = $(CC) -shared $(if $(filter-out -g -g0,$(debugflags)),,-s)
@@ -104,29 +104,29 @@ TOUCH = exit >
 
 #### End of system configuration section. ####
 
-preload = 
+preload =
 
 libpath = . $(libdir)
 LIBPATH =  -L. -L$(libdir)
 DEFFILE = $(TARGET)-$(arch).def
 
 CLEANFILES = mkmf.log $(DEFFILE)
-DISTCLEANFILES = 
-DISTCLEANDIRS = 
+DISTCLEANFILES =
+DISTCLEANDIRS =
 
-extout = 
-extout_prefix = 
-target_prefix = 
-LOCAL_LIBS = 
-LIBS = $(LIBRUBYARG_SHARED)  -lshell32 -lws2_32 -limagehlp -lshlwapi  
+extout =
+extout_prefix =
+target_prefix =
+LOCAL_LIBS =
+LIBS = $(LIBRUBYARG_SHARED)  -lshell32 -lws2_32 -limagehlp -lshlwapi
 SRCS = cron.c cron_wrap.c
 OBJS = cron.o cron_wrap.o
 TARGET = cron
 TARGET_NAME = cron
 TARGET_ENTRY = Init_$(TARGET_NAME)
 DLLIB = $(TARGET).so
-EXTSTATIC = 
-STATIC_LIB = 
+EXTSTATIC =
+STATIC_LIB =
 
 BINDIR        = $(bindir)
 RUBYCOMMONDIR = $(sitedir)$(target_prefix)
@@ -136,7 +136,7 @@ HDRDIR        = $(rubyhdrdir)/ruby$(target_prefix)
 ARCHHDRDIR    = $(rubyhdrdir)/$(arch)/ruby$(target_prefix)
 
 TARGET_SO     = $(DLLIB)
-CLEANLIBS     = $(TARGET).so 
+CLEANLIBS     = $(TARGET).so
 CLEANOBJS     = *.o  *.bak
 
 all:    $(DLLIB)
@@ -215,7 +215,7 @@ $(DLLIB): $(DEFFILE) $(OBJS) Makefile
 
 
 
-$(DEFFILE): 
+$(DEFFILE):
 	$(ECHO) generating $(@)
 	$(Q) $(RUBY) -e "puts 'EXPORTS', '$(TARGET_ENTRY)'"  > $@
 

@@ -1,6 +1,8 @@
 %module cron
 %{
-  #include "cron.c"
+  #include <stdio.h>
+  #include <windows.h>
+  void timed_message(int t, char * message);
 %}
 
-void print(char * string);
+void timed_message(int t, char * message);
