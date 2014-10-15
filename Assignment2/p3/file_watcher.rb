@@ -21,9 +21,17 @@ class FileWatcher
   def watch(duration, file_names, alteration, action)
     file_names.each{|file_name|
       @children << fork {
+
+        begin
           alteration.call(file_name)
-          sleep(duration)
-          action.call()
+        rescue SystemCallError => e
+          $stdout << e.message
+          $stdout << e.backtrace.inspect
+          return
+        end
+
+        sleep(duration)
+        action.call()
       }
     }
   end

@@ -53,7 +53,15 @@ class Shell
       pipe = IO.pipe if (i+1 < cmd.size)
       pipe_out = (i+1 < cmd.size) ? pipe.last : $stdout
 
-      execute_single_command(c[0], c[1..-1], pipe_in, pipe_out)
+      begin
+        execute_single_command(c[0], c[1..-1], pipe_in, pipe_out)
+      rescue SystemCallError => e
+        pipe_out.close unless pipe_out == $stdout
+        pipe_in.close unless pipe_in == $stdin
+        $stdout << e.message
+        $stdout << e.backtrace.inspect
+        return
+      end
 
       pipe_out.close unless pipe_out == $stdout
       pipe_in.close unless pipe_in == $stdin

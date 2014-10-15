@@ -18,7 +18,8 @@ module Alterations
 
   def file_modified(file_name)
     time_init = File.stat(file_name).mtime
-    sleep(0) while time_init == File.stat(file_name).mtime
+    sleep(0) while File.exists?(file_name) && \
+              time_init == File.stat(file_name).mtime
   end
 
   def file_destroyed(file_name)
