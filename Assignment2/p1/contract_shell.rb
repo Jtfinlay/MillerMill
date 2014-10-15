@@ -7,13 +7,14 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require 'test/unit'
+require 'test/unit/assertions'
 
 module ContractShell
   include Test::Unit::Assertions
 
   def class_invariant
-    # No invariants
+    assert @whitelist.is_a? Hash, "Whitelist must be a Hash"
+    assert !@whitelist.empty?, "Whitelist cannot be empty"
   end
 
   def post_initialize()
@@ -33,7 +34,6 @@ module ContractShell
 
   def pre_execute(cmd)
     assert cmd.is_a? String, "Command must be String"
-    # TODO Regex check
   end
 
   def post_execute(cmd)
@@ -41,14 +41,13 @@ module ContractShell
   end
 
   def pre_execute_single_command(cmd, args, pipe_in, pipe_out)
-    assert valid? cmd, "Must be a registered command."
+    assert valid? cmd, "Must be a registered command"
     assert pipe_in.is_a? IO, "Pipe_in must be an IO pipe"
     assert pipe_out.is_a? IO, "Pipe_out must be an IO pipe"
     assert !pipe_in.closed?, "Pipe_in must be open"
     assert !pipe_out.closed?, "Pipe_out must be open"
-
-    # TODO Regex check on each arg String. Cannot start/end with ' or "
-
+    args.each{|arg| assert arg.is_a? Number or arg.is_a? String, \
+      "Arguments must all be Numbers or Strings"}
   end
 
   def post_execute_single_command()

@@ -7,7 +7,7 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require 'test/unit'
+require 'test/unit/assertions'
 
 module ContractCustomCommands
   include Test::Unit::Assertions
