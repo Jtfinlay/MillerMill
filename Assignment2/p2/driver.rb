@@ -12,5 +12,5 @@ require './timed_message'
 if ARGV.length < 2
   puts "Two arguments required: time and message"
 else
-  TimedMessage.schedule_message(ARGV[0], ARGV[1])
+  TimedMessage.schedule_message(ARGV[0].to_i, ARGV[1])
 end

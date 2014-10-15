@@ -1,7 +1,7 @@
 require './cron'
 
 module TimedMessage
-  def schedule_message(time, message)
+  def TimedMessage.schedule_message(time, message)
     fork do
       Cron.timed_message(time, message)
       sleep(time)
