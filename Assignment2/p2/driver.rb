@@ -2,13 +2,15 @@
 #
 # = driver.rb
 #
-# Driver that takes inputs and passes it to cronc.
+# Driver that takes inputs and passes it to cron
 #
 # Authors: Evan Degraff, James Finlay
 ##
 
-# loop
-  # get_command
-  # check parameters (time, message)
-  # pass parameters to C code
-# end_loop
+require './timed_message'
+
+if ARGV.length < 2
+  puts "Two arguments required: time and message"
+else
+  TimedMessage.schedule_message(ARGV[0], ARGV[1])
+end
