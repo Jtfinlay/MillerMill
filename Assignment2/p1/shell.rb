@@ -11,11 +11,9 @@ require './contract_shell'
 
 class Shell
   include ContractShell
-
-  #TODO Remove 'dir'
   @@default = ["dir", "cat", "cp", "echo", "grep", "ln", "ls", \
                 "mkdir", "rm", "rmdir"]
-  @whitelist
+  attr_accessor :whitelist
 
   # Store all commands in Hash as {"name",&method}
   def initialize()
@@ -25,13 +23,21 @@ class Shell
         |args| exec(c, *args)
       }
     }
+
+    post_initialize(@@default)
+    class_invariant
   end
 
   #
   # Add a custom command to the shell commands
   #
   def register(name, &method)
+    pre_register(name, &method)
+
     @whitelist[name] = method
+
+    post_register
+    class_invariant
   end
 
   #
@@ -42,6 +48,8 @@ class Shell
   # -part-4-pipes
   #
   def execute(cmd)
+    pre_execute(cmd)
+
     cmd = split_on_pipes(cmd).map{|v| v.split}
 
     pipe_in = $stdin
@@ -69,12 +77,17 @@ class Shell
     }
 
     Process.waitall
+
+    post_execute
+    class_invariant
   end
 
   #
   # Execute single command
   #
   def execute_single_command(cmd, args, pipe_in, pipe_out)
+    pre_execute_single_command(cmd, args, pipe_in, pipe_out)
+
     raise NotImplementedError, cmd if !valid? cmd
 
     fork {
@@ -90,6 +103,9 @@ class Shell
 
         @whitelist[cmd].call args
     }
+
+    post_execute_single_command
+    class_invariant
   end
 
   #
@@ -103,7 +119,13 @@ class Shell
   # Return whether given command is valid
   #
   def valid?(cmd)
-    return @whitelist.has_key? cmd
+    pre_valid(cmd)
+
+    result = @whitelist.has_key? cmd
+
+    post_valid
+    class_invariant
+    return result
   end
 
   #
@@ -116,11 +138,6 @@ class Shell
   #
   # Takes line of inputs and splits it using '|' as a delimeter. This prevents
   # splitting lines that have a pipe character within a quoted string.
-  #
-  # http://stackoverflow.com/questions/4970064/how-to-split-a-string-by-colons-
-  # not-in-quotes/4970136#4970136
-  #
-  # We apologize to Prof Miller for using StackOverflow, but we're bad at regex.
   #
   def split_on_pipes(line)
     # TODO - Make this suck less. It tends to separate arguments as well :(

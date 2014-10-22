@@ -17,15 +17,15 @@ module ContractCustomCommands
   end
 
   def pre_change_directory(dir)
-    assert dir.is_a? String, "Target must be a string"
+    assert dir.is_a?(String), "Target must be a string"
   end
 
-  def post_change_directory(dir)
+  def post_change_directory
     # No post conditions
   end
 
-  def pre_present_working_directory(shell)
-    assert shell.is_a? Shell, "Must be a Shell"
+  def pre_present_working_directory
+    # No pre condition
   end
 
   def post_present_working_directory
