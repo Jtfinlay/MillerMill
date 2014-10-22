@@ -16,9 +16,13 @@ class FileWatcher
 
   def initialize()
     @children = []
+
+    class_invariant(@children)
   end
 
   def watch(duration, file_names, alteration, action)
+    pre_watch(duration, file_names, alteration, action)
+
     file_names.each{|file_name|
       @children << fork {
 
@@ -34,6 +38,9 @@ class FileWatcher
         action.call()
       }
     }
+
+    post_watch(@children)
+    class_invariant(@children)
   end
 
 end

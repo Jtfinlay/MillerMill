@@ -27,7 +27,7 @@ module ContractAlterations
 
   def pre_file_modified(file_name)
     assert file_name.is_a?(String), "File name must be a String"
-    assert File.exists? file_name, "File must already exist"
+    assert File.exists?(file_name), "File must already exist"
   end
 
   def post_file_modified()
@@ -36,11 +36,11 @@ module ContractAlterations
 
   def pre_file_destroyed(file_name)
     assert file_name.is_a?(String), "File name must be a String"
-    assert File.exists? file_name, "File must already exist"
+    assert File.exists?(file_name), "File must already exist"
   end
 
   def post_file_destroyed(file_name)
-    assert !File.exists? file_name, "File should have been destroyed"
+    assert !File.exists?(file_name), "File should have been destroyed"
   end
 
 end

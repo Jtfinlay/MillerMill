@@ -14,5 +14,5 @@ include Alterations
 
 fw = FileWatcher.new
 
-fw.watch(100, "C:/Users/James/Documents/test.txt", \
+fw.watch(100, ["C:/Users/James/Documents/test.txt1", "C:/Users/James/Documents/test2.txt"], \
   method(:file_modified), Proc.new{puts "Done!"})
