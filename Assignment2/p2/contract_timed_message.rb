@@ -11,6 +11,7 @@ require 'test/unit'
 
 module ContractTimedMessage
   include Test::Unit::Assertions
+  # Module, so no class invariant
 
   def pre_schedule_message(time, message)
     assert time.is_a? Number
