@@ -50,7 +50,7 @@ class Shell
   def execute(cmd)
     pre_execute(cmd)
 
-    cmd = split_on_pipes(cmd).map{|v| v.split}
+    cmd = split_on_pipes(cmd)
 
     pipe_in = $stdin
     pipe_out = $stdout
@@ -140,9 +140,13 @@ class Shell
   # splitting lines that have a pipe character within a quoted string.
   #
   def split_on_pipes(line)
-    # TODO - Make this suck less. It tends to separate arguments as well :(
-    # TODO - Remove quotes around parameters
-    line.scan( /([^"'|]+)|["']([^"']+)["']/ ).flatten.compact
+    result = []
+    line = line.shellsplit
+    while !(i = line.find_index("|")).nil?
+      result += [line.shift(i)]
+      line.shift
+    end
+    return result
   end
 
 
