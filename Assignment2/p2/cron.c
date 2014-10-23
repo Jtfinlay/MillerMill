@@ -17,6 +17,5 @@ void timed_message(int t, char * message)
 {
   signal(SIGALRM, alarm_handler);
   m = message;
-  printf("Waiting %d seconds\n", t);
   alarm(t);
 }
