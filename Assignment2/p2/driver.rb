@@ -9,6 +9,8 @@
 
 require './timed_message'
 
+include TimedMessage
+
 if ARGV.length < 2
   puts "Two arguments required: time and message"
 else

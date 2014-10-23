@@ -2,7 +2,8 @@ require './cron'
 require './contract_timed_message'
 
 module TimedMessage
-  def TimedMessage.schedule_message(time, message)
+  include ContractTimedMessage
+  def schedule_message(time, message)
     pre_schedule_message(time, message)
     fork do
       begin

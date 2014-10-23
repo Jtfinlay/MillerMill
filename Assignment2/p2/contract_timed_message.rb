@@ -14,7 +14,7 @@ module ContractTimedMessage
   # Module, so no class invariant
 
   def pre_schedule_message(time, message)
-    assert time.is_a? Number
+    assert time.is_a? Fixnum
     assert time >= 0
     assert message.is_a? String
   end
