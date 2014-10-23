@@ -46,7 +46,7 @@ module ContractShell
     assert pipe_out.is_a?(IO), "Pipe_out must be an IO pipe"
     assert !pipe_in.closed?, "Pipe_in must be open"
     assert !pipe_out.closed?, "Pipe_out must be open"
-    args.each{|arg| assert (arg.is_a?(Float) or assert arg.is_a?(FixNum) \
+    args.each{|arg| assert (arg.is_a?(Float) or arg.is_a?(Fixnum) \
       or arg.is_a?(String))}
   end
 
