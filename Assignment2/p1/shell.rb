@@ -8,6 +8,7 @@
 ##
 
 require './contract_shell'
+require 'shellwords'
 
 class Shell
   include ContractShell
@@ -146,9 +147,8 @@ class Shell
       result += [line.shift(i)]
       line.shift
     end
+    result += [line]
     return result
   end
-
-
 
 end
