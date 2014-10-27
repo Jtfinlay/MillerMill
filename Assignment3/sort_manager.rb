@@ -8,6 +8,7 @@
 ##
 
 require './contract_sort_manager'
+require './merge_sort'
 require 'java'
 
 # JRuby code inspired from:
@@ -15,6 +16,7 @@ require 'java'
 java_import 'java.util.concurrent.FutureTask'
 java_import 'java.util.concurrent.ThreadPoolExecutor'
 java_import 'java.util.concurrent.LinkedBlockingQueue'
+java_import 'java.util.concurrent.TimeUnit'
 
 class SortManager
   include ContractSortManager
@@ -34,7 +36,7 @@ class SortManager
       LinkedBlockingQueue.new)
 
     file_names.each { |file_name|
-      sorter << FutureTask.new(MergeSort.new(max_time, file_name))
+      sorter = FutureTask.new(MergeSort.new(max_time, file_name))
       executor.execute(sorter)
       @sorters << sorter
     }

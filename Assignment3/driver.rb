@@ -6,6 +6,7 @@
 #
 # Authors: Evan Degraff, James Finlay
 ##
+
 require './sort_manager'
 
 if ARGV.length < 2

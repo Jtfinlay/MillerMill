@@ -10,7 +10,7 @@
 require 'test/unit/assertions'
 
 module ContractSortManager
-  include Test::Unit::Asertions
+  include Test::Unit::Assertions
 
   def class_invariant()
 
