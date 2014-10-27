@@ -7,15 +7,25 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
+require 'java'
+
+java_import 'java.util.concurrent.Callable'
 
 class MergeSort
+  include Callable
 
-  def initialize(max_time, file_name)
-    sort(max_time, file_name)
+  max_time
+  file_name
+
+  def initialize(duration, file_name)
+    self.max_time = duration
+    self.file_name = file_name
+
+    # TODO create executor
   end
 
-  def sort(max_time, file)
-    # TODO implement concurrent merge sort
+  def call
+    # TODO implement concurrent merge sort`
   end
 
 end
