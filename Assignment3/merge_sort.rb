@@ -7,19 +7,17 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
+require './contract_merge_sort'
 require 'java'
 
-java_import 'java.util.concurrent.Callable'
-
 class MergeSort
-  include Callable
+  include ContractMergeSort
 
-  def initialize(duration, file_name)
-    # TODO create executor
+  def initialize
   end
 
-  def call
-    # TODO implement concurrent merge sort`
+  def sort(max_time, objects)
+    # TODO perform sort
   end
 
 end

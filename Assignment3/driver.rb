@@ -7,11 +7,11 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require './sort_manager'
+require './merge_sort'
 
 if ARGV.length < 2
-  puts "Two arguments required: time and file name."
+  puts "Two arguments required: time and objects."
 else
-  manager = SortManager.new
-  manager.sort(ARGV[0].to_i, ARGV[1..-1])
+  sorter = MergeSort.new
+  sorter.sort(ARGV[0].to_i, ARGV[1..-1])
 end
