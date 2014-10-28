@@ -37,18 +37,41 @@ class MergeSort
   end
 
   def merge(a, b, c)
-    return merge(b, a, c) if (b.size > a.size)
+#    if (b.size > a.size)
+#      merge(b, a, c)
+#      return
+#    end
     threads = []
+
+    puts "#-----------------------#"
+    puts "merge: #{a.size}, #{b.size}, #{c.size}"
+    tmp = "A: "
+    a.each{|v| tmp << " #{v},"}
+    puts tmp
+    tmp = "B: "
+    b.each{|v| tmp << " #{v},"}
+    puts tmp
+
+    if (b.size > a.size)
+      merge(b, a, c)
+      return
+    end
+
 
     if (c.size == 1)
       c[0] = a[0]
     elsif (a.size == 1)
       c[0,2] = a[0] < b[0] ? [a[0],b[0]] : [b[0],a[0]]
     else
-      am = a.size/2
-      bm = b.find_index{|v| (v <=> a[am])}
-      threads << Thread.new{merge(a[0..am], b[0..bm], c[0..am+bm])}
-      threads << Thread.new{merge(a[am+1..-1], b[bm+1..-1], c[am+bm+1..c.size])}
+      am = (a.size-1)/2
+      bm = (b.find_index{|v| (v <=> a[am]) > -1} || b.size)-1
+      bm = 0 if bm < 0
+      puts "#{am}, #{bm}, #{bm.class}"
+#      gets
+      #threads << Thread.new{merge(a[0..am], b[0..bm], c[0..am+bm+1])}
+      #threads << Thread.new{merge(a[am+1..-1], b[bm+1..-1], c[am+bm+2..c.size])}
+      merge(a[0..am], b[0..bm], c[0..am+bm+1])
+      merge(a[am+1..-1], b[bm+1..-1], c[am+bm+2..c.size])
     end
 
     threads.each{|t| t.join}
