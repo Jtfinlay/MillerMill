@@ -15,7 +15,7 @@ module ContractMergeSort
   def class_invariant()
   end
 
-  def pre_sort(max_time, objects)
+  def pre_start(max_time, objects)
     assert (max_time.is_a?(Float) or max_time.is_a?(Fixnum)), \
       "Max time must be a Number"
     assert objects.is_a?(Array)
@@ -24,7 +24,30 @@ module ContractMergeSort
     }
   end
 
-  def post_sort
+  def post_start
+
+  end
+
+  def pre_merge_sort(a, l, r)
+    assert a.is_a?(Array), "a must be an array"
+    assert l.is_a?(Fixnum), "l must be an index"
+    assert r.is_a?(Fixnum), "r must be an index"
+    assert r.between(0, a.size), "r must be within array size"
+    assert l.between(0, a.size), "l must be within array size"
+  end
+
+  def post_merge_sort
+
+  end
+
+  def pre_merge(a, b, c)
+    assert a.is_a?(Array), "a must be an array"
+    assert b.is_a?(Array), "b must be an array"
+    assert c.is_a?(Array), "c must be an array"
+    assert c.size == a.size+b.size, "c must be sum of a & b sizes"
+  end
+
+  def post_merge
 
   end
 
