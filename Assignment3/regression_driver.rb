@@ -16,7 +16,7 @@ if ARGV.length < 2
 else
   File.open(ARGV[0], 'w'){ |file|
     ARGV[1..-1].each{|thread_count|
-      file.puts("#{thread_count},#{thread_task(thread_count)}")
+      file.puts("#{thread_count},#{thread_task(thread_count.to_i)}")
     }
   }
 end
