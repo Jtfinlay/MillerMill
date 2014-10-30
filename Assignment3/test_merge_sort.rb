@@ -11,11 +11,17 @@ class TestMergeSort < Test::Unit::TestCase
     c = Array.new(a.size+b.size)
 
     m = MergeSort.new
-    m.merge(a,b,c)
+    m.merge(a,b,c,0)
 
-    tmp = "C: " 
-    c.each{|v| tmp << " #{v},"}
-    puts tmp
+    assert [-2,1,2,5,6,9,9,20,44,69], c
+  end
+
+  def test_merge_sort()
+    a = [-4,3,5,7,43,2,67,4,4,56,6,7,8,53,43,34,54,56]
+    
+    m = MergeSort.new
+
+    assert a.sort, m.start(100,a)
   end
 
 end

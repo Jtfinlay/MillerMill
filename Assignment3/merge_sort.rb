@@ -24,54 +24,37 @@ class MergeSort
   def merge_sort(a, l, r)
     return 0 if (r-l) <= 1
 
-    left = Thread.new { merge_sort(a, l, (r-l)/2)}
-    right = Thread.new { merge_sort(a, 1+(r-l)/2, r)}
+    left = Thread.new { merge_sort(a, l, l+(r-l)/2)}
+    right = Thread.new { merge_sort(a, l+1+(r-l)/2, r)}
 
     left.join
     right.join
 
     result = Array.new(a.size, 0)
-    merge(a[0..a.size/2], a[1+a.size/2..-1], result)
+    merge(a[0..a.size/2], a[1+a.size/2..-1], result, 0)
 
     return result
   end
 
-  def merge(a, b, c)
-#    if (b.size > a.size)
-#      merge(b, a, c)
-#      return
-#    end
+  def merge(a, b, c, ci)
     threads = []
 
-    puts "#-----------------------#"
-    puts "merge: #{a.size}, #{b.size}, #{c.size}"
-    tmp = "A: "
-    a.each{|v| tmp << " #{v},"}
-    puts tmp
-    tmp = "B: "
-    b.each{|v| tmp << " #{v},"}
-    puts tmp
-
     if (b.size > a.size)
-      merge(b, a, c)
+      merge(b, a, c, ci)
       return
     end
 
 
-    if (c.size == 1)
-      c[0] = a[0]
+    if (a.size+b.size == 1)
+      c[ci] = a[0]
     elsif (a.size == 1)
-      c[0,2] = a[0] < b[0] ? [a[0],b[0]] : [b[0],a[0]]
+      c[ci,2] = a[0] < b[0] ? [a[0],b[0]] : [b[0],a[0]]
     else
       am = (a.size-1)/2
       bm = (b.find_index{|v| (v <=> a[am]) > -1} || b.size)-1
       bm = 0 if bm < 0
-      puts "#{am}, #{bm}, #{bm.class}"
-#      gets
-      #threads << Thread.new{merge(a[0..am], b[0..bm], c[0..am+bm+1])}
-      #threads << Thread.new{merge(a[am+1..-1], b[bm+1..-1], c[am+bm+2..c.size])}
-      merge(a[0..am], b[0..bm], c[0..am+bm+1])
-      merge(a[am+1..-1], b[bm+1..-1], c[am+bm+2..c.size])
+      threads << Thread.new{merge(a[0..am], b[0..bm], c, ci)}
+      threads << Thread.new{merge(a[am+1..-1], b[bm+1..-1], c, ci+am+bm+2)}
     end
 
     threads.each{|t| t.join}
