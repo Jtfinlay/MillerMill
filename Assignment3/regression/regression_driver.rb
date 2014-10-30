@@ -15,7 +15,7 @@ if ARGV.length < 1
   puts "Argument required: output file"
 elsif ARGV.length == 1
   File.open(ARGV[0], 'w'){|file|
-    (1..200).each{|thread_count|
+    (1..100).each{|thread_count|
        file.puts("#{thread_count},#{thread_task(thread_count)}")
     }
   }
