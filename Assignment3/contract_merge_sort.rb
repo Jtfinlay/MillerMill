@@ -25,7 +25,6 @@ module ContractMergeSort
   end
 
   def post_start
-
   end
 
   def pre_merge_sort(a, l, r)
@@ -36,19 +35,20 @@ module ContractMergeSort
     assert l.between(0, a.size), "l must be within array size"
   end
 
-  def post_merge_sort
-
+  def post_merge_sort(result)
+    assert result == result.sort, "Result must be sorted"
   end
 
-  def pre_merge(a, b, c)
+  def pre_merge(a, b, c, ci)
     assert a.is_a?(Array), "a must be an array"
     assert b.is_a?(Array), "b must be an array"
     assert c.is_a?(Array), "c must be an array"
+    assert ci.is_a?(Fixnum), "ci must be a Fixnum array index"
     assert c.size == a.size+b.size, "c must be sum of a & b sizes"
   end
 
-  def post_merge
-
+  def post_merge(c, ci, size)
+    assert c[ci,size] = c[ci,size].sort, "Subarray must be sorted"
   end
 
 end
