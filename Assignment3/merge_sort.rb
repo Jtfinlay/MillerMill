@@ -8,6 +8,7 @@
 ##
 
 require './contract_merge_sort'
+require 'timeout'
 
 class MergeSort
   include ContractMergeSort
@@ -17,8 +18,9 @@ class MergeSort
 
   def start(max_time, objects)
      # TODO max_time trigger
-     result = merge_sort(objects, 0, objects.size)
-
+     result = Timeout::timeout(max_time.to_i) {
+       merge_sort(objects, 0, objects.size)
+     }
   end
 
   def merge_sort(a, l, r)
