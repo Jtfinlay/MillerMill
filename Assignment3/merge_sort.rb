@@ -38,6 +38,7 @@ class MergeSort
 
   def merge(a, b, c, ci)
     threads = []
+    b ||= Array.new
 
     if (b.size > a.size)
       merge(b, a, c, ci)

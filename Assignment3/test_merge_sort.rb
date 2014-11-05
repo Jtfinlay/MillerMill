@@ -25,11 +25,11 @@ class TestMergeSort < Test::Unit::TestCase
   end
 
   def test_merge_sort_large()
-    a = Array.new(10000, 5000-rand(10000))
+    a = Array.new(100){500-rand(1000)}
 
     m = MergeSort.new
 
-    assert a.sort, m.start(10000000, a)
+    assert a.sort, m.start(1000, a)
   end
 
 end
