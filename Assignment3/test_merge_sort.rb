@@ -18,10 +18,18 @@ class TestMergeSort < Test::Unit::TestCase
 
   def test_merge_sort()
     a = [-4,3,5,7,43,2,67,4,4,56,6,7,8,53,43,34,54,56]
-    
+
     m = MergeSort.new
 
     assert a.sort, m.start(100,a)
+  end
+
+  def test_merge_sort_large()
+    a = Array.new(10000, 5000-rand(10000))
+
+    m = MergeSort.new
+
+    assert a.sort, m.start(10000000, a)
   end
 
 end
