@@ -13,7 +13,12 @@ require 'timeout'
 class MergeSort
   include ContractMergeSort
 
-  def initialize
+  attr_accessor :compare
+  @@CMP_DEFAULT = lambda {|v1, v2| v1 <=> v2}
+
+
+  def initialize(comparator=@@CMP_DEFAULT)
+    @compare = comparator
   end
 
   def start(max_time, objects)
@@ -51,14 +56,13 @@ class MergeSort
       return
     end
 
-
     if (a.size+b.size == 1)
       c[ci] = a[0]
     elsif (a.size == 1)
       c[ci,2] = a[0] < b[0] ? [a[0],b[0]] : [b[0],a[0]]
     else
       am = (a.size-1)/2
-      bm = (b.find_index{|v| (v <=> a[am]) > -1} || b.size)-1
+      bm = (b.find_index{|v| @compare.call(v, a[am]) > -1} || b.size)-1
       bm = 0 if bm < 0
       threads << Thread.new{merge(a[0..am], b[0..bm], c, ci)}
       threads << Thread.new{merge(a[am+1..-1], b[bm+1..-1], c, ci+am+bm+2)}
