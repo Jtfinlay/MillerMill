@@ -24,6 +24,7 @@ class MergeSort
      rescue Timeout::Error
        puts "Sorting timed out"
      end
+     return result
   end
 
   def merge_sort(a, l, r)
