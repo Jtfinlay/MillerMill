@@ -13,6 +13,14 @@ module ContractMergeSort
   include Test::Unit::Assertions
 
   def class_invariant()
+    assert compare.is_a?(Proc), "Comparator must be Proc"
+  end
+
+  def pre_initialize(comparator)
+    assert comparator.is_a?(Proc), "Comparator must be Proc"
+  end
+
+  def post_initialize()
   end
 
   def pre_start(max_time, objects)
@@ -20,7 +28,7 @@ module ContractMergeSort
       "Max time must be a Number"
     assert objects.is_a?(Array)
     objects.each_with_index{ |obj,i|
-      assert !(obj <=> objects[i-1]).nil?, "All objects must be comparable"
+      assert !(compare(obj, objects[i-1])).nil?, "All objects must be comparable"
     }
   end
 
