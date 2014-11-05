@@ -29,7 +29,15 @@ class TestMergeSort < Test::Unit::TestCase
 
     m = MergeSort.new
 
-    assert_equal a.sort, m.start(1, a)
+    assert_equal a.sort, m.start(100, a)
+  end
+
+  def test_timeout()
+    a = Array.new(100){500-rand(1000)}
+
+    m = MergeSort.new
+
+    assert_equal nil, m.start(1, a)
   end
 
 end
