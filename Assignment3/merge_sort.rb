@@ -17,10 +17,13 @@ class MergeSort
   end
 
   def start(max_time, objects)
-     # TODO max_time trigger
-     result = Timeout::timeout(max_time.to_i) {
-       merge_sort(objects, 0, objects.size)
-     }
+     begin
+       result = Timeout::timeout(max_time.to_f) {
+         merge_sort(objects, 0, objects.size)
+       }
+     rescue Timeout::Error
+       puts "Sorting timed out"
+     end
   end
 
   def merge_sort(a, l, r)
