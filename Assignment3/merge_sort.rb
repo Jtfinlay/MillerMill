@@ -18,17 +18,29 @@ class MergeSort
 
 
   def initialize(comparator=@@CMP_DEFAULT)
+    pre_initialize(comparator)
+
     @compare = comparator
+
+    post_initialize
+    class_invariant
   end
 
   def start(max_time, objects)
-     # TODO max_time trigger
-     result = Timeout::timeout(max_time.to_i) {
-       merge_sort(objects, 0, objects.size)
-     }
+    pre_start(max_time, objects)
+
+    # TODO max_time trigger
+    result = Timeout::timeout(max_time.to_i) {
+      merge_sort(objects, 0, objects.size)
+    }
+
+    post_start
+    class_invariant
   end
 
   def merge_sort(a, l, r)
+    pre_merge_sort(a, l, r)
+
     return 0 if (r-l) <= 1
 
     left = Thread.new { merge_sort(a, l, l+(r-l)/2)}
@@ -40,10 +52,14 @@ class MergeSort
     result = Array.new(a.size, 0)
     merge(a[0..a.size/2], a[1+a.size/2..-1], result, 0)
 
+    post_merge_sort(result)
+    class_invariant
     return result
   end
 
   def merge(a, b, c, ci)
+    pre_merge(a, b, c, ci)
+
     threads = []
     b ||= Array.new
 
@@ -65,6 +81,9 @@ class MergeSort
     end
 
     threads.each{|t| t.join}
+
+    post_merge(c, ci, a.size+b.size)
+    class_invariant
   end
 
 

@@ -13,5 +13,5 @@ if ARGV.length < 2
   puts "Two arguments required: time and objects."
 else
   sorter = MergeSort.new
-  sorter.sort(ARGV[0].to_i, ARGV[1..-1])
+  puts sorter.sort(ARGV[0].to_i, ARGV[1..-1])
 end
