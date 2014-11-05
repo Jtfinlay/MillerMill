@@ -13,7 +13,7 @@ class TestMergeSort < Test::Unit::TestCase
     m = MergeSort.new
     m.merge(a,b,c,0)
 
-    assert [-2,1,2,5,6,9,9,20,44,69], c
+    assert [-2,1,2,5,6,9,9,20,44,69], c.to_s
   end
 
   def test_merge_sort()
@@ -21,7 +21,7 @@ class TestMergeSort < Test::Unit::TestCase
 
     m = MergeSort.new
 
-    assert a.sort, m.start(100,a)
+    assert a.sort, m.start(100,a).to_s
   end
 
   def test_merge_sort_large()
@@ -29,7 +29,7 @@ class TestMergeSort < Test::Unit::TestCase
 
     m = MergeSort.new
 
-    assert a.sort, m.start(1000, a)
+    assert a.sort, m.start(100, a).to_s
   end
 
 end
