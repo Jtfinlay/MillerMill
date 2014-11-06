@@ -61,7 +61,7 @@ class MergeSort
   end
 
   def merge(a, b, c, ci)
-    b ||= Array.new
+    pre_merge(a,b,c,ci)
 
     threads = []
 

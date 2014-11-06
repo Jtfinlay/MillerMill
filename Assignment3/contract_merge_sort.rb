@@ -44,7 +44,7 @@ module ContractMergeSort
   end
 
   def post_merge_sort(result)
-    assert result == result.sort, "Result must be sorted"
+    assert result == result.sort{|x,y| @compare.call(x,y)}, "Result must be sorted"
   end
 
   def pre_merge(a, b, c, ci)
