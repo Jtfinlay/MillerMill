@@ -1,0 +1,10 @@
+The main change in our contracts involve the new custom Comparator:
+
+- The class invariant now ensures that the comparator is a Proc.
+- pre_start now uses the comparator to check if objects are comparable.
+- post_merge_sort now uses the comparator to see if the array is sorted.
+
+Other changes:
+
+- pre_merge checks that array c is of proper size.
+- post_merge checks subarray is sorted.

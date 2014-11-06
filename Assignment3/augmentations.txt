@@ -1,0 +1,2 @@
+An augmentation that was added to our solution is a custom comparator,
+which lets you pass in your own comparator to sort by.
