@@ -16,16 +16,6 @@ class TestMergeSort < Test::Unit::TestCase
     assert_equal [-2,1,2,5,6,9,9,20,44,69], c
   end
 
-  def test_merge_small()
-    a = [6,7,8]
-    b = [53, 43]
-    c = Array.new(5)
-
-    m = MergeSort.new
-#    m.merge(a,b,c,0)
-#    assert_equal [6,7,8,53,43], c
-  end
-
   def test_merge_sort()
     a = [-4,3,5,7,43,2,67,4,4,56,6,7,8,53,43,34,54,56]
 

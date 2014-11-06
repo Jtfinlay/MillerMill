@@ -44,8 +44,6 @@ module ContractMergeSort
   end
 
   def post_merge_sort(result)
-    puts "----------------"
-    result.each{|v| puts v}
     assert result == result.sort, "Result must be sorted"
   end
 
