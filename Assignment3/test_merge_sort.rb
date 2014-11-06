@@ -17,21 +17,21 @@ class TestMergeSort < Test::Unit::TestCase
   end
 
   def test_merge_small()
-    a = [-4, 3]
-    b = [5]
-    c = Array.new(3)
+    a = [6,7,8]
+    b = [53, 43]
+    c = Array.new(5)
 
     m = MergeSort.new
-#    m.merge(a,b,c,0)
-#    assert_equal [-4,3,5], c
+    m.merge(a,b,c,0)
+    assert_equal [6,7,8,43,53], c
   end
 
   def test_merge_sort()
     a = [-4,3,5,7,43,2,67,4,4,56,6,7,8,53,43,34,54,56]
 
-    m = MergeSort.new
+#    m = MergeSort.new
 
-    assert_equal a.sort, m.start(100,a)
+#    assert_equal a.sort, m.start(100,a)
   end
 
   def test_merge_sort_large()
