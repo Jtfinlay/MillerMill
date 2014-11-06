@@ -11,9 +11,9 @@ class TestMergeSort < Test::Unit::TestCase
     c = Array.new(a.size+b.size)
 
     m = MergeSort.new
-#    m.merge(a,b,c,0)
+    m.merge(a,b,c,0)
 
-#    assert_equal [-2,1,2,5,6,9,9,20,44,69], c
+    assert_equal [-2,1,2,5,6,9,9,20,44,69], c
   end
 
   def test_merge_small()
@@ -22,16 +22,16 @@ class TestMergeSort < Test::Unit::TestCase
     c = Array.new(5)
 
     m = MergeSort.new
-    m.merge(a,b,c,0)
-    assert_equal [6,7,8,43,53], c
+#    m.merge(a,b,c,0)
+#    assert_equal [6,7,8,53,43], c
   end
 
   def test_merge_sort()
     a = [-4,3,5,7,43,2,67,4,4,56,6,7,8,53,43,34,54,56]
 
-#    m = MergeSort.new
+    m = MergeSort.new
 
-#    assert_equal a.sort, m.start(100,a)
+    assert_equal a.sort, m.start(100,a)
   end
 
   def test_merge_sort_large()
@@ -39,7 +39,7 @@ class TestMergeSort < Test::Unit::TestCase
 
     m = MergeSort.new
 
-#    assert_equal a.sort, m.start(100, a)
+    assert_equal a.sort, m.start(100, a)
   end
 
   def test_timeout()
@@ -47,7 +47,7 @@ class TestMergeSort < Test::Unit::TestCase
 
     m = MergeSort.new
 
-#    assert_equal nil, m.start(1, a)
+    assert_equal nil, m.start(1, a)
   end
 
 end
