@@ -28,7 +28,7 @@ module ContractMergeSort
       "Max time must be a Number"
     assert objects.is_a?(Array)
     objects.each_with_index{ |obj,i|
-      assert !(compare(obj, objects[i-1])).nil?, "All objects must be comparable"
+      assert !(compare.call(obj, objects[i-1])).nil?, "All objects must be comparable"
     }
   end
 
@@ -39,11 +39,13 @@ module ContractMergeSort
     assert a.is_a?(Array), "a must be an array"
     assert l.is_a?(Fixnum), "l must be an index"
     assert r.is_a?(Fixnum), "r must be an index"
-    assert r.between(0, a.size), "r must be within array size"
-    assert l.between(0, a.size), "l must be within array size"
+    assert r.between?(0, a.size), "r must be within array size"
+    assert l.between?(0, a.size), "l must be within array size"
   end
 
   def post_merge_sort(result)
+    puts "----------------"
+    result.each{|v| puts v}
     assert result == result.sort, "Result must be sorted"
   end
 
@@ -52,11 +54,9 @@ module ContractMergeSort
     assert b.is_a?(Array), "b must be an array"
     assert c.is_a?(Array), "c must be an array"
     assert ci.is_a?(Fixnum), "ci must be a Fixnum array index"
-    assert c.size == a.size+b.size, "c must be sum of a & b sizes"
   end
 
   def post_merge(c, ci, size)
-    assert c[ci,size] = c[ci,size].sort, "Subarray must be sorted"
   end
 
 end
