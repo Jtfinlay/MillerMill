@@ -36,8 +36,9 @@ class TestMergeSort < Test::Unit::TestCase
     a = Array.new(100){500-rand(1000)}
 
     m = MergeSort.new
-
-    assert_equal nil, m.start(1, a)
+    
+    # Sort was not finished
+    assert_not_same a.sort, m.start(0.001,a)
   end
 
 end
