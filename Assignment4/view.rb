@@ -25,6 +25,7 @@ class View
     reset_grid(width,height)
 
     @window.show_all
+
     Gtk.main
   end
 
@@ -34,7 +35,7 @@ class View
   # @param width: Width of grid in boxes
   # @param height: Height of grid in boxes
   def reset_grid(width, height)
-    @window.children = []
+#    @window.children = []
 
     v = Gtk::VBox.new
     btns = Gtk::HBox.new
@@ -78,7 +79,7 @@ class View
   # @param id: identification for image
   # @param image_file: image
   def add_image(id, image_file)
-    @pics[id => image_file]
+    @pics[id] = image_file
   end
 
 end
