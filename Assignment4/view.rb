@@ -10,7 +10,7 @@
 require 'gtk2'
 
 class View
-
+ 
   def initialize(width, height)
     Gtk.init
     window = Gtk::Window.new
@@ -21,7 +21,8 @@ class View
     Array.new(height).each_with_index{|a,row|
       h = Gtk::HBox.new
       Array.new(width).each_with_index{|b,col|
-        h.pack_start(Gtk::Image.new("X.png"))
+        img = Gtk::Image.new("empty.png")
+        h.pack_start(img)
       }
       v.pack_start(h)
     }
@@ -30,6 +31,5 @@ class View
     window.show_all
     Gtk.main
   end
-
 
 end
