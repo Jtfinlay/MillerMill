@@ -9,7 +9,9 @@
 
 class GameController
 
+  def initialize
 
+  end
 
 
 
