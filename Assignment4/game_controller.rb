@@ -31,12 +31,8 @@ class GameController
     @view.start_game
   end
 
-  def end_game
-
-  end
-
   def quit
-
+    @view.kill
   end
 
   def restart
@@ -50,7 +46,7 @@ class GameController
     @game.make_human_move(column)
   end
 
-  def subscribe(view)
+  def subscribe(observer)
     @game.add_observer(view)
   end
 
