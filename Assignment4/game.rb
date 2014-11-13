@@ -33,11 +33,11 @@ class Game
   end
 
   def add_to_column(column)
-    puts "add to column"
-    @board[@board.col(column).find_index(0), column] = @tokens[@turn]
+    row = @board.col(column).find_index(0)
+    @board[row,column] = @tokens[@turn]
     @turn = @turn ? 0 : 1
     check_win_conditions #TODO win condition stuff
-    @observers.each{|o| o.update_value(@board.col(column).find_index(0),column,@tokens[@turn])}
+    @observers.each{|o| o.update_value(column,row,@tokens[@turn])}
   end
 
   def make_computer_move
