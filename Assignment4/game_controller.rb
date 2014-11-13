@@ -7,15 +7,28 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
+require './view'
+require './game'
+
 class GameController
 
   @game
-  def initialize(model)
-    @game = model
+  @view
+
+  def initialize
+    width = 7
+    height = 6
+
+    @game = Game.new
+    @game.setup_board(width, height)
+    @game.setup_game(nil)
+
+    @view = View.new(self)
+    @view.setup(width, height)
   end
 
-  def start_game(type, human_players)
-
+  def start_game
+    @view.start_game
   end
 
   def end_game
@@ -23,6 +36,10 @@ class GameController
   end
 
   def quit
+
+  end
+
+  def restart
 
   end
 
