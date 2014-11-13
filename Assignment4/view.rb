@@ -34,7 +34,7 @@ class View
   def setup(width, height)
 
     v = Gtk::VBox.new
-    v.add(toolbar)
+    v.add(create_toolbar)
     v.pack_start(create_buttons(width))
 
     Array.new(height).each{|a|
