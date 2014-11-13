@@ -1,4 +1,4 @@
-
+gem 'test-unit'
 
 require 'test/unit/assertions'
 require 'gtk2'
