@@ -20,6 +20,6 @@ class ComputerizedOpponent
 
   def easy_difficulty(game_board)
     r = rand(0..game_board.row(0).size - 1)
-    return 1
+    return r
   end
 end
