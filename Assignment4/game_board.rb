@@ -11,7 +11,7 @@ class GameBoard
   @data
 
   def initialize(width, height)
-    @data = Array.new(height, Array.new(width, -1))
+    @data = Array.new(height){Array.new(width, 0)}
   end
 
   def row(row)
