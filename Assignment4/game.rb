@@ -28,16 +28,22 @@ class Game
     @board = GameBoard.new(7,6)
     @win_condition = win_condition
     @tokens = tokens
-    @turn = 0
+    @turn = 1
     @computerized_opponent = ComputerizedOpponent.new("easy") if computerized_opponent
   end
 
   def add_to_column(column)
     row = @board.col(column).find_index(0)
-    @board[row,column] = @tokens[@turn]
-    @turn = @turn ? 0 : 1
+    @board[row,column] = @tokens[@turn-1]
+    @turn = (@turn == 1) ? 2 : 1
     check_win_conditions #TODO win condition stuff
-    @observers.each{|o| o.update_value(column,row,@tokens[@turn])}
+    @observers.each{|o| o.update_value(column,row,@board[row,column])}
+  end
+
+  def make_human_move(column)
+    return if @board.col_full?(column)
+    add_to_column(column)
+    make_computer_move if @computerized_opponent != nil
   end
 
   def make_computer_move

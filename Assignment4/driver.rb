@@ -13,6 +13,6 @@ c = GameController.new(g)
 v = View.new(c)
 
 # TODO streamline this
-g.start_game(nil, nil, [1,2])
+g.start_game(nil, true, [1,2])
 v.setup(7,6)
 v.start_game
