@@ -8,7 +8,7 @@
 ##
 
 class GameController
-
+  @game
   def initialize
 
   end
@@ -26,7 +26,8 @@ class GameController
   end
 
   def column_press(column)
-
+    @game.add_to_column(column)
+    @game.make_computer_move if @game.computerized_opponent != nil
   end
 
 end
