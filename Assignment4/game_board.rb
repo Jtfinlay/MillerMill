@@ -30,4 +30,8 @@ class GameBoard
     return @data[row][col] = v
   end
 
+  def col_full?(column)
+    return self[col(column).size - 1, column] != 0
+  end
+
 end

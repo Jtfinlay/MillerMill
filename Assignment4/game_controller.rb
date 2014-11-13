@@ -27,8 +27,7 @@ class GameController
   end
 
   def column_press(column)
-    @game.add_to_column(column)
-    @game.make_computer_move if @game.computerized_opponent != nil
+    @game.make_human_move(column)
   end
 
   def subscribe(view)
