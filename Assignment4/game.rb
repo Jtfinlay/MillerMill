@@ -9,10 +9,10 @@
 
 require "./computerized_opponent.rb"
 require './game_board.rb'
-#require observer
+#require "observer"
 
 class Game
-#  include Observable
+  #include Observable
   attr_accessor :board, :turn, :computerized_opponent
   @board
   @win_condition
@@ -27,7 +27,7 @@ class Game
   def start_game(win_condition, computerized_opponent, tokens)
     @board = GameBoard.new(7,6)
     @win_condition = win_condition
-    @tokens = tokens 
+    @tokens = tokens
     @turn = 0
     @computerized_opponent = ComputerizedOpponent.new("easy") if computerized_opponent
   end
@@ -36,7 +36,7 @@ class Game
     @board[@board.col(column).find_index(0), column] = @tokens[@turn]
     @turn = @turn ? 0 : 1
     check_win_conditions
-#    notify_observers(Time.now)
+    notify_observers(Time.now)
   end
 
   def make_computer_move

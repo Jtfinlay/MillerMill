@@ -15,7 +15,7 @@ class View
   @pics
   @controller
 
-  def initialize(controller, width, height)
+  def initialize(controller)
     @controller = controller
     reset_images
 
@@ -24,20 +24,14 @@ class View
     @window.signal_connect("destroy"){Gtk.main_quit}
     @window.title = "FourPlay"
 
-    reset_grid(width,height)
+    @controller.subscribe(self)
 
-    @window.show_all
-
-    Gtk.main
   end
 
   #
-  # Remove everything from grid and repopulate
+  # Repopulate board
   #
-  # @param width: Width of grid in boxes
-  # @param height: Height of grid in boxes
-  def reset_grid(width, height)
-#    @window.children = []
+  def setup(width, height)
 
     v = Gtk::VBox.new
     v.add(toolbar)
@@ -50,6 +44,17 @@ class View
     @window.add(v)
   end
 
+  #
+  # Show grid
+  #
+  def start_game
+    @window.show_all
+    Gtk.main
+  end
+
+  #
+  # Create the toolbar
+  #
   def create_toolbar
     toolbar = Gtk::Toolbar.new
     file_menu = Gtk::ToolButton.new(nil, "Restart")
@@ -91,19 +96,15 @@ class View
   end
 
   #
-  # Update box value
+  # Set box value
   #
-  # @param x: column location
-  # @param y: row location
-  # @param v: value to set. Should match value in @pics
   def set_box(x, y, v)
     @window.children[0].children[y+2].children[x].set(@pics[v])
   end
 
   #
   # Add a possible box image, identified by given id
-  # @param id: identification for image
-  # @param image_file: image
+  #
   def set_image(id, image_file)
     @pics[id] = image_file
   end

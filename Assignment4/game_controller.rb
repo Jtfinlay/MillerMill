@@ -9,9 +9,9 @@
 
 class GameController
 
-  @model
+  @game
   def initialize(model)
-    @model = model
+    @game = model
   end
 
   def start_game(type, human_players)
@@ -27,8 +27,12 @@ class GameController
   end
 
   def column_press(column)
-    @model.add_to_column(column)
-    @model.make_computer_move if @model.computerized_opponent != nil
+    @game.add_to_column(column)
+    @game.make_computer_move if @game.computerized_opponent != nil
+  end
+
+  def subscribe(view)
+    @game.add_observer(view)
   end
 
 end

@@ -2,10 +2,15 @@
 
 require 'gtk2'
 require './view'
+require './game'
+require './game_controller'
 
 width = 10
 height = 10
 
-m = Model.new(width,height)
-c = GameController.new(m)
-v = View.new(c,width,height)
+g = Game.new
+c = GameController.new(g)
+v = View.new(c)
+
+v.setup(7,6)
+v.start_game
