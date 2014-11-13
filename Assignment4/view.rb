@@ -2,14 +2,15 @@
 #
 # = view.rb
 #
-# Manages Gtk GUI
+# Gtk GUI Manager
 #
 # Authors: Evan Degraff, James Finlay
 ##
 
 require 'gtk2'
+require './abstract_listener'
 
-class View
+class View < AbstractListener
 
   @window
   @pics
@@ -25,11 +26,10 @@ class View
     @window.title = "FourPlay"
 
     @controller.subscribe(self)
-
   end
 
   #
-  # Repopulate board
+  # Populate board
   #
   def setup(width, height)
 
@@ -42,6 +42,13 @@ class View
     }
 
     @window.add(v)
+  end
+
+  #
+  # Destroy GUI
+  #
+  def kill
+    Gtk.main_quit
   end
 
   #
@@ -65,6 +72,9 @@ class View
     return toolbar
   end
 
+  #
+  # Create row of action buttons
+  #
   def create_buttons(width)
     btns = Gtk::HBox.new
     Array.new(width).each_with_index{|b,col|
@@ -77,6 +87,9 @@ class View
     return btns
   end
 
+  #
+  # Creates a row in the image grid
+  #
   def create_grid_row(width)
     h = Gtk::HBox.new
     Array.new(width).each{|b|
@@ -99,7 +112,6 @@ class View
   # Set box value
   #
   def update_value(x, y, v)
-    puts "update value: #{x}, #{y} => #{v}"
     @window.children[0].children[y+2].children[x].set(@pics[v])
   end
 

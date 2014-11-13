@@ -9,7 +9,6 @@
 
 require "./computerized_opponent.rb"
 require './game_board.rb'
-require "observer"
 
 class Game
   attr_accessor :board, :turn, :computerized_opponent
@@ -49,6 +48,9 @@ class Game
 
   end
 
+  #
+  # Add a ModelListener
+  #
   def add_observer(view)
     @observers << view
   end
