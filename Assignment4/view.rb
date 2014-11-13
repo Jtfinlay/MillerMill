@@ -65,18 +65,19 @@ class View < AbstractListener
     btnRestart = Gtk::Button.new("New Game")
     btnExit = Gtk::Button.new("Exit")
 
-    hbox = Gtk::HBox.new
-    hbox.pack_start(btnRestart)
-    hbox.pack_start(btnExit)
+    # hbox = Gtk::HBox.new
+    # hbox.pack_start(btnRestart)
+    # hbox.pack_start(btnExit)
 
     dialog = Gtk::Dialog.new(
       "Game Over",
       @window,
       Gtk::Dialog::DESTROY_WITH_PARENT,
-      [ Gtk::Stock::OK, Gtk::Dialog::RESPONSE_OK ]
+      [ Gtk::Stock::OK, Gtk::Dialog::RESPONSE_OK ],
+      [ Gtk::Stock::EXIT, Gtk::Dialog::RESPONSE_EXIT ]
     )
     dialog.vbox.add(Gtk::Label.new(message))
-    dialog.vbox.add(hbox)
+    # dialog.vbox.add(hbox)
 
     dialog.show_all
   end
