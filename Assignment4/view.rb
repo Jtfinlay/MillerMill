@@ -38,7 +38,7 @@ class View
     v.pack_start(create_buttons(width))
 
     Array.new(height).each{|a|
-      v.pack_start(create_grid_row(width))
+      v.pack_end(create_grid_row(width))
     }
 
     @window.add(v)
@@ -99,8 +99,7 @@ class View
   # Set box value
   #
   def update_value(x, y, v)
-    puts "update value: #{x}, #{y} => #{v}"
-    @window.children[0].children[y+2].children[x].set(@pics[v])
+    @window.children[0].children.reverse[y].children[x].set(@pics[v])
   end
 
   #
