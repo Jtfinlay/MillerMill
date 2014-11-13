@@ -9,7 +9,6 @@
 
 require "./computerized_opponent.rb"
 require './game_board.rb'
-require "observer"
 
 class Game
   attr_accessor :board, :turn, :computerized_opponent
@@ -25,12 +24,18 @@ class Game
     @observers = []
   end
 
-  def start_game(win_condition, computerized_opponent, tokens)
-    @board = GameBoard.new(7,6)
+  def setup_game(win_condition, \
+      computerized_opponent = ComputerizedOpponent.new("easy"), \
+      tokens=[1,2])
+
     @win_condition = win_condition
     @tokens = tokens
+    @computerized_opponent = computerized_opponent
+  end
+
+  def setup_board(width, height)
+    @board = GameBoard.new(width,height)
     @turn = 1
-    @computerized_opponent = ComputerizedOpponent.new("easy") if computerized_opponent
   end
 
   def add_to_column(column)
@@ -65,6 +70,9 @@ class Game
     }
   end
 
+  #
+  # Add a ModelListener
+  #
   def add_observer(view)
     @observers << view
   end

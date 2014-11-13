@@ -2,14 +2,15 @@
 #
 # = view.rb
 #
-# Manages Gtk GUI
+# Gtk GUI Manager
 #
 # Authors: Evan Degraff, James Finlay
 ##
 
 require 'gtk2'
+require './abstract_listener'
 
-class View
+class View < AbstractListener
 
   @window
   @pics
@@ -18,20 +19,17 @@ class View
   def initialize(controller)
     @controller = controller
     reset_images
+    @controller.subscribe(self)
+  end
 
+  #
+  # Populate board
+  #
+  def setup(width, height)
     Gtk.init
     @window = Gtk::Window.new
     @window.signal_connect("destroy"){Gtk.main_quit}
     @window.title = "FourPlay"
-
-    @controller.subscribe(self)
-
-  end
-
-  #
-  # Repopulate board
-  #
-  def setup(width, height)
 
     v = Gtk::VBox.new
     v.add(create_toolbar)
@@ -45,11 +43,49 @@ class View
   end
 
   #
-  # Show grid
+  # Destroy GUI
+  #
+  def kill
+    @window.destroy
+  end
+
+  #
+  # Show grid & start
   #
   def start_game
     @window.show_all
     Gtk.main
+  end
+
+  #
+  # Show game finish alert
+  #
+  def game_over(message)
+
+   dialog = Gtk::Dialog.new(
+      "Game Over",
+      @window,
+      Gtk::Dialog::MODAL
+    )
+
+    btnRestart = Gtk::Button.new("New Game")
+    btnRestart.signal_connect("clicked"){
+      @controller.restart
+      dialog.close
+    }
+    btnExit = Gtk::Button.new("Quit")
+    btnExit.signal_connect("clicked"){
+      @controller.quit
+    }
+
+    hbox = Gtk::HBox.new
+    hbox.pack_start(btnRestart)
+    hbox.pack_start(btnExit)
+
+    dialog.vbox.add(Gtk::Label.new(message))
+    dialog.vbox.add(hbox)
+
+    dialog.show_all
   end
 
   #
@@ -59,12 +95,15 @@ class View
     toolbar = Gtk::Toolbar.new
     file_menu = Gtk::ToolButton.new(nil, "Restart")
     file_menu.signal_connect("clicked") {
-      # TODO - Restart
+      @controller.restart
     }
     toolbar.insert(0, file_menu)
     return toolbar
   end
 
+  #
+  # Create row of action buttons
+  #
   def create_buttons(width)
     btns = Gtk::HBox.new
     Array.new(width).each_with_index{|b,col|
@@ -77,6 +116,9 @@ class View
     return btns
   end
 
+  #
+  # Creates a row in the image grid
+  #
   def create_grid_row(width)
     h = Gtk::HBox.new
     Array.new(width).each{|b|

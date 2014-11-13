@@ -47,6 +47,9 @@ module ContractGameBoard
     assert col < data.size, "Col index cannot be larger than array"
   end
 
+  def post_col
+  end
+
   def pre_square_brackets(data, row, col)
     assert row.is_a?(Fixnum), "Row index must be Fixnum"
     assert col.is_a?(Fixnum), "Col index must be Fixnum"
