@@ -98,7 +98,8 @@ class View
   #
   # Set box value
   #
-  def set_box(x, y, v)
+  def update_value(x, y, v)
+    puts "update value: #{x}, #{y} => #{v}"
     @window.children[0].children[y+2].children[x].set(@pics[v])
   end
 

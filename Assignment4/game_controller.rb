@@ -32,7 +32,7 @@ class GameController
   end
 
   def subscribe(view)
-#    @game.add_observer(view)
+    @game.add_observer(view)
   end
 
 end
