@@ -20,11 +20,6 @@ class View < AbstractListener
     @controller = controller
     reset_images
 
-    Gtk.init
-    @window = Gtk::Window.new
-    @window.signal_connect("destroy"){Gtk.main_quit}
-    @window.title = "FourPlay"
-
     @controller.subscribe(self)
   end
 
@@ -32,6 +27,10 @@ class View < AbstractListener
   # Populate board
   #
   def setup(width, height)
+    Gtk.init
+    @window = Gtk::Window.new
+    @window.signal_connect("destroy"){Gtk.main_quit}
+    @window.title = "FourPlay"
 
     v = Gtk::VBox.new
     v.add(create_toolbar)
@@ -66,7 +65,7 @@ class View < AbstractListener
     toolbar = Gtk::Toolbar.new
     file_menu = Gtk::ToolButton.new(nil, "Restart")
     file_menu.signal_connect("clicked") {
-      # TODO - Restart
+      @controller.restart
     }
     toolbar.insert(0, file_menu)
     return toolbar

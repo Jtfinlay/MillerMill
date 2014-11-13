@@ -30,7 +30,7 @@ class Game
 
     @win_condition = win_condition
     @tokens = tokens
-    @computerized_opponent = computerized_oppoent
+    @computerized_opponent = computerized_opponent
   end
 
   def setup_board(width, height)
