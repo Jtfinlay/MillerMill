@@ -19,7 +19,6 @@ class View < AbstractListener
   def initialize(controller)
     @controller = controller
     reset_images
-
     @controller.subscribe(self)
   end
 
@@ -47,7 +46,7 @@ class View < AbstractListener
   # Destroy GUI
   #
   def kill
-    Gtk.main_quit
+    @window.destroy
   end
 
   #
