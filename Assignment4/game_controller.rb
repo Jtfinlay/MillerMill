@@ -8,26 +8,27 @@
 ##
 
 class GameController
-  @game
-  def initialize
 
+  @model
+  def initialize(model)
+    @model = model
   end
 
   def start_game(type, human_players)
 
   end
-  
+
   def end_game
 
   end
- 
+
   def quit
 
   end
 
   def column_press(column)
-    @game.add_to_column(column)
-    @game.make_computer_move if @game.computerized_opponent != nil
+    @model.add_to_column(column)
+    @model.make_computer_move if @model.computerized_opponent != nil
   end
 
 end

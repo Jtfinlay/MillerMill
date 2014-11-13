@@ -13,14 +13,16 @@ class View
 
   @window
   @pics
+  @controller
 
-  def initialize(width, height)
+  def initialize(controller, width, height)
+    @controller = controller
     reset_images
 
     Gtk.init
     @window = Gtk::Window.new
     @window.signal_connect("destroy"){Gtk.main_quit}
-    @window.border_width = 5
+    @window.title = "FourPlay"
 
     reset_grid(width,height)
 
@@ -38,36 +40,44 @@ class View
 #    @window.children = []
 
     v = Gtk::VBox.new
+    v.add(toolbar)
+    v.pack_start(create_buttons(width))
 
-    # Toolbar
+    Array.new(height).each{|a|
+      v.pack_start(create_grid_row(width))
+    }
+
+    @window.add(v)
+  end
+
+  def create_toolbar
     toolbar = Gtk::Toolbar.new
     file_menu = Gtk::ToolButton.new(nil, "Restart")
     file_menu.signal_connect("clicked") {
       # TODO - Restart
     }
     toolbar.insert(0, file_menu)
-    v.add(toolbar)
+    return toolbar
+  end
 
-    # Add buttons
+  def create_buttons(width)
     btns = Gtk::HBox.new
     Array.new(width).each_with_index{|b,col|
       btn = Gtk::Button.new("Place")
       btn.signal_connect("clicked") {
-        #TODO implement on-click
+        @controller.column_press(col)
       }
       btns.pack_start(btn)
     }
-    v.pack_start(btns)
+    return btns
+  end
 
-    # Add grid
-    Array.new(height).each{|a|
-      h = Gtk::HBox.new
-      Array.new(width).each{|b|
-        h.pack_start(Gtk::Image.new(@pics[0]))
-      }
-      v.pack_start(h)
+  def create_grid_row(width)
+    h = Gtk::HBox.new
+    Array.new(width).each{|b|
+      h.pack_start(Gtk::Image.new(@pics[0]))
     }
-    @window.add(v)
+    return h
   end
 
   #
