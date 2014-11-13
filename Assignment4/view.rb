@@ -50,11 +50,35 @@ class View < AbstractListener
   end
 
   #
-  # Show grid
+  # Show grid & start
   #
   def start_game
     @window.show_all
     Gtk.main
+  end
+
+  #
+  # Show game finish alert
+  #
+  def game_over(message)
+
+    btnRestart = Gtk::Button.new("New Game")
+    btnExit = Gtk::Button.new("Exit")
+
+    hbox = Gtk::HBox.new
+    hbox.pack_start(btnRestart)
+    hbox.pack_start(btnExit)
+
+    dialog = Gtk::Dialog.new(
+      "Game Over",
+      @window,
+      Gtk::Dialog::DESTROY_WITH_PARENT,
+      [ Gtk::Stock::OK, Gtk::Dialog::RESPONSE_OK ]
+    )
+    dialog.vbox.add(Gtk::Label.new(message))
+    dialog.vbox.add(hbox)
+
+    dialog.show_all
   end
 
   #
@@ -66,7 +90,10 @@ class View < AbstractListener
     file_menu.signal_connect("clicked") {
       @controller.restart
     }
+    restart = Gtk::ToolButton.new(nil, "Alert!")
+    restart.signal_connect("clicked"){game_over("Cocaine.")}
     toolbar.insert(0, file_menu)
+    toolbar.insert(1, restart)
     return toolbar
   end
 
