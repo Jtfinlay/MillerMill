@@ -75,9 +75,9 @@ class View
   #
   def reset_images()
     @pics = Hash.new
-    add_image(0, "empty.png")
-    add_image(1, "X.png")
-    add_image(2, "O.png")
+    set_image(0, "empty.png")
+    set_image(1, "X.png")
+    set_image(2, "O.png")
   end
 
   #
