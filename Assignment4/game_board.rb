@@ -22,6 +22,24 @@ class GameBoard
     return @data.flatten.select.with_index{|v,i| i % @data[0].size == col}
   end
 
+  def diagonals
+    a = @data # Readability
+    diags = []
+    (0..a[0].size - 1).each { |k|
+      diags << (0..a.size - 1).collect{|i| a[i][i+k]}.compact
+    }
+    (0..a[0].size - 1).each { |k|
+      diags << (0..a.size - 1).collect{|i| a[i][k-i] if k-i > -1}.compact
+    }
+    (0..a[0].size - 1).reverse_each { |k|
+      diags << (0..a.size - 1).to_a.reverse.collect{|i| a[i][i-k] if i-k > -1}.compact
+    }
+    (0..a[0].size - 1).reverse_each { |k|
+     diags << (0..a.size - 1).to_a.reverse.collect{|i| a[i][k-(i-(a.size-1))]}.compact
+    }
+    return diags
+  end 
+
   def [](row, col)
     return @data[row][col]
   end
