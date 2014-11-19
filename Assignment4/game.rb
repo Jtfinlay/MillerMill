@@ -15,8 +15,6 @@ class Game
   @board
   @win_condition1
   @win_condition2
-  @tokens
-  @turn
   @computerized_opponent
 
   @observers
@@ -27,37 +25,33 @@ class Game
 
   def setup_game(win_condition1, \
       win_condition2, \
-      computerized_opponent = ComputerizedOpponent.new("easy"), \
-      tokens=[1,2])
+      computerized_opponent = ComputerizedOpponent.new("easy"))
 
     @win_condition1 = win_condition1
     @win_condition2 = win_condition2
-    @tokens = tokens
     @computerized_opponent = computerized_opponent
   end
 
   def setup_board(width, height)
     @board = GameBoard.new(width,height)
-    @turn = 1
   end
 
-  def add_to_column(column)
+  def add_to_column(column, value)
     row = @board.col(column).find_index(0)
-    @board[row,column] = @tokens[@turn-1]
-    @turn = (@turn == 1) ? 2 : 1
+    @board[row,column] = value 
     puts "P1 wins" if check_win_conditions(@win_condition1)
     puts "P2 wins" if check_win_conditions(@win_condition2)
     @observers.each{|o| o.update_value(column,row,@board[row,column])}
   end
 
-  def make_human_move(column)
+  def make_human_move(column, value)
     return if @board.col_full?(column)
-    add_to_column(column)
+    add_to_column(column, value)
     make_computer_move if @computerized_opponent != nil
   end
 
   def make_computer_move
-    add_to_column(@computerized_opponent.make_move(@board))
+    add_to_column(@computerized_opponent.make_move(@board), @win_condition2[and(0,1)])
   end
 
   def check_win_conditions(w)

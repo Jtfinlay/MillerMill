@@ -25,7 +25,7 @@ class GameController
 
     @view = View.new(self)
     @view.setup(@@width, @@height)
-    @view.setup_standard(@@width, @@height)
+    @view.setup_OTTO(@@width, @@height)
   end
 
   def start_game
@@ -44,8 +44,7 @@ class GameController
   end
 
   def column_press(column, value)
-    # TODO - use value with OTTO/TOOT
-    @game.make_human_move(column)
+    @game.make_human_move(column, value)
   end
 
   def subscribe(observer)
