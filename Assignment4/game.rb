@@ -30,31 +30,31 @@ class Game
 
   def setup_game(win_condition1, \
       win_condition2, \
-      computerized_opponent = ComputerizedOpponent.new("easy"))
-    pre_setup_game(win_condition1, computerized_opponent)
+      computerized_opponent = ComputerizedOpponent.new)
+    pre_setup_game(win_condition1, win_condition1, computerized_opponent)
     @win_condition1 = win_condition1
     @win_condition2 = win_condition2
     @computerized_opponent = computerized_opponent
-    post_setup_game
-    class_invariant(@board, @win_condition1, @computerized_opponent)
+    post_setup_game(@win_condition1, @win_conditions2, @computer_opponent)
+    class_invariant
   end
 
   def setup_board(width, height)
     pre_setup_board(width, height)
     @board = GameBoard.new(width,height)
     post_setup_board(@board)
-    class_invariant(@board, @win_condition1, @computerized_opponent)
+    class_invariant
   end
 
   def add_to_column(column, value)
-    pree_add_to_clumn(column)
+    pre_add_to_column(column)
     row = @board.col(column).find_index(0)
     @board[row,column] = value
     puts "P1 wins" if check_win_conditions(@win_condition1)
     puts "P2 wins" if check_win_conditions(@win_condition2)
     @observers.each{|o| o.update_value(column,row,@board[row,column])}
     post_add_to_column(value)
-    class_invariant(@board, @win_condition1, @computerized_opponent)
+    class_invariant
   end
 
   def make_human_move(column, value)
@@ -63,14 +63,14 @@ class Game
     add_to_column(column, value)
     make_computer_move if @computerized_opponent != nil
     post_make_human_move
-    class_invariant(@board, @win_condition1, @computerized_opponent)
+    class_invariant
   end
 
   def make_computer_move
     pre_make_computer_move
     add_to_column(@computerized_opponent.make_move(@board), @win_condition2[rand(0..1)])
     post_make_computer_move
-    class_invariant(@board, @win_condition1, @computerized_opponent)
+    class_invariant
   end
 
   def check_win_conditions(w)
@@ -92,7 +92,7 @@ class Game
       }
     }
     post_check_win_conditions
-    class_invariant(@board, @win_condition1, @computerized_opponent)
+    class_invariant
     return false
   end
 
@@ -103,7 +103,7 @@ class Game
     pre_add_observer(view)
     @observers << view
     post_add_observer
-    class_invariant(@board, @win_condition1, @computerized_opponent)
+    class_invariant
   end
 
 end

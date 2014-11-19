@@ -2,7 +2,7 @@ gem 'test-unit'
 
 require 'test/unit/assertions'
 
-module ContractGameBoard
+module ContractComputerizedOpponent
   include Test::Unit::Assertions
 
   def class_invariant

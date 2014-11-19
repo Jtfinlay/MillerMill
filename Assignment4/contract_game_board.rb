@@ -33,18 +33,31 @@ module ContractGameBoard
   end
 
   def pre_row(data, row)
-    assert row.is_a?(Fixnum), "Row index must be Fixnum"
-    assert row >= 0, "Row index cannot be negative"
-    assert row < data.size, "Row index cannot be larger than array"
+    if row.is_a?(Range)
+    row.each{|r|
+      assert r.is_a?(Fixnum), "Row index must be Fixnum, is a #{r.class}"
+      assert r >= 0, "Row index cannot be negative"
+    }
+    elsif row.is_a?(Fixnum)
+      assert row.is_a?(Fixnum), "Row index must be Fixnum, is a #{row.class}"
+      assert row >= 0, "Row index cannot be negative"
+    end
   end
 
   def post_row
   end
 
-  def pre_col(col)
-    assert col.is_a?(Fixnum), "Col index must be Fixnum"
-    assert col >= 0, "Col index cannot be negative"
-    assert col < data.size, "Col index cannot be larger than array"
+  def pre_col(data, col)
+    if col.is_a?(Range)
+    col.each{|c|
+      assert c.is_a?(Fixnum), "Col index must be Fixnum, is a #{c.class}"
+      assert c >= 0, "Col index cannot be negative"
+    }
+    elsif col.is_a?(Fixnum)
+      assert col.is_a?(Fixnum), "Col index must be Fixnum, is a #{col.class}"
+      assert col >= 0, "Col index cannot be negative"
+    end
+
   end
 
   def post_col
@@ -61,30 +74,25 @@ module ContractGameBoard
     assert row.is_a?(Fixnum), "Row index must be Fixnum"
     assert col.is_a?(Fixnum), "Col index must be Fixnum"
     assert row >= 0, "Row index cannot be negative"
-    assert row < data.size, "Row index cannot be larger than array"
     assert col >= 0, "Col index cannot be negative"
-    assert col < data.size, "Col index cannot be larger than array"
   end
 
-  def post_square_backets()
+  def post_square_brackets()
   end
 
-  def pre_square_brackets_equals(row, col, v)
+  def pre_square_brackets_equals(data, row, col, v)
     assert row.is_a?(Fixnum), "Row index must be Fixnum"
     assert col.is_a?(Fixnum), "Col index must be Fixnum"
     assert row >= 0, "Row index cannot be negative"
-    assert row < data.size, "Row index cannot be larger than array"
     assert col >= 0, "Col index cannot be negative"
-    assert col < data.size, "Col index cannot be larger than array"
   end
 
   def post_square_brackets_equals
   end
 
-  def pre_col_full_question(column)
+  def pre_col_full_question(data, col)
     assert col.is_a?(Fixnum), "Col index must be Fixnum"
     assert col >= 0, "Col index cannot be negative"
-    assert col < data.size, "Col index cannot be larger than array"
   end
 
   def post_col_full_question

@@ -13,27 +13,27 @@ module ContractGameController
   end
 
   def post_initialize(game, view)
-    assert ~game.nil?, "Model cannot be nil"
-    assert ~view.nil?, "View cannot be nil"
+    assert !game.nil?, "Model cannot be nil"
+    assert !view.nil?, "View cannot be nil"
   end
 
   def pre_start_game(view)
-    assert ~view.nil?, "View cannot be nil"
+    assert !view.nil?, "View cannot be nil"
   end
 
   def post_start_game
   end
 
   def pre_quit(view)
-    assert ~view.nil? "View cannot be nil"
+    assert !view.nil?, "View cannot be nil"
   end
 
   def post_quit
   end
 
   def pre_restart(view, game)
-    assert ~view.nil?, "View cannot be nil"
-    assert ~game.nil?, "Model cannot be nil"
+    assert !view.nil?, "View cannot be nil"
+    assert !game.nil?, "Model cannot be nil"
   end
 
   def post_restart
@@ -49,7 +49,7 @@ module ContractGameController
   end
 
   def pre_subscribe(game, observer)
-    assert ~game.nil?, "Model cannot be nil"
+    assert !game.nil?, "Model cannot be nil"
     assert observer.is_a?(AbstractListener), "Observer must implement AbstractListener"
   end
 

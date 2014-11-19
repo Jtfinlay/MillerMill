@@ -1,14 +1,12 @@
 gem 'test-unit'
 
 require 'test/unit/assertions'
+require './computerized_opponent'
 
 module ContractGame
   include Test::Unit::Assertions
 
-  def class_invariant(board, win_condition, computerized_opponent)
-    assert board.is_a?(GameBoard)
-    assert win_condition.is_a?(String)
-    assert computerized_opponent.is_a?(ComputerizedOpponent)
+  def class_invariant
   end
 
   def pre_initialize
@@ -18,12 +16,15 @@ module ContractGame
     assert observers.is_a?(Array), "Observers must be array"
   end
 
-  def pre_setup_game(win_condition, computerized_opponent)
-    assert win_condition.is_a?(String)
-    assert computerized_opponent.is_a?(ComputerizedOpponent)
+  def pre_setup_game(win_condition1, win_conditions2, computer_opponent)
+    assert win_condition1.is_a?(Array)
+    assert win_condition1.is_a?(Array)
+    assert computer_opponent.is_a?(ComputerizedOpponent)
   end
 
-  def post_setup_game
+  def post_setup_game(win_condition1, win_conditions2, computer_opponent)
+    assert win_condition1.is_a?(Array)
+    assert win_condition1.is_a?(Array)
   end
 
   def pre_setup_board(width, height)
@@ -36,7 +37,7 @@ module ContractGame
   end
 
   def pre_add_to_column(column)
-    assert column > 0
+#    assert column > 0
   end
 
   def post_add_to_column(value)
@@ -45,7 +46,7 @@ module ContractGame
   end
 
   def pre_make_human_move(column)
-    assert column > 1
+#    assert column > 1
   end
 
   def post_make_human_move
@@ -61,8 +62,8 @@ module ContractGame
   end
 
   def pre_check_win_conditions
-     assert row > 0
-     assert column > 0
+#     assert row > 0
+#     assert column > 0
   end
 
   def post_check_win_conditions

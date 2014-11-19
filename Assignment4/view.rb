@@ -81,7 +81,7 @@ class View < AbstractListener
 
     @window.add(v)
 
-    post_setup_OTTO(window)
+    post_setup_OTTO(@window)
     class_invariant
   end
 

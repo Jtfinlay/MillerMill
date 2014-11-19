@@ -10,7 +10,7 @@ module ContractView
   end
 
   def pre_initialize(controller)
-    assert ~controller.nil?, "Controller cannot be nil"
+    assert !controller.nil?, "Controller cannot be nil"
   end
 
   def post_initialize()
@@ -85,7 +85,7 @@ module ContractView
 
   def post_create_buttons(result)
     assert result.is_a?(Gtk::HBox), "Result must be an HBox"
-    assert ~result.children.empty?, "Result cannot be empty"
+    assert !result.children.empty?, "Result cannot be empty"
   end
 
   def pre_create_grid_row(width)
@@ -95,7 +95,7 @@ module ContractView
 
   def post_create_grid_row(result)
     assert result.is_a?(Gtk::HBox), "Result must be an HBox"
-    assert ~result.children.empty?, "Result cannot be empty"
+    assert !result.children.empty?, "Result cannot be empty"
   end
 
   def pre_reset_images
@@ -103,7 +103,7 @@ module ContractView
 
   def post_reset_images(pics)
     assert pics.is_a?(Hash), "Pics must be Hash"
-    assert ~pics.empty?, "Pics cannot be empty"
+    assert !pics.empty?, "Pics cannot be empty"
   end
 
   def pre_update_value(keys, x, y, v)
@@ -117,7 +117,7 @@ module ContractView
 
   def pre_set_image(id, image_file)
     assert image_file.is_a?(String), "Image file must be a String"
-    assert File.exists(image_file), "Image file must exist"
+    assert File.exists?(image_file), "Image file must exist"
   end
 
   def post_set_image(keys, id, image_file)

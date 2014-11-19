@@ -29,9 +29,9 @@ class GameBoard
   end
 
   def col(col)
-    pre_col(col)
+    pre_col(@data, col)
     result = @data.flatten.select.with_index{|v,i| i % @data[0].size == col}
-    post_col(col)
+    post_col
     class_invariant(@data)
     return result
   end
