@@ -38,7 +38,7 @@ class View < AbstractListener
   def setup_standard(width, height)
     v = Gtk::VBox.new
     v.add(create_toolbar)
-    v.pack_start(create_buttons(width, "Place X", 'X'))
+    v.pack_start(create_buttons(width, "X"))
 
     Array.new(height).each{|a|
       v.pack_end(create_grid_row(width))
@@ -53,8 +53,8 @@ class View < AbstractListener
   def setup_standard(width, height)
     v = Gtk::VBox.new
     v.add(create_toolbar)
-    v.pack_start(create_buttons(width, "Place O", 'O'))
-    v.pack_start(create_buttons(width, "Place T", 'T'))
+    v.pack_start(create_buttons(width, "O"))
+    v.pack_start(create_buttons(width, "T"))
 
     Array.new(height).each{|a|
       v.pack_end(create_grid_row(width))
@@ -125,12 +125,12 @@ class View < AbstractListener
   #
   # Create row of action buttons
   #
-  def create_buttons(width, label, value)
+  def create_buttons(width, label)
     btns = Gtk::HBox.new
     Array.new(width).each_with_index{|b,col|
       btn = Gtk::Button.new("Place #{label}")
       btn.signal_connect("clicked") {
-        @controller.column_press(col, value)
+        @controller.column_press(col, label)
       }
       btns.pack_start(btn)
     }
