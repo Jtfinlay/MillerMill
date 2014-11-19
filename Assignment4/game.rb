@@ -62,7 +62,7 @@ class Game
     pre_make_human_move(column)
     return if @board.col_full?(column)
     add_to_column(column, value)
-    make_computer_move if @computerized_opponent != nil
+    make_computer_move if @computerized_opponent != nil and !check_win_conditions(@win_condition1) and !check_win_conditions(@win_condition2)
     post_make_human_move
     class_invariant
   end
