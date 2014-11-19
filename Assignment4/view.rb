@@ -38,7 +38,7 @@ class View < AbstractListener
   def setup_standard(width, height)
     v = Gtk::VBox.new
     v.add(create_toolbar)
-    v.pack_start(create_buttons(width, "X"))
+    v.pack_start(create_buttons(width, 1, "X"))
 
     Array.new(height).each{|a|
       v.pack_end(create_grid_row(width))
@@ -50,11 +50,11 @@ class View < AbstractListener
   #
   # OTTO/TOOT board
   #
-  def setup_standard(width, height)
+  def setup_OTTO(width, height)
     v = Gtk::VBox.new
     v.add(create_toolbar)
-    v.pack_start(create_buttons(width, "O"))
-    v.pack_start(create_buttons(width, "T"))
+    v.pack_start(create_buttons(width, 2, "O"))
+    v.pack_start(create_buttons(width, 3, "T"))
 
     Array.new(height).each{|a|
       v.pack_end(create_grid_row(width))
@@ -125,12 +125,12 @@ class View < AbstractListener
   #
   # Create row of action buttons
   #
-  def create_buttons(width, label)
+  def create_buttons(width, value, label)
     btns = Gtk::HBox.new
     Array.new(width).each_with_index{|b,col|
       btn = Gtk::Button.new("Place #{label}")
       btn.signal_connect("clicked") {
-        @controller.column_press(col, label)
+        @controller.column_press(col, value)
       }
       btns.pack_start(btn)
     }
@@ -156,6 +156,7 @@ class View < AbstractListener
     set_image(0, "empty.png")
     set_image(1, "X.png")
     set_image(2, "O.png")
+    set_image(3, "T.png")
   end
 
   #
