@@ -49,9 +49,10 @@ class Game
   def add_to_column(column, value)
     pre_add_to_column(column)
     row = @board.col(column).find_index(0)
-    @board[row,column] = value
-    puts "P1 wins" if check_win_conditions(@win_condition1)
-    puts "P2 wins" if check_win_conditions(@win_condition2)
+    @board[row,column] = value 
+    @observers.each{|o| o.game_over("P1 wins!")} if check_win_conditions(@win_condition1)
+    @observers.each{|o| o.game_over("P2 wins!")} if check_win_conditions(@win_condition2)
+    @observers.each{|o| o.game_over("Draw!")} if check_board_full? 
     @observers.each{|o| o.update_value(column,row,@board[row,column])}
     post_add_to_column(value)
     class_invariant
@@ -94,6 +95,13 @@ class Game
     post_check_win_conditions
     class_invariant
     return false
+  end
+  
+  def check_board_full?
+    (0..@board.row(0).size - 1).each{ |k|
+      return false if !@board.col_full?(k)
+    }
+    return true
   end
 
   #

@@ -19,17 +19,13 @@ class GameController
 
   @game
   @view
+  @type
 
-  def initialize
+  def initialize(type)
     pre_initialize
 
-    @game = Game.new
-    @game.setup_board(@@width, @@height)
-    @game.setup_game([2,3,3,2], [3,2,2,3])
-
-    @view = View.new(self)
-    @view.setup(@@width, @@height)
-    @view.setup_OTTO(@@width, @@height)
+    @type = type
+    setup
 
     post_initialize(@game, @view)
     class_invariant
@@ -60,8 +56,7 @@ class GameController
     pre_restart(@view, @game)
 
     @view.kill
-    @view.setup(@@width, @@height)
-    @game.setup_board(@@width, @@height)
+    setup
     start_game
 
     post_restart
@@ -86,4 +81,17 @@ class GameController
     class_invariant
   end
 
+  def setup
+    @game = Game.new
+    @game.setup_board(@@width, @@height)
+    @view = View.new(self)
+    @view.setup(@@width, @@height)
+    if @type == 1
+      @game.setup_game([1,1,1,1], [2,2,2,2])
+      @view.setup_standard(@@width, @@height)
+    else
+      @game.setup_game([2,3,3,2], [3,2,2,3])
+      @view.setup_OTTO(@@width, @@height)
+    end 
+  end
 end
