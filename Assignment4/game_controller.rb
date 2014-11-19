@@ -25,6 +25,7 @@ class GameController
 
     @view = View.new(self)
     @view.setup(@@width, @@height)
+    @view.setup_standard(@@width, @@height)
   end
 
   def start_game
@@ -42,7 +43,8 @@ class GameController
     start_game
   end
 
-  def column_press(column)
+  def column_press(column, value)
+    # TODO - use value with OTTO/TOOT
     @game.make_human_move(column)
   end
 

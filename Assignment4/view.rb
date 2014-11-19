@@ -30,10 +30,31 @@ class View < AbstractListener
     @window = Gtk::Window.new
     @window.signal_connect("destroy"){Gtk.main_quit}
     @window.title = "FourPlay"
+  end
 
+  #
+  # Standard X/O board
+  #
+  def setup_standard(width, height)
     v = Gtk::VBox.new
     v.add(create_toolbar)
-    v.pack_start(create_buttons(width))
+    v.pack_start(create_buttons(width, "Place X", 'X'))
+
+    Array.new(height).each{|a|
+      v.pack_end(create_grid_row(width))
+    }
+
+    @window.add(v)
+  end
+
+  #
+  # OTTO/TOOT board
+  #
+  def setup_standard(width, height)
+    v = Gtk::VBox.new
+    v.add(create_toolbar)
+    v.pack_start(create_buttons(width, "Place O", 'O'))
+    v.pack_start(create_buttons(width, "Place T", 'T'))
 
     Array.new(height).each{|a|
       v.pack_end(create_grid_row(width))
@@ -104,12 +125,12 @@ class View < AbstractListener
   #
   # Create row of action buttons
   #
-  def create_buttons(width)
+  def create_buttons(width, label, value)
     btns = Gtk::HBox.new
     Array.new(width).each_with_index{|b,col|
-      btn = Gtk::Button.new("Place")
+      btn = Gtk::Button.new("Place #{label}")
       btn.signal_connect("clicked") {
-        @controller.column_press(col)
+        @controller.column_press(col, value)
       }
       btns.pack_start(btn)
     }
