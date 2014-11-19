@@ -21,10 +21,6 @@ class GameController
 
   def initialize(type)
     @type = type
-    @game = Game.new
-    @game.setup_board(@@width, @@height)
-    @view = View.new(self)
-    @view.setup(@@width, @@height)
     setup 
   end
 
@@ -38,9 +34,6 @@ class GameController
 
   def restart
     @view.kill
-    @game = Game.new
-    @game.setup_board(@@width, @@height)
-    @view.setup(@@width, @@height)
     setup
     start_game
   end
@@ -54,6 +47,10 @@ class GameController
   end
 
   def setup
+    @game = Game.new
+    @game.setup_board(@@width, @@height)
+    @view = View.new(self)
+    @view.setup(@@width, @@height)
     if @type == 1
       @game.setup_game([1,1,1,1], [2,2,2,2])
       @view.setup_standard(@@width, @@height)

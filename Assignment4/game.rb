@@ -41,6 +41,7 @@ class Game
     @board[row,column] = value 
     @observers.each{|o| o.game_over("P1 wins!")} if check_win_conditions(@win_condition1)
     @observers.each{|o| o.game_over("P2 wins!")} if check_win_conditions(@win_condition2)
+    @observers.each{|o| o.game_over("Draw!")} if check_board_full? 
     @observers.each{|o| o.update_value(column,row,@board[row,column])}
   end
 
@@ -72,6 +73,13 @@ class Game
       }
     }
     return false
+  end
+  
+  def check_board_full?
+    (0..@board.row(0).size - 1).each{ |k|
+      return false if !@board.col_full?(k)
+    }
+    return true
   end
 
   #

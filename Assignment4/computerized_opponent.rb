@@ -20,6 +20,6 @@ class ComputerizedOpponent
 
   def rand_move(game_board)
     r = rand(0..game_board.row(0).size - 1)
-    return game_board.col_full?(r) ? easy_difficulty(game_board) : r
+    return game_board.col_full?(r) ? rand_move(game_board) : r
   end
 end
