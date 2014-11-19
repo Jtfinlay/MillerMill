@@ -2,7 +2,17 @@
 
 require './game_controller'
 
-c = GameController.new
+puts "What type of game would you like to play?"
+puts "Enter 1 for normal and 2 for OTTO/TOOT"
+
+i = gets
+
+if i.to_i != 1 and i.to_i != 2
+  puts "Please enter 1 or 2"
+  exit
+end
+
+c = GameController.new(i.to_i)
 
 Thread.new {
   while true

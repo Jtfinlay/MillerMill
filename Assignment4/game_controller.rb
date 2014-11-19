@@ -17,15 +17,15 @@ class GameController
 
   @game
   @view
+  @type
 
-  def initialize
+  def initialize(type)
+    @type = type
     @game = Game.new
     @game.setup_board(@@width, @@height)
-    @game.setup_game([2,3,3,2], [3,2,2,3])
-
     @view = View.new(self)
     @view.setup(@@width, @@height)
-    @view.setup_OTTO(@@width, @@height)
+    setup 
   end
 
   def start_game
@@ -38,8 +38,10 @@ class GameController
 
   def restart
     @view.kill
-    @view.setup(@@width, @@height)
+    @game = Game.new
     @game.setup_board(@@width, @@height)
+    @view.setup(@@width, @@height)
+    setup
     start_game
   end
 
@@ -51,4 +53,13 @@ class GameController
     @game.add_observer(observer)
   end
 
+  def setup
+    if @type == 1
+      @game.setup_game([1,1,1,1], [2,2,2,2])
+      @view.setup_standard(@@width, @@height)
+    else
+      @game.setup_game([2,3,3,2], [3,2,2,3])
+      @view.setup_OTTO(@@width, @@height)
+    end 
+  end
 end

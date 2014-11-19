@@ -39,8 +39,8 @@ class Game
   def add_to_column(column, value)
     row = @board.col(column).find_index(0)
     @board[row,column] = value 
-    puts "P1 wins" if check_win_conditions(@win_condition1)
-    puts "P2 wins" if check_win_conditions(@win_condition2)
+    @observers.each{|o| o.game_over("P1 wins!")} if check_win_conditions(@win_condition1)
+    @observers.each{|o| o.game_over("P2 wins!")} if check_win_conditions(@win_condition2)
     @observers.each{|o| o.update_value(column,row,@board[row,column])}
   end
 
