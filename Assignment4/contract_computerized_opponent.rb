@@ -8,22 +8,26 @@ module ContractGameBoard
   def class_invariant
   end
 
-  def pre_initialize(difficulty)
+  def pre_initialize()
   end
 
   def post_initialize
   end
 
   def pre_make_move(game_board)
+    assert game_board.is_a?(GameBoard), "Board must be proper object"
   end
 
-  def post_make_move
+  def post_make_move(result)
+    assert result.is_a?(Fixnum), "Result must be fixnum"
   end
 
-  def pre_easy_difficulty(game_board)
+  def pre_rand_move(game_board)
+    assert game_board.is_a?(GameBoard), "Board must be proper object"
   end
 
-  def post_easy_difficulty
+  def post_rand_move(result)
+    assert result.is_a?(Fixnum), "Result must be Fixnum"
   end
 
 end

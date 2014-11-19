@@ -7,19 +7,32 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
+require './contract_computerized_opponent'
+
 
 class ComputerizedOpponent
-  @difficulty
-  def initialize(difficulty)
-    @difficulty = difficulty
+  include ContractComputerizedOpponent
+
+  def initialize
+    pre_initialize
+    post_initialize
+    class_invariant
   end
-  
+
   def make_move(game_board)
-    return rand_move(game_board) 
+    pre_make_move(game_board)
+    result = rand_move(game_board)
+    post_make_move(result)
+    class_invariant
+    return result
   end
 
   def rand_move(game_board)
+    pre_rand_move(game_board)
     r = rand(0..game_board.row(0).size - 1)
-    return game_board.col_full?(r) ? easy_difficulty(game_board) : r
+    result = game_board.col_full?(r) ? rand_move(game_board) : r
+    post_rand_move(result)
+    class_invariant
+    return r
   end
 end

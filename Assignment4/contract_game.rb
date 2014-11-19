@@ -5,17 +5,21 @@ require 'test/unit/assertions'
 module ContractGame
   include Test::Unit::Assertions
 
-  def class_invariant(board, win_condition, tokens, turn, computerized_opponent)
+  def class_invariant(board, win_condition, computerized_opponent)
     assert board.is_a?(GameBoard)
     assert win_condition.is_a?(String)
-    assert tokens.size == 2
-    assert turn == 1 or turn == 2
     assert computerized_opponent.is_a?(ComputerizedOpponent)
   end
 
-  def pre_setup_game(win_condition, computerized_opponent, tokens)
+  def pre_initialize
+  end
+
+  def post_initialize(observers)
+    assert observers.is_a?(Array), "Observers must be array"
+  end
+
+  def pre_setup_game(win_condition, computerized_opponent)
     assert win_condition.is_a?(String)
-    assert tokens.size == 2
     assert computerized_opponent.is_a?(ComputerizedOpponent)
   end
 
@@ -27,9 +31,8 @@ module ContractGame
     assert height > 0
   end
 
-  def post_setup_board(board, turn)
+  def post_setup_board(board)
     assert board.is_a?(GameBoard)
-    assert turn == 1
   end
 
   def pre_add_to_column(column)
@@ -44,7 +47,7 @@ module ContractGame
   def pre_make_human_move(column)
     assert column > 1
   end
-  
+
   def post_make_human_move
     # add_to_column is called
     # make_computer_move is called

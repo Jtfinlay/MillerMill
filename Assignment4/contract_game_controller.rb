@@ -39,7 +39,8 @@ module ContractGameController
   def post_restart
   end
 
-  def pre_column_press(column)
+  def pre_column_press(column, value)
+    assert value.is_a?(Fixnum), "Column must be Fixnum"
     assert column.is_a?(Fixnum), "Column must be Fixnum"
     assert column >= 0, "Column cannot be negative"
   end

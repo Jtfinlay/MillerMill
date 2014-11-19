@@ -50,6 +50,13 @@ module ContractGameBoard
   def post_col
   end
 
+  def pre_diagonals
+  end
+
+  def post_diagonals(result)
+    assert result.is_a?(Array), "Result should be array"
+  end
+
   def pre_square_brackets(data, row, col)
     assert row.is_a?(Fixnum), "Row index must be Fixnum"
     assert col.is_a?(Fixnum), "Col index must be Fixnum"
@@ -72,6 +79,15 @@ module ContractGameBoard
   end
 
   def post_square_brackets_equals
+  end
+
+  def pre_col_full_question(column)
+    assert col.is_a?(Fixnum), "Col index must be Fixnum"
+    assert col >= 0, "Col index cannot be negative"
+    assert col < data.size, "Col index cannot be larger than array"
+  end
+
+  def post_col_full_question
   end
 
 end
