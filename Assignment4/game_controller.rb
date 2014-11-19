@@ -21,7 +21,7 @@ class GameController
   def initialize
     @game = Game.new
     @game.setup_board(@@width, @@height)
-    @game.setup_game([1,1,1,1], [2,2,2,2])
+    @game.setup_game([2,3,3,2], [3,2,2,3])
 
     @view = View.new(self)
     @view.setup(@@width, @@height)

@@ -51,7 +51,7 @@ class Game
   end
 
   def make_computer_move
-    add_to_column(@computerized_opponent.make_move(@board), @win_condition2[and(0,1)])
+    add_to_column(@computerized_opponent.make_move(@board), @win_condition2[rand(0..1)])
   end
 
   def check_win_conditions(w)
