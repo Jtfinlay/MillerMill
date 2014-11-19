@@ -4,3 +4,10 @@ require './game_controller'
 
 c = GameController.new
 c.start_game
+
+while true
+  print ">"
+  cmd = gets.chomp
+
+  # DO SHIT
+end
