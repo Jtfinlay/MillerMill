@@ -16,4 +16,11 @@ class AbstractListener
     raise NotImplementedError.new('Abstract Class')
   end
 
+  #
+  # Game over
+  #
+  def game_over(message)
+    raise NotImplementedError.new('Abstract Class')
+  end
+
 end

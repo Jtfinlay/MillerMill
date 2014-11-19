@@ -9,7 +9,7 @@ Thread.new {
     print ">"
     cmd = gets.chomp
 
-    # DO SHIT
+    c.column_press(cmd.to_i, 1)
   end
 }
 
