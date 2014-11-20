@@ -19,12 +19,15 @@ c = GameController.new(i.to_i)
 Thread.new { 
   begin
     while true
+      puts "Enter a column (0-indexed) and type of token (1 for X, 2 for O, 3 for T"
       print ">"
       cmd = gets.chomp
-
-      c.column_press(cmd.to_i, 1)
+      a = cmd.split[0].to_i
+      b = cmd.split[1].to_i
+      c.column_press(a, b) if a >= 0 and a < 7 and b > 0 and b < 4
     end
-  rescue Interrupt
+  rescue Exception => e
+    puts e
   end
 }
 

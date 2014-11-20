@@ -13,7 +13,7 @@ require './contract_game_controller'
 
 class GameController
   include ContractGameController
-
+  
   @@width = 7
   @@height = 6
 
