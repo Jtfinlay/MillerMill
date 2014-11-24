@@ -15,7 +15,7 @@ class GameClient
 
     # TODO - If not connected, throws ERRNO::ECONNREFUSED
 
-    manager.hello
+    puts manager.hello
 
     puts "Please enter an ID for the game you would like to start/join."
     gameID = gets
