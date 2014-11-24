@@ -3,7 +3,7 @@ require './client_handler'
 
 class GameServer
 
-  @games
+  attr_accessor :games
 
   def initialize()
     @games = Hash.new

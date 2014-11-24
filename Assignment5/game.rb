@@ -21,6 +21,7 @@ class Game
   @observers
 
   def initialize
+    @players = 1
     @observers = []
   end
 
