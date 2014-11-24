@@ -7,71 +7,44 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require "./computerized_opponent"
 require './game_board'
 require './contract_game'
 
 class Game
   include ContractGame
 
-  attr_accessor :board, :turn, :computerized_opponent
+  attr_accessor :board, :turn, :players
   @board
   @win_condition1
   @win_condition2
-  @computerized_opponent
 
   @observers
 
   def initialize
-    pre_initialize
     @observers = []
-    post_initialize(@observers)
   end
 
-  def setup_game(win_condition1, \
-      win_condition2, \
-      computerized_opponent = ComputerizedOpponent.new)
-    pre_setup_game(win_condition1, win_condition1, computerized_opponent)
+  def setup_game(win_condition1, win_condition2)
     @win_condition1 = win_condition1
     @win_condition2 = win_condition2
-    @computerized_opponent = computerized_opponent
-    post_setup_game(@win_condition1, @win_conditions2, @computer_opponent)
-    class_invariant
   end
 
   def setup_board(width, height)
-    pre_setup_board(width, height)
     @board = GameBoard.new(width,height)
-    post_setup_board(@board)
-    class_invariant
   end
 
   def add_to_column(column, value)
-    pre_add_to_column(column)
     row = @board.col(column).find_index(0)
-    @board[row,column] = value 
+    @board[row,column] = value
     @observers.each{|o| o.game_over("P1 wins!")} if check_win_conditions(@win_condition1)
     @observers.each{|o| o.game_over("P2 wins!")} if check_win_conditions(@win_condition2)
-    @observers.each{|o| o.game_over("Draw!")} if check_board_full? 
+    @observers.each{|o| o.game_over("Draw!")} if check_board_full?
     @observers.each{|o| o.update_value(column,row,@board[row,column])}
-    post_add_to_column(value)
-    class_invariant
   end
 
   def make_human_move(column, value)
-    pre_make_human_move(column)
     return if @board.col_full?(column)
     add_to_column(column, value)
-    make_computer_move if @computerized_opponent != nil and !check_win_conditions(@win_condition1) and !check_win_conditions(@win_condition2)
-    post_make_human_move
-    class_invariant
-  end
-
-  def make_computer_move
-    pre_make_computer_move
-    add_to_column(@computerized_opponent.make_move(@board), @win_condition2[rand(0..1)])
-    post_make_computer_move
-    class_invariant
   end
 
   def check_win_conditions(w)
@@ -96,7 +69,7 @@ class Game
     class_invariant
     return false
   end
-  
+
   def check_board_full?
     (0..@board.row(0).size - 1).each{ |k|
       return false if !@board.col_full?(k)

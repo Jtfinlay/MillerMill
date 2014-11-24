@@ -1,7 +1,6 @@
 gem 'test-unit'
 
 require 'test/unit/assertions'
-require './computerized_opponent'
 
 module ContractGame
   include Test::Unit::Assertions
@@ -16,13 +15,12 @@ module ContractGame
     assert observers.is_a?(Array), "Observers must be array"
   end
 
-  def pre_setup_game(win_condition1, win_conditions2, computer_opponent)
+  def pre_setup_game(win_condition1, win_conditions2)
     assert win_condition1.is_a?(Array)
     assert win_condition1.is_a?(Array)
-    assert computer_opponent.is_a?(ComputerizedOpponent)
   end
 
-  def post_setup_game(win_condition1, win_conditions2, computer_opponent)
+  def post_setup_game(win_condition1, win_conditions2)
     assert win_condition1.is_a?(Array)
     assert win_condition1.is_a?(Array)
   end
@@ -51,14 +49,6 @@ module ContractGame
 
   def post_make_human_move
     # add_to_column is called
-    # make_computer_move is called
-  end
-
-  def pre_make_computer_move
-  end
-
-  def post_make_computer_move
-     # add_to_column is called with result from ComputerizedOpponent
   end
 
   def pre_check_win_conditions
