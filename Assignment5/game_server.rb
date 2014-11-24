@@ -1,4 +1,5 @@
-require 'xmlrpc/socket'
+require 'xmlrpc/server'
+require './client_handler'
 
 class GameServer
 

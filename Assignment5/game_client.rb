@@ -6,7 +6,7 @@ class GameClient
   end
 
   def start(host, port)
-    server = XMLRPC::Client.new(host, "", port)
+    server = XMLRPC::Client.new(host, "/", port)
     manager = server.proxy("manager")
 
 
