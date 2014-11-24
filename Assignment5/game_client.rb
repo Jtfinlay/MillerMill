@@ -20,7 +20,7 @@ class GameClient
     puts "Please enter an ID for the game you would like to start/join."
     gameID = gets
 
-    [type, id] = manager.join(gameID)
+    type, id = manager.join(gameID)
     puts "T: #{type}, ID: #{id}"
   end
 

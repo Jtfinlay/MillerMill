@@ -12,7 +12,7 @@ class GameServer
   def start(port)
     s = XMLRPC::Server.new(port)
 
-    s.add_handler("manager", ClientHandler.new(s))
+    s.add_handler("manager", ClientHandler.new(@games))
 
     s.serve
   end
