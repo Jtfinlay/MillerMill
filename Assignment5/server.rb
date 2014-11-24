@@ -1,24 +1,19 @@
-require 'socket'
+require 'xmlrpc/socket'
 
 class Server
 
+  @games
+
   def initialize()
+    @games = Hash.new
   end
 
   def start(port)
-    server = TCPServer.new(port)
+    s = XMLRPC::Server.new(port)
 
-    while (session = server.accept)
+    s.add_handler("manager", ClientHandler.new(s))
 
-      Thread.start do
-        puts "Log: Connection from #{session.peeraddr[2]} at #{session.peeraddr[3]}"
-
-        input = session.gets
-        puts input
-
-        session.puts "Server: Sup yo gurl\n"
-        session.puts "Server: Goodbye\n"
-    end
+    s.serve
   end
 
 end

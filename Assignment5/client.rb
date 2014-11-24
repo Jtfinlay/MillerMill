@@ -1,4 +1,4 @@
-require 'socket'
+require 'xmlrpc/client'
 
 class Client
 
@@ -6,19 +6,13 @@ class Client
   end
 
   def start(host, port)
-    clientSession = TCPSocket.new(host, port)
+    server = XMLRPC::Client.new(host, "", port)
+    manager = server.proxy("manager")
 
-    puts "starting connection"
-    clientSession.puts "Client: Hello Server!\n"
 
-    while !(clientSession.closed?) && (serverMessage = clientSession.gets)
-      puts serverMessage
-      if serverMessage.include?("Goodbye")
-        puts "closing connection"
-        clientSession.close
-      end
-    end
+    puts "#{manager.hello}"
   end
+
 end
 
 c = Client.new
