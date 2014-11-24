@@ -1,6 +1,6 @@
 require 'xmlrpc/socket'
 
-class Server
+class GameServer
 
   @games
 
@@ -18,5 +18,5 @@ class Server
 
 end
 
-s = Server.new
+s = GameServer.new
 s.start(2014)

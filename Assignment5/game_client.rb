@@ -1,6 +1,6 @@
 require 'xmlrpc/client'
 
-class Client
+class GameClient
 
   def initialize
   end
@@ -15,5 +15,5 @@ class Client
 
 end
 
-c = Client.new
+c = GameClient.new
 c.start("localhost", 2014)
