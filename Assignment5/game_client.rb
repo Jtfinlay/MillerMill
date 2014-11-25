@@ -36,7 +36,7 @@ class GameClient
 
     setup
 
-    while manager.player_count < 2
+    while manager.player_count(@gameID) < 2
       puts "Waiting for a friend to join.."
       sleep(3)
     end
