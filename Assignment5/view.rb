@@ -8,48 +8,34 @@
 ##
 
 require 'gtk2'
-require './abstract_listener'
 require './contract_view'
 
-class View < AbstractListener
+class View
   include ContractView
 
   @window
   @pics
   @controller
 
-  def initialize(controller)
-    pre_initialize(controller)
-
-    @controller = controller
+  def initialize(client)
+    @controller = client
     reset_images
-    @controller.subscribe(self)
-
-    post_initialize
-    class_invariant
   end
 
   #
   # Populate board
   #
   def setup(width, height)
-    pre_setup(width, height)
-
     Gtk.init
     @window = Gtk::Window.new
     @window.signal_connect("destroy"){Gtk.main_quit}
-    @window.title = "FourPlay"
-
-    post_setup(@window)
-    class_invariant
+    @window.title = "FourPlay with Friends!"
   end
 
   #
   # Standard X/O board
   #
   def setup_standard(width, height)
-    pre_setup_standard(width, height)
-
     v = Gtk::VBox.new
     v.add(create_toolbar)
     v.pack_start(create_buttons(width, 1, "X"))
@@ -59,17 +45,12 @@ class View < AbstractListener
     }
 
     @window.add(v)
-
-    post_setup_standard(@window)
-    class_invariant
   end
 
   #
   # OTTO/TOOT board
   #
   def setup_OTTO(width, height)
-    pre_setup_OTTO(width, height)
-
     v = Gtk::VBox.new
     v.add(create_toolbar)
     v.pack_start(create_buttons(width, 2, "O"))
@@ -80,38 +61,27 @@ class View < AbstractListener
     }
 
     @window.add(v)
-
-    post_setup_OTTO(@window)
-    class_invariant
   end
 
   #
   # Destroy GUI
   #
   def kill
-    pre_kill
     @window.destroy
-    post_kill
-    class_invariant
   end
 
   #
   # Show grid & start
   #
   def start_game
-    pre_start_game
     @window.show_all
     Gtk.main
-    post_start_game
-    class_invariant
   end
 
   #
   # Show game finish alert
   #
   def game_over(message)
-    pre_game_over(message)
-
    dialog = Gtk::Dialog.new(
       "Game Over",
       @window,
@@ -136,17 +106,12 @@ class View < AbstractListener
     dialog.vbox.add(hbox)
 
     dialog.show_all
-
-    post_game_over
-    class_invariant
   end
 
   #
   # Create the toolbar
   #
   def create_toolbar
-    pre_create_toolbar
-
     toolbar = Gtk::Toolbar.new
     file_menu = Gtk::ToolButton.new(nil, "Restart")
     file_menu.signal_connect("clicked") {
@@ -154,8 +119,6 @@ class View < AbstractListener
     }
     toolbar.insert(0, file_menu)
 
-    post_create_toolbar(toolbar)
-    class_invariant
     return toolbar
   end
 

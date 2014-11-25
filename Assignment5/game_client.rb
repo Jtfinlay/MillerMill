@@ -5,6 +5,7 @@ class GameClient
 
   @view
   @type
+  @gameID
 
   def initialize
   end
@@ -18,10 +19,22 @@ class GameClient
     puts manager.hello
 
     puts "Please enter an ID for the game you would like to start/join."
-    gameID = gets
+    @gameID = gets
 
-    type, id = manager.join(gameID)
-    puts "T: #{type}, ID: #{id}"
+    @type, id = manager.join(@gameID)
+    puts "T: #{@type}, ID: #{id}"
+
+    if !@type
+      puts "What type of game would you like to play?"
+      puts "Enter 1 for normal and 2 for OTTO/TOOT"
+
+      # TODO - Validate inputs
+
+      @type = gets
+      manager.setup(@gameID, @type)
+    end
+
+    setup
   end
 
   def start_game
@@ -40,12 +53,22 @@ class GameClient
 
   def setup
     @view = View.new(self)
-    @view.setup(@@width, @@height)
+    @view.setup(7, 6)
     if @type == 1
-      @view.setup_standard(@@width, @@height)
+      @view.setup_standard(7, 6)
     else
-      @view.setup_OTTO(@@width, @@height)
+      @view.setup_OTTO(7, 6)
     end
+  end
+
+  def restart
+  end
+
+  def quit
+  end
+
+  def column_press(col, value)
+    # TODO
   end
 
 end
