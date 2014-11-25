@@ -15,6 +15,8 @@ class ClientHandler
   def join(gid)
     if !@games.has_key?(gid)
       @games[gid] = GameController.new
+    else
+      @games[gid].add_player
     end
     return [@games[gid].type, @games[gid].players]
   end
@@ -23,8 +25,8 @@ class ClientHandler
     @games[gid].setup(type)
   end
 
-  def await_player(gid)
-
+  def player_count(gid)
+    return @games[gid].players
   end
 
 end

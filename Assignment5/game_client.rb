@@ -35,6 +35,13 @@ class GameClient
     end
 
     setup
+
+    while manager.player_count < 2
+      puts "Waiting for a friend to join.."
+      sleep(3)
+    end
+
+    start_game
   end
 
   def start_game

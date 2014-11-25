@@ -28,6 +28,10 @@ class GameController
     return @game.players
   end
 
+  def add_player
+    @game.players += 1
+  end
+
   def column_press(column, value)
     @game.make_human_move(column, value)
   end
