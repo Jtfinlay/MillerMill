@@ -9,8 +9,9 @@
 
 require 'gtk2'
 require './contract_view'
+require './abstract_listener'
 
-class View
+class View < AbstractListener
   include ContractView
 
   @window

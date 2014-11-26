@@ -9,31 +9,41 @@
 
 require './game'
 require './contract_game_controller'
+require './abstract_listener'
 
 class GameController
   include ContractGameController
 
-  attr_accessor :type
+  attr_accessor :type, :width, :height
 
-  @@width = 7
-  @@height = 6
   @game
 
   def initialize
     @type = false
     @game = Game.new
+    @width = 7
+    @height = 6
   end
 
   def players
     return @game.players
   end
 
-  def add_player
-    @game.players += 1
+  def player_turn
+    return @game.pturn
   end
 
-  def column_press(column, value)
-    @game.make_human_move(column, value)
+  def add_player(pid)
+    @game.players << pid
+    return @game.players.size
+  end
+
+  def column_press(column, pid, value)
+    return @game.make_human_move(column, pid, value)
+  end
+
+  def turn_count
+    return @game.turn_count
   end
 
   def subscribe(observer)
@@ -42,7 +52,7 @@ class GameController
 
   def setup(type)
     @type = type
-    @game.setup_board(@@width, @@height)
+    @game.setup_board(@width, @height)
     if @type == 1
       @game.setup_game([1,1,1,1], [2,2,2,2])
     else

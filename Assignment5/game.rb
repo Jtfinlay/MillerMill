@@ -13,21 +13,20 @@ require './contract_game'
 class Game
   include ContractGame
 
-  attr_accessor :board, :turn, :players
-  @board
+  attr_accessor :board, :players, :pturn, :message, :turn_count
   @win_condition1
   @win_condition2
 
-  @observers
-
   def initialize
-    @players = 1
+    @players = []
     @observers = []
   end
 
   def setup_game(win_condition1, win_condition2)
     @win_condition1 = win_condition1
     @win_condition2 = win_condition2
+    @pturn = 1
+    @turn_count = 1
   end
 
   def setup_board(width, height)
@@ -43,9 +42,14 @@ class Game
     @observers.each{|o| o.update_value(column,row,@board[row,column])}
   end
 
-  def make_human_move(column, value)
-    return if @board.col_full?(column)
+  def make_human_move(column, pid, value)
+    return "Invalid: not your turn" if pid != @pturn
+    return "Invalid: column is full" if @board.col_full?(column)
     add_to_column(column, value)
+    @pturn = (@pturn == 1) ? 2 : 1
+    @turn_count += 1
+    @message = "Message: P#{pid} placed #{value} in column #{column}."
+    return "Seems to have been placed: #{@turn_count}"
   end
 
   def check_win_conditions(w)

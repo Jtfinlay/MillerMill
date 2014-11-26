@@ -11,13 +11,14 @@ require './contract_game_board'
 
 class GameBoard
   include ContractGameBoard
-  @data
+
+  attr_accessor :data
+  @observers   # Just used by client.
 
   def initialize(width, height)
     pre_initialize(width, height)
     @data = Array.new(height){Array.new(width, 0)}
-    post_initialize(@data, width, height)
-    class_invariant(@data)
+    @observers = []
   end
 
   def row(row)
@@ -34,6 +35,18 @@ class GameBoard
     post_col
     class_invariant(@data)
     return result
+  end
+
+  def update_all(data)
+    data.each_with_index{
+      |row,y| row.each_with_index{
+        |v,x| self[y,x]=v if self[y,x] != v
+      }
+    }
+  end
+
+  def subscribe(view)
+    @observers << view
   end
 
   def diagonals
@@ -68,6 +81,7 @@ class GameBoard
   def []=(row, col, v)
     pre_square_brackets_equals(@data, row, col, v)
     result = @data[row][col] = v
+    @observers.each{|o| o.update_value(col, row, v)}
     post_square_brackets_equals
     class_invariant(@data)
     return result
