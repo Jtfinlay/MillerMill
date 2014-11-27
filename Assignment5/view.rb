@@ -25,36 +25,15 @@ class View
   #
   # Populate board
   #
-  def setup(width, height)
+  def setup(width, height, inputs)
     Gtk.init
     @window = Gtk::Window.new
     @window.signal_connect("destroy"){Gtk.main_quit}
     @window.title = "FourPlay with Friends"
-  end
 
-  #
-  # Standard X/O board
-  #
-  def setup_standard(width, height)
     v = Gtk::VBox.new
     v.add(create_toolbar)
-    v.pack_start(create_buttons(width, 1, "X"))
-
-    Array.new(height).each{|a|
-      v.pack_end(create_grid_row(width))
-    }
-
-    @window.add(v)
-  end
-
-  #
-  # OTTO/TOOT board
-  #
-  def setup_OTTO(width, height)
-    v = Gtk::VBox.new
-    v.add(create_toolbar)
-    v.pack_start(create_buttons(width, 2, "O"))
-    v.pack_start(create_buttons(width, 3, "T"))
+    v.pack_start(create_buttons(width, 1, inputs))
 
     Array.new(height).each{|a|
       v.pack_end(create_grid_row(width))
@@ -132,19 +111,20 @@ class View
   #
   # Create row of action buttons
   #
-  def create_buttons(width, value, label)
-    pre_create_buttons(width, value, label)
-    btns = Gtk::HBox.new
-    Array.new(width).each_with_index{|b,col|
-      btn = Gtk::Button.new("Place #{label}")
-      btn.signal_connect("clicked") {
-        @controller.column_press(col, value)
+  def create_buttons(width, value, inputs)
+    v = Gtk::VBox.new
+    inputs.each{|i|
+      h = Gtk::HBox.new
+      Array.new(width).each_with_index{|b,col|
+        btn = Gtk::Button.new("Place #{i[1]}")
+        btn.signal_connect("clicked") {
+          @controller.column_press(col, i[0])
+        }
+        h.pack_start(btn)
       }
-      btns.pack_start(btn)
+      v.pack_start(h)
     }
-    post_create_buttons(btns)
-    class_invariant
-    return btns
+    return v
   end
 
   #

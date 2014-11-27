@@ -11,8 +11,8 @@ require './contract_game_board'
 
 class GameBoard
   include ContractGameBoard
+
   attr_accessor :data
-  @data
 
   def initialize(width, height)
     pre_initialize(width, height)
