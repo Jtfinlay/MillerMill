@@ -12,14 +12,14 @@ class AbstractListener
   #
   # When model value is updated
   #
-  def update_value(x,y,v)
+  def update_value(x,y,v,gid)
     raise NotImplementedError.new('Abstract Class')
   end
 
   #
   # Game Over
   #
-  def game_over(message)
+  def game_over(message,gid)
     raise NotImplementedError.new('Abstract Class')
   end
   

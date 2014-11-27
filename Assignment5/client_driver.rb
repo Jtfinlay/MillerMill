@@ -48,15 +48,30 @@ class ClientDriver
     puts "Enter game identifier:"
     @gameID = gets
     
+    # Create game if DNE
     if !@server.join(@gameID, @pname)
       puts "What type of game would you like to play?"
       puts "Enter 1 for normal and 2 for OTTO/TOOT"
 
       # TODO Validate input
 
-      type = gets
+      type = gets.to_i
       @server.create(@gameID, @pname, type)
     end
+
+    # Wait for opponent
+    while @server.players(@gameID).size < 2
+      puts "Waiting for a friend to join..."
+      sleep(3)
+    end
+
+    start_match
+  end
+  
+  def start_match
+    players = @server.players(@gameID)
+    puts "Match begins: #{players[0]} vs #{players[1]}!"
+    @view.start_game
   end
 
   def launch_listener(port)
@@ -68,6 +83,22 @@ class ClientDriver
       s.add_handler("client", self)
       s.serve
     }
+  end
+
+  #
+  # From Server
+  #
+  def update_value(x,y,v)
+    @view.update_value(x,y,v)
+    return true
+  end
+
+  # 
+  # From Server
+  #
+  def game_over(message)
+    @view.game_over(message)
+    return true
   end
 
   

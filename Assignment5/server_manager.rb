@@ -1,7 +1,9 @@
 require 'xmlrpc/server'
 require 'xmlrpc/client'
+require './model_controller'
+require './abstract_listener'
 
-class ServerManager
+class ServerManager < AbstractListener
  
   attr_accessor :games, :clients
 
@@ -21,7 +23,7 @@ class ServerManager
 
     # TODO - If not connected, throws ERRNO:ECONNREFUSED
     
-    return [true, "Connection established."]
+    return [true, "Connection established"]
   end
 
   def join(gid, pid)
@@ -34,13 +36,29 @@ class ServerManager
   def create(gid, pid, type)
     return join(gid,pid) if @games.has_key?(gid)
  
-    #@games[gid] = GameController.new(type)
-    #@games[gid].add_player(pid)
+    @games[gid] = ModelController.new(type)
+    @games[gid].add_player(pid)
     return 0
   end
 
-  def action(player_name)
-    return @clients[player_name].test
+  def players(gid)
+    return @games[gid].game.players
+  end
+
+  def whos_turn(gid)
+    return @games[gid].game.players[@games[gid].game.turn]
+  end
+
+  def update_value(x,y,v,gid)
+    @games[gid].game.players.each{
+      |p| @clients[p].update_value(x,y,v)
+    }
+  end
+
+  def game_over(message,gid)
+    @games[gid].game.players.each{
+      |p| @clients[p].game_over(message)
+    }
   end
 
 end
