@@ -33,15 +33,16 @@ class ClientDriver
   end
 
   def ask_player_name
-    puts "Please enter your username,"
+    puts "Please enter your username:"
     return gets
   end
 
   def main_menu
     puts "What would you like to do?"
-    puts "1. Match against AI"
-    puts "2. Match against player"
-    puts "3. Leaderboards"
+    puts "1. Match against player"
+    puts "2. Match against Bot"
+    puts "3. Load saved multiplayer game"
+    puts "4. Leaderboards"
 
     # TODO Do something with choice. For now, just doing multiplayer
     gets
@@ -52,7 +53,7 @@ class ClientDriver
   def new_multiplayer
     puts "Enter game identifier:"
     @gameID = gets
-    
+
     # Create game if DNE
     if !@server.join(@gameID, @pname)
       puts "What type of game would you like to play?"
@@ -74,12 +75,25 @@ class ClientDriver
     w, h, turn, data = @server.current_state(@gameID)
     inputs, win_condition = @server.player_info(@gameID, @pname)
 
-    setup_view(w, h, inputs) 
+    setup_view(w, h, inputs)
     reset_model(data)
-    
+
     start_match
   end
-  
+
+
+  def new_bot
+
+  end
+
+  def new_saved_multiplayer
+
+  end
+
+  def load_leaderboards
+
+  end
+
   def start_match
     players = @server.players(@gameID)
     puts "Match begins: #{players[0]} vs #{players[1]}!"
@@ -114,22 +128,22 @@ class ClientDriver
     return port
   end
 
-  
+
   ### from View ###
-  
+
   def column_press(col, value)
     @server.column_press(@gameID, @pname, col, value)
   end
 
-  def restart
+  def save
+  end
 
+  def quit
   end
 
   ### from Server ###
-  
+
   def update_value(x,y,v)
-    #puts "fart"
-    puts "update_value(#{x},#{y},#{v})"
     @view.update_value(x,y,v)
     return true
   end
@@ -144,5 +158,7 @@ class ClientDriver
     return true
   end
 
-end
+  def client_disconnect(message)
+  end
 
+end

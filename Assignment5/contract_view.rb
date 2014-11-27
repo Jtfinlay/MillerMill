@@ -13,40 +13,19 @@ module ContractView
     assert !controller.nil?, "Controller cannot be nil"
   end
 
-  def post_initialize()
+  def post_initialize
   end
 
-  def pre_setup(width, height)
+  def pre_setup(width, height, inputs)
     assert width.is_a?(Fixnum), "Width must be a Fixnum"
     assert height.is_a?(Fixnum), "Height must be a Fixnum"
     assert width >= 0, "Width cannot be negative"
     assert height >= 0, "Height cannot be negative"
+    assert inputs.is_a?(Array), "Input must be an array"
   end
 
   def post_setup(window)
     assert window.is_a?(Gtk::Window), "Window must be a Gtk Window"
-  end
-
-  def pre_setup_standard(width, height)
-    assert width.is_a?(Fixnum), "Width must be a Fixnum"
-    assert height.is_a?(Fixnum), "Height must be a Fixnum"
-    assert width >= 0, "Width cannot be negative"
-    assert height >= 0, "Height cannot be negative"
-  end
-
-  def post_setup_standard(window)
-    assert window.children.size > 0, "Window must have children"
-  end
-
-  def pre_setup_OTTO(width, height)
-    assert width.is_a?(Fixnum), "Width must be a Fixnum"
-    assert height.is_a?(Fixnum), "Height must be a Fixnum"
-    assert width >= 0, "Width cannot be negative"
-    assert height >= 0, "Height cannot be negative"
-  end
-
-  def post_setup_OTTO(window)
-    assert window.children.size > 0, "Window must have children"
   end
 
   def pre_kill
@@ -75,22 +54,21 @@ module ContractView
     assert result.is_a?(Gtk::Toolbar)
   end
 
-  def pre_create_buttons(width, value, label)
+  def pre_create_buttons(width, value, inputs)
     assert width.is_a?(Fixnum), "Width must be a Fixnum"
     assert width >= 0, "Width cannot be negative"
-    assert label.is_a?(String), "Label must be a string"
+    assert inputs.is_a?(Array), "Inputs must be a array"
     assert value.is_a?(Fixnum), "Value must be a Fixnum"
     assert value >= 0, "Value cannot be negative"
   end
 
   def post_create_buttons(result)
-    assert result.is_a?(Gtk::HBox), "Result must be an HBox"
-    assert !result.children.empty?, "Result cannot be empty"
+    assert result.is_a?(Gtk::Vbox), "Result must be an VBox"
   end
 
   def pre_create_grid_row(width)
     assert width.is_a?(Fixnum), "Width must be a Fixnum"
-    assert width >= 0, "Width cannot be negative"
+    assert width > 0, "Width cannot be negative or empty"
   end
 
   def post_create_grid_row(result)
