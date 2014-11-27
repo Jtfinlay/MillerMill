@@ -44,6 +44,27 @@ module ContractClientDriver
     # Starts specified game
   end
 
+  def pre_new_bot
+  end
+
+  def post_new_bot
+    # New Bot game is started
+  end
+
+  def pre_new_saved_multiplayer
+  end
+
+  def post_new_saved_multiplayer
+    # New saved multiplayer is game is tarted
+  end
+
+  def pre_load_leaderboards
+  end
+
+  def post_load_leaderboards
+    # Leaderboards are displayed
+  end
+
   def pre_start_game
   end
 
@@ -84,6 +105,20 @@ module ContractClientDriver
 
   def post_column_press
     # Player input is sent to server
+  end
+
+  def pre_save
+  end
+
+  def post_save
+    # Game is saved on SQL server
+  end
+
+  def pre_quit
+  end
+
+  def post_quit
+    # Game quits
   end
 
   def pre_update_value(x,y,v)
