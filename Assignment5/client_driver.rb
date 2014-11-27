@@ -1,9 +1,13 @@
 require 'xmlrpc/server'
 require 'xmlrpc/client'
+require 'socket'
+require './view'
 
 class ClientDriver
 
   attr_accessor :pname, :gameID, :server
+
+  @view
 
   def initialize
   end
@@ -16,13 +20,14 @@ class ClientDriver
     # TODO - If not connected, throws ERRNO:ECONNREFUSED
 
     # Get user name
+    # TODO - Strip newline from player name
     @pname = ask_player_name
 
     # Launch client server
-    launch_listener(2020)
-
-    @server.connect(@pname, "localhost", 2020)
-    #TODO - 'connect' may fail and return false
+    port = launch_listener
+    # TODO - Return ip address, isn't always 'localhost'
+    @server.connect(@pname, "localhost", port)
+    # TODO - 'connect' may fail and return false
 
     main_menu
   end
@@ -65,6 +70,13 @@ class ClientDriver
       sleep(3)
     end
 
+    # Get current game state
+    w, h, turn, data = @server.current_state(@gameID)
+    inputs, win_condition = @server.player_info(@gameID, @pname)
+
+    setup_view(w, h, inputs) 
+    reset_model(data)
+    
     start_match
   end
   
@@ -74,34 +86,63 @@ class ClientDriver
     @view.start_game
   end
 
-  def launch_listener(port)
-    Thread.new {
-      # TODO Need dynamic port. It works if 'port' is 0, but need 
-      # way to then extract generated port.
+  def reset_model(data)
+    data.each_with_index{
+      |row,y| row.each_with_index{
+#        |v,x| update_value(x,y,v)
+      }
+    }
+  end
 
+  def setup_view(width, height, inputs)
+    @view = View.new(self)
+    @view.setup(width, height, inputs)
+  end
+
+  def launch_listener
+    # Get open port. This code is bad, can't find better way
+    sock = Socket.new(:INET, :STREAM, 0)
+    sock.bind(Addrinfo.tcp("localhost", 0))
+    port = sock.local_address.ip_port
+    sock.close
+
+    Thread.new {
       s = XMLRPC::Server.new(port)
       s.add_handler("client", self)
       s.serve
     }
+    return port
   end
 
-  #
-  # From Server
-  #
+  
+  ### from View ###
+  
+  def column_press(col, value)
+    @server.column_press(@gameID, @pname, col, value)
+  end
+
+  def restart
+
+  end
+
+  ### from Server ###
+  
   def update_value(x,y,v)
+    #puts "fart"
+    puts "update_value(#{x},#{y},#{v})"
     @view.update_value(x,y,v)
     return true
   end
 
-  # 
-  # From Server
-  #
   def game_over(message)
     @view.game_over(message)
     return true
   end
 
-  
+  def message(message)
+    puts message
+    return true
+  end
 
 end
 

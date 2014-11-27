@@ -14,21 +14,21 @@ require './contract_game'
 class Game
   include ContractGame
 
-  attr_accessor :board, :turn, :players
-  @win_condition1
-  @win_condition2
+  attr_accessor :board, :turn, :players, :game_typei, :gameID
+  @win_conditions
 
   @observers
 
-  def initialize
+  def initialize(gid, game_type)
+    @gameID = gid
+    @game_type = game_type
     @observers = []
     @players = []
-    @turn = 1
+    @turn = 0
   end
 
   def setup_game(win_condition1, win_condition2)
-    @win_condition1 = win_condition1
-    @win_condition2 = win_condition2
+    @win_conditions = [win_condition1, win_condition2]
   end
 
   def setup_board(width, height)
@@ -38,17 +38,19 @@ class Game
   def add_to_column(column, value)
     row = @board.col(column).find_index(0)
     @board[row,column] = value 
-    @observers.each{|o| o.game_over("P1 wins!")} if check_win_conditions(@win_condition1)
-    @observers.each{|o| o.game_over("P2 wins!")} if check_win_conditions(@win_condition2)
+    @observers.each{|o| o.game_over("P1 wins!")} if check_win_conditions(@win_conditions[0])
+    @observers.each{|o| o.game_over("P2 wins!")} if check_win_conditions(@win_conditions[1])
     @observers.each{|o| o.game_over("Draw!")} if check_board_full? 
-    @observers.each{|o| o.update_value(column,row,@board[row,column])}
+    @observers.each{|o| o.update_value(column,row,@board[row,column], @gameID)}
   end
 
   def make_move(pid, column, value)
-    return "Full column" if @board.col_full?(column)
-    return "Not your turn" if pid != @players[@turn]
+    return [false, "Not your turn"] if pid != @players[@turn]
+    return [false, "Error: column full"] if @board.col_full?(column)
+
     add_to_column(column, value)
-    @turn = (@turn == 1) ? 2 : 1
+    @turn = (@turn == 0) ? 1 : 0
+    return [true, "#{@players[@turn]} goes next!"]
   end
 
   def check_win_conditions(w)
@@ -76,6 +78,24 @@ class Game
       return false if !@board.col_full?(k)
     }
     return true
+  end
+
+  def player_inputs(pid)
+    if @game_type == 1
+      if @players.find_index(pid) == 0
+        return [[1,"X"]]
+      elsif @players.find_index(pid) == 1
+        return [[2,"O"]]
+      else
+        return []
+      end
+    else
+      return [[2,"O"], [3,"X"]]; 
+    end
+  end
+
+  def player_win_conditions(pid)
+    return @win_conditions[@players.find_index(pid)]
   end
 
   #
