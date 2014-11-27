@@ -8,13 +8,13 @@
 ##
 
 require './game'
-require './contract_game_controller'
+require './contract_model_controller'
 
 class ModelController
-  include ContractGameController
+  include ContractModelController
 
   attr_accessor :width, :height, :game
-  
+
   def initialize(gid, type)
     @width = 7
     @height = 6
@@ -40,7 +40,7 @@ class ModelController
       @game.setup_game([1,1,1,1], [2,2,2,2])
     else
       @game.setup_game([2,3,3,2], [3,2,2,3])
-    end 
+    end
   end
 
   def get_state
