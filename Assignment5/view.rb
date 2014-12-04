@@ -8,7 +8,7 @@
 ##
 
 require 'gtk2'
-require './contract_view'
+require './contracts/contract_view'
 
 class View
   include ContractView

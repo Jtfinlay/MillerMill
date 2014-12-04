@@ -7,7 +7,7 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require './contract_game_board'
+require './contracts/contract_game_board'
 
 class GameBoard
   include ContractGameBoard

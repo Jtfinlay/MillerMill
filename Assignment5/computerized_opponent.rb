@@ -7,7 +7,7 @@
 # Authors: Evan Degraff, James Finlay
 ##
 
-require './contract_computerized_opponent'
+require './contracts/contract_computerized_opponent'
 
 
 class ComputerizedOpponent

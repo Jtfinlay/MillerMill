@@ -8,7 +8,7 @@
 ##
 
 require './game'
-require './contract_model_controller'
+require './contracts/contract_model_controller'
 
 class ModelController
   include ContractModelController
