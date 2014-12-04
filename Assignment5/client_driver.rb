@@ -2,14 +2,17 @@ require 'xmlrpc/server'
 require 'xmlrpc/client'
 require 'socket'
 require './view'
+require './stats.rb'
 
 class ClientDriver
 
   attr_accessor :pname, :gameID, :server
 
   @view
+  @stats
 
   def initialize
+    @stats = Stats.new("mysqlsrc.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
   end
 
   def start(host, port)
@@ -44,10 +47,17 @@ class ClientDriver
     puts "3. Load saved multiplayer game"
     puts "4. Leaderboards"
 
-    # TODO Do something with choice. For now, just doing multiplayer
-    gets
+    choice = gets.to_i
+    while choice <= 0 || choice > 4
+      puts "Please enter a valid number between 1 and 4"
+      choice = gets.to_i
+    end
 
-    new_multiplayer
+    functions = [method(:new_multiplayer), \
+                 method(:new_bot), \
+                 method(:new_saved_multiplayer), \
+                 method(:load_leaderboards)]
+    functions[choice-1].call
   end
 
   def new_multiplayer
@@ -136,6 +146,8 @@ class ClientDriver
   end
 
   def save
+    Stats.menu
+    main_menu
   end
 
   def quit

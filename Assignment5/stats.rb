@@ -23,7 +23,7 @@ class Stats
 
   def add_stat(game_id, p1, p2, winner)
     begin
-      @con.query("INSERT INTO games (id, p1, p2, winner) 
+      @con.query("INSERT INTO games (id, p1, p2, winner)
               VALUES
                 ('#{game_id}','#{p1}','#{p2}','#{winner}')"
           )
@@ -43,12 +43,12 @@ class Stats
     r.each_hash do |row|
       result += "Game ID: #{row['id']}, P1: #{row['p1']}, P2: #{row['p2']}, Winner: #{row['winner']}\n"
     end
-    return result  
+    return result
   end
 
   def get_player(id)
-    begin  
-      r = @con.query("SELECT * FROM games WHERE p1 = '#{id}' or p2 = '#{id}'") 
+    begin
+      r = @con.query("SELECT * FROM games WHERE p1 = '#{id}' or p2 = '#{id}'")
     rescue Mysql::Error => e
       puts e.error
     end
@@ -56,7 +56,7 @@ class Stats
     won_games = 0
     r.each_hash do |row|
       won_games += 1 if row['winner'] == id
-    end 
+    end
     return "Player: #{id}\nGames Played: #{r.num_rows}\nGames Won:#{won_games}"
   end
 
@@ -72,9 +72,43 @@ class Stats
       result += "#{i}: #{row['winner']} - #{row['count(winner)']} wins\n"
       i += 1
     end
-    return result    
+    return result
+  end
+
+  def menu
+    puts "What stats would you like to see?"
+    puts "1. Player stats"
+    puts "2. Game stats"
+    puts "3. League stats"
+    puts "4. Return to main menu"
+
+    choice = gets.to_i
+
+    choice = gets.to_i
+    while choice <= 0 || choice > 4
+      puts "Please enter a valid number between 1 and 4"
+      choice = gets.to_i
+    end
+
+    return if choice == 4
+
+    player_stats = Proc.new{
+      puts "Enter the ID of the player for their stats"
+      get_player(gets)
+    }
+
+    game_stats = Proc.new{
+      puts "Enter a game ID to see its stats"
+      get_game(gets)
+    }
+
+    functions = [player_stats, \
+                 game_stats, \
+                 method(:get_league_stats)]
+    puts functions[choice-1].call
+    menu
   end
 end
 
 s = Stats.new("mysqlsrv.ece.ualberta.ca", "ece421grp7",'Afbgt7oE', 'ece421grp7', 13010)
-puts s.get_league_stats
+s.menu
