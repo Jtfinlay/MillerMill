@@ -103,7 +103,8 @@ class Stats
     functions = [player_stats, \
                  game_stats, \
                  method(:get_league_stats)]
-    puts functions[choice-1].call
+    
+    puts "\n" + functions[choice-1].call + "\n"
     menu
   end
 end

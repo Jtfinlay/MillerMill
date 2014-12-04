@@ -11,7 +11,7 @@ class ServerManager < AbstractListener
   def initialize(port)
     @games = Hash.new
     @clients = Hash.new
-    @save = GameSave.new("mysqlsrc.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
+    @save = GameSave.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
 
     s = XMLRPC::Server.new(port, "localhost", 10, "srv.log")
     s.add_handler("manager", self)
@@ -80,9 +80,12 @@ class ServerManager < AbstractListener
     }
   end
 
-  def save(gid)
-    @save.save_game(gid, @games[gid].game.board, @games.[gid].game.turn)
-    game_over("Game '#{gid}' has been saved and can be resumed at a later time", gid)
+  def save(gid, pid)
+    if @save.save_game(gid, @games[gid].game.board, @games[gid].game.turn)
+      game_over("Game '#{gid}' has been saved and can be resumed at a later time", gid)
+    else
+      @clients[pid].message("Save with gameID already exists!")
+    end
   end
 
 end

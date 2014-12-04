@@ -66,13 +66,4 @@ class GameSave
     return board
   end
 end
-b = GameBoard.new(7,6)
-b[3,5] = 4
-b[2,3] = 2
-s = GameSave.new("mysqlsrv.ece.ualberta.ca", "ece421grp7",'Afbgt7oE', 'ece421grp7', 13010)
-puts s.save_game("game_3", b, 0)
-b2, t = s.load_game("game_3")
-puts b2[3,5]
-puts b2[2,3]
-puts b2[5,6]
 
