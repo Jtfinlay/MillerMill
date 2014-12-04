@@ -9,7 +9,7 @@
 
 require "./computerized_opponent"
 require './game_board'
-require './contract_game'
+require './contracts/contract_game'
 
 class Game
   include ContractGame
@@ -37,10 +37,10 @@ class Game
 
   def add_to_column(column, value)
     row = @board.col(column).find_index(0)
-    @board[row,column] = value 
+    @board[row,column] = value
     @observers.each{|o| o.game_over("P1 wins!")} if check_win_conditions(@win_conditions[0])
     @observers.each{|o| o.game_over("P2 wins!")} if check_win_conditions(@win_conditions[1])
-    @observers.each{|o| o.game_over("Draw!")} if check_board_full? 
+    @observers.each{|o| o.game_over("Draw!")} if check_board_full?
     @observers.each{|o| o.update_value(column,row,@board[row,column], @gameID)}
   end
 
@@ -72,7 +72,7 @@ class Game
     }
     return false
   end
-  
+
   def check_board_full?
     (0..@board.row(0).size - 1).each{ |k|
       return false if !@board.col_full?(k)
@@ -90,7 +90,7 @@ class Game
         return []
       end
     else
-      return [[2,"O"], [3,"X"]]; 
+      return [[2,"O"], [3,"X"]];
     end
   end
 

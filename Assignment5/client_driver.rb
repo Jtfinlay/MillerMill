@@ -12,7 +12,7 @@ class ClientDriver
   @stats
 
   def initialize
-    @stats = Stats.new("mysqlsrc.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
+    @stats = Stats.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
   end
 
   def start(host, port)
