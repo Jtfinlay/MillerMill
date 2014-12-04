@@ -2,14 +2,16 @@ require 'xmlrpc/server'
 require 'xmlrpc/client'
 require './model_controller'
 require './abstract_listener'
+require './game_save'
 
 class ServerManager < AbstractListener
- 
+
   attr_accessor :games, :clients
 
   def initialize(port)
     @games = Hash.new
     @clients = Hash.new
+    @save = GameSave.new("mysqlsrc.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
 
     s = XMLRPC::Server.new(port, "localhost", 10, "srv.log")
     s.add_handler("manager", self)
@@ -23,7 +25,7 @@ class ServerManager < AbstractListener
 
     # TODO - Ensure player DNE
     # TODO - If not connected, throws ERRNO:ECONNREFUSED
-    
+
     return [true, "Connection established"]
   end
 
@@ -36,7 +38,7 @@ class ServerManager < AbstractListener
 
   def create(gid, pid, type)
     return join(gid,pid) if @games.has_key?(gid)
- 
+
     @games[gid] = ModelController.new(gid, type)
     @games[gid].subscribe(self)
     @games[gid].add_player(pid)
@@ -61,7 +63,7 @@ class ServerManager < AbstractListener
 
   def column_press(gid, pid, col, value)
     success, msg = @games[gid].column_press(pid, col, value)
-    @clients[pid].message(msg) 
+    @clients[pid].message(msg)
     return success
   end
 
@@ -76,6 +78,11 @@ class ServerManager < AbstractListener
     @games[gid].game.players.each{
       |p| @clients[p].game_over(message)
     }
+  end
+
+  def save(gid)
+    @save.save_game(gid, @games[gid].game.board, @games.[gid].game.turn)
+    game_over("Game '#{gid}' has been saved and can be resumed at a later time", gid)
   end
 
 end
