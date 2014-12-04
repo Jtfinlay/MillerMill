@@ -4,7 +4,7 @@ require './model_controller'
 require './abstract_listener'
 
 class ServerManager < AbstractListener
- 
+
   attr_accessor :games, :clients
 
   def initialize(port)
@@ -23,7 +23,7 @@ class ServerManager < AbstractListener
 
     # TODO - Ensure player DNE
     # TODO - If not connected, throws ERRNO:ECONNREFUSED
-    
+
     return [true, "Connection established"]
   end
 
@@ -61,7 +61,7 @@ class ServerManager < AbstractListener
 
   def column_press(gid, pid, col, value)
     success, msg = @games[gid].column_press(pid, col, value)
-    @clients[pid].message(msg) 
+    @clients[pid].message(msg)
     return success
   end
 

@@ -23,7 +23,6 @@ class ClientDriver
     # TODO - If not connected, throws ERRNO:ECONNREFUSED
 
     # Get user name
-    # TODO - Strip newline from player name
     @pname = ask_player_name
 
     # Launch client server
@@ -37,7 +36,7 @@ class ClientDriver
 
   def ask_player_name
     puts "Please enter your username:"
-    return gets
+    return gets.chomp
   end
 
   def main_menu
@@ -62,7 +61,7 @@ class ClientDriver
 
   def new_multiplayer
     puts "Enter game identifier:"
-    @gameID = gets
+    @gameID = gets.chomp
 
     # Create game if DNE
     if !@server.join(@gameID, @pname)
@@ -113,14 +112,14 @@ class ClientDriver
   def reset_model(data)
     data.each_with_index{
       |row,y| row.each_with_index{
-#        |v,x| update_value(x,y,v)
+        |v,x| update_value(x,y,v)
       }
     }
   end
 
   def setup_view(width, height, inputs)
     @view = View.new(self)
-    @view.setup(width, height, inputs)
+    @view.setup(width, height, inputs, @pname)
   end
 
   def launch_listener
@@ -134,6 +133,8 @@ class ClientDriver
       s = XMLRPC::Server.new(port)
       s.add_handler("client", self)
       s.serve
+      #TODO tell server we're disconnecting
+      exit
     }
     return port
   end
@@ -151,6 +152,9 @@ class ClientDriver
   end
 
   def quit
+    @gameID = ""
+    @view.kill
+    main_menu
   end
 
   ### from Server ###
