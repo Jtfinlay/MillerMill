@@ -83,8 +83,6 @@ class Stats
     puts "4. Return to main menu"
 
     choice = gets.to_i
-
-    choice = gets.to_i
     while choice <= 0 || choice > 4
       puts "Please enter a valid number between 1 and 4"
       choice = gets.to_i
@@ -94,12 +92,12 @@ class Stats
 
     player_stats = Proc.new{
       puts "Enter the ID of the player for their stats"
-      get_player(gets)
+      get_player(gets.strip)
     }
 
     game_stats = Proc.new{
       puts "Enter a game ID to see its stats"
-      get_game(gets)
+      get_game(gets.strip)
     }
 
     functions = [player_stats, \
@@ -109,6 +107,3 @@ class Stats
     menu
   end
 end
-
-s = Stats.new("mysqlsrv.ece.ualberta.ca", "ece421grp7",'Afbgt7oE', 'ece421grp7', 13010)
-s.menu
