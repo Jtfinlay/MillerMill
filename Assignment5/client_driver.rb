@@ -2,7 +2,7 @@ require 'xmlrpc/server'
 require 'xmlrpc/client'
 require 'socket'
 require './view'
-require './stats.rb'
+require './stats'
 
 class ClientDriver
 
@@ -23,7 +23,7 @@ class ClientDriver
     # TODO - If not connected, throws ERRNO:ECONNREFUSED
 
     # Get user name
-    @pname = ask_player_name
+    @pname = ask_player_name.chomp
 
     # Launch client server
     port = launch_listener
@@ -45,9 +45,10 @@ class ClientDriver
     puts "2. Match against Bot"
     puts "3. Load saved multiplayer game"
     puts "4. Leaderboards"
+    puts "5. Exit"
 
     choice = gets.to_i
-    while choice <= 0 || choice > 4
+    while choice <= 0 || choice > 5
       puts "Please enter a valid number between 1 and 4"
       choice = gets.to_i
     end
@@ -55,7 +56,8 @@ class ClientDriver
     functions = [method(:new_multiplayer), \
                  method(:new_bot), \
                  method(:new_saved_multiplayer), \
-                 method(:load_leaderboards)]
+                 method(:load_leaderboards), \
+                 method(:exit)]
     functions[choice-1].call
   end
 
@@ -68,9 +70,12 @@ class ClientDriver
       puts "What type of game would you like to play?"
       puts "Enter 1 for normal and 2 for OTTO/TOOT"
 
-      # TODO Validate input
 
       type = gets.to_i
+      while type < 1 || type > 2
+        puts "Please enter 1 or 2"
+        type = gets.to_i
+      end
       @server.create(@gameID, @pname, type)
     end
 
@@ -100,7 +105,8 @@ class ClientDriver
   end
 
   def load_leaderboards
-
+    @stats.menu
+    main_menu
   end
 
   def start_match
@@ -147,8 +153,7 @@ class ClientDriver
   end
 
   def save
-    Stats.menu
-    main_menu
+    @server.save(@gameID, @pname)
   end
 
   def quit

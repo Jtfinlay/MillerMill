@@ -95,7 +95,12 @@ class View
     file_menu.signal_connect("clicked") {
       @controller.restart
     }
+    save_menu = Gtk::ToolButton.new(nil, "Save")
+    save_menu.signal_connect("clicked") {
+      @controller.save
+    }
     toolbar.insert(0, file_menu)
+    toolbar.insert(0, save_menu)
 
     post_create_toolbar(toolbar)
     class_invariant
