@@ -45,14 +45,16 @@ class GameSave
 
   def serialize_board(board)
     s = ''
-    board.data.each{ |n|
-      s += n.to_s
+    board.data.each{ |x|
+      x.each { |n|
+        s += n.to_s
+      }
     }
-    puts s
     return s
   end
 
   def deserialize_board(s)
+    puts s
     board = GameBoard.new(7,6)
     i = 0
     j = 0
@@ -66,4 +68,3 @@ class GameSave
     return board
   end
 end
-

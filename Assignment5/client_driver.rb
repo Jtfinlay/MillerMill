@@ -3,6 +3,7 @@ require 'xmlrpc/client'
 require 'socket'
 require './view'
 require './stats'
+require './game_save'
 
 class ClientDriver
 
@@ -10,9 +11,11 @@ class ClientDriver
 
   @view
   @stats
+  @save
 
   def initialize
     @stats = Stats.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
+    @save = GameSave.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
   end
 
   def start(host, port)
@@ -101,7 +104,31 @@ class ClientDriver
   end
 
   def new_saved_multiplayer
+    puts "Enter game identifier:"
+    @gameID = gets.chomp
 
+    # Create game if DNE
+    if !@server.join(@gameID, @pname)
+      board, turn = @save.load_game(@gameID)
+      if board.is_a? String
+        puts board
+        return
+      end
+      @server.create(@gameID, @pname, type)
+    end
+
+    # Wait for opponent
+    while @server.players(@gameID).size < 2
+      puts "Waiting for a friend to join..."
+      sleep(3)
+    end
+
+    # Get current game state
+    w, h, turn, data = @server.current_state(@gameID)
+    inputs, win_condition = @server.player_info(@gameID, @pname)
+
+    setup_view(w, h, inputs)
+    reset_model(data)
   end
 
   def load_leaderboards
