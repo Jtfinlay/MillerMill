@@ -1,5 +1,5 @@
 server:
-	ruby run_server.rb > /dev/null
+	ruby run_server.rb 2> /dev/null
 
 client:
-	ruby run_client.rb > /dev/null
+	ruby run_client.rb 2> /dev/null
