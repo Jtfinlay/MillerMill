@@ -2,12 +2,8 @@ require 'xmlrpc/server'
 require 'xmlrpc/client'
 require 'socket'
 require './view'
-<<<<<<< HEAD
 require './stats'
 require './game_save'
-=======
-require './stats.rb'
->>>>>>> 8475ac62a48d20a35816058fde24d9e5c0452556
 
 class ClientDriver
 
@@ -107,12 +103,13 @@ class ClientDriver
 
     # Create game if DNE
     if !@server.join(@gameID, @pname)
-      board, turn = @save.load_game(@gameID)
+      board, turn, type = @save.load_game(@gameID)
       if board.is_a? String
         puts board
         return
       end
-      @server.create(@gameID, @pname, type)
+      board = @save.serialize_board(board)
+      @server.load(@gameID, @pname, board, turn, type)
     end
 
     # Wait for opponent
@@ -121,12 +118,8 @@ class ClientDriver
       sleep(3)
     end
 
-    # Get current game state
-    w, h, turn, data = @server.current_state(@gameID)
-    inputs, win_condition = @server.player_info(@gameID, @pname)
+    start_match
 
-    setup_view(w, h, inputs)
-    reset_model(data)
   end
 
   def load_leaderboards
@@ -202,8 +195,6 @@ class ClientDriver
 
   def save
     @server.save(@gameID, @pname)
-    Stats.menu
-    main_menu
   end
 
   def quit

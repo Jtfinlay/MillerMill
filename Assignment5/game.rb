@@ -14,7 +14,7 @@ require './contracts/contract_game'
 class Game
   include ContractGame
 
-  attr_accessor :board, :turn, :players, :game_typei, :gameID
+  attr_accessor :board, :turn, :players, :game_type, :gameID
   @win_conditions
 
   @observers
@@ -39,8 +39,8 @@ class Game
     row = @board.col(column).find_index(0)
     @board[row,column] = value
 
-    @observers.each{|o| o.game_over("P1 wins!", @gameID)} if check_win_conditions(@win_conditions[0])
-    @observers.each{|o| o.game_over("P2 wins!", @gameID)} if check_win_conditions(@win_conditions[1])
+    @observers.each{|o| o.game_over("#{players[0]} wins!", @gameID)} if check_win_conditions(@win_conditions[0])
+    @observers.each{|o| o.game_over("#{players[1]} wins!", @gameID)} if check_win_conditions(@win_conditions[1])
     @observers.each{|o| o.game_over("Draw!")} if check_board_full?
     @observers.each{|o| o.update_value(column,row,@board[row,column], @gameID)}
   end

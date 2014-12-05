@@ -13,15 +13,16 @@ class GameSave
     end
   end
 
-  def save_game(id, board, turn)
+  def save_game(id, board, turn, type)
     begin
       r = @con.query("SELECT * FROM saves WHERE id = '#{id}'")
       return false if r.num_rows > 0
-      r = @con.query("INSERT INTO saves (id, board, turn) 
+      r = @con.query("INSERT INTO saves (id, board, turn, type) 
               VALUES
-                ('#{id}','#{serialize_board(board)}', #{turn})"
+                ('#{id}','#{serialize_board(board)}', #{turn}, #{type})"
           )
     rescue Mysql::Error => e
+      puts "SQL Error while saving"
       puts e.error
     end
     return true
@@ -31,16 +32,25 @@ class GameSave
     begin
       r = @con.query("SELECT * FROM saves WHERE id = '#{id}'")
     rescue Mysql::Error => e
+      puts "SQL Error while loading"
       puts e.error
     end
     return "Game does not exist!", 0 if r.num_rows == 0
     board = ''
     turn = 0
+    type = 1
     r.each_hash do |row|
       board = row['board']
-      turn = row['turn']
+      turn = row['turn'].to_i
+      type = row['type'].to_i
     end
-    return deserialize_board(board), turn
+    begin
+      r = @con.query("DELETE FROM saves WHERE id = '#{id}'")
+    rescue Mysql::Error => e
+      puts "SQL Error while deleting save"
+      puts e.error
+    end
+    return deserialize_board(board), turn, type
   end
 
   def serialize_board(board)
@@ -54,7 +64,6 @@ class GameSave
   end
 
   def deserialize_board(s)
-    puts s
     board = GameBoard.new(7,6)
     i = 0
     j = 0
