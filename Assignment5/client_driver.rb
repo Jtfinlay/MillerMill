@@ -18,7 +18,7 @@ class ClientDriver
     @save = GameSave.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
   end
 
-  def start(host, port)
+  def start(host, port, client_port)
 
     s = XMLRPC::Client.new(host, "/", port)
     @server = s.proxy("manager")
@@ -29,9 +29,8 @@ class ClientDriver
     @pname = ask_player_name.chomp
 
     # Launch client server
-    port = launch_listener
-    # TODO - Return ip address, isn't always 'localhost'
-    while (!@server.connect(@pname, "localhost", port))
+    launch_listener(client_port)
+    while (!@server.connect(@pname, Socket.ip_address_list[1].ip_address, client_port))
       print "Username is currently in use.\n"
       @pname = ask_player_name.chomp
     end
@@ -42,7 +41,7 @@ class ClientDriver
 
   def ask_player_name
     puts "Please enter your username:"
-    return gets.chomp
+    return $stdin.gets.chomp
   end
 
   def main_menu
@@ -53,10 +52,10 @@ class ClientDriver
     puts "4. Leaderboards"
     puts "5. Exit"
 
-    choice = gets.to_i
+    choice = $stdin.gets.to_i
     while choice <= 0 || choice > 5
       puts "Please enter a valid number between 1 and 4"
-      choice = gets.to_i
+      choice = $stdin.gets.to_i
     end
 
     functions = [method(:new_multiplayer), \
@@ -69,7 +68,7 @@ class ClientDriver
 
   def new_multiplayer
     puts "Enter game identifier:"
-    @gameID = gets.chomp
+    @gameID = $stdin.gets.chomp
 
     if @server.num_players(@gameID) > 1
       puts "Game already has 2 players"
@@ -106,7 +105,7 @@ class ClientDriver
 
   def new_saved_multiplayer
     puts "Enter game identifier:"
-    @gameID = gets.chomp
+    @gameID = $stdin.gets.chomp
 
     # Create game if DNE
     if !@server.join(@gameID, @pname)
@@ -164,15 +163,9 @@ class ClientDriver
     @view.setup(width, height, inputs, @pname)
   end
 
-  def launch_listener
-    # Get open port. This code is bad, can't find better way
-    sock = Socket.new(:INET, :STREAM, 0)
-    sock.bind(Addrinfo.tcp("localhost", 0))
-    port = sock.local_address.ip_port
-    sock.close
-
+  def launch_listener(port)
     Thread.new {
-      s = XMLRPC::Server.new(port)
+      s = XMLRPC::Server.new(port, Socket.ip_address_list[1].ip_address)
       s.add_handler("client", self)
       s.serve
       exit
@@ -184,10 +177,10 @@ class ClientDriver
     puts "What type of game would you like to play?"
     puts "Enter 1 for normal and 2 for OTTO/TOOT"
 
-    type = gets.to_i
+    type = $stdin.gets.to_i
     while type < 1 || type > 2
       puts "Please enter 1 or 2"
-      type = gets.to_i
+      type = $stdin.gets.to_i
     end
 
     return type

@@ -1,3 +1,7 @@
 require './server_manager'
 
-s = ServerManager.new(2014)
+if ARGV.length != 2
+  puts "Two arguments required: server hostname and port"
+  exit  
+end
+s = ServerManager.new(ARGV[0],ARGV[1].to_i)

@@ -10,12 +10,12 @@ class ServerManager < AbstractListener
 
   attr_accessor :games, :clients
 
-  def initialize(port)
+  def initialize(hostname, port)
     @games = Hash.new
     @clients = Hash.new
     @save = GameSave.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
 
-    s = XMLRPC::Server.new(port, "localhost", 10, "srv.log")
+    s = XMLRPC::Server.new(port, hostname, 20, "srv.log")
     s.add_handler("manager", self)
     s.serve
   end
@@ -28,7 +28,6 @@ class ServerManager < AbstractListener
 
     s = XMLRPC::Client.new(ip_addr, "/", port)
     @clients[player_name] = s.proxy("client")
-
     # TODO - If not connected, throws ERRNO:ECONNREFUSED
 
     return [true, "Connection established"]
@@ -87,7 +86,7 @@ class ServerManager < AbstractListener
 
   def column_press(gid, pid, col, value)
     success, msg = @games[gid].column_press(pid, col, value)
-    @clients[pid].message(msg)
+    @clients[pid].message(msg) if !@clients[pid].nil?
     @games[gid].game.players.each{|p| @clients[p].turn_change} if success
     return success
   end
@@ -102,7 +101,7 @@ class ServerManager < AbstractListener
   def game_over(message,gid)
     @games[gid].game.players.each{ |p|
       @clients[p].game_over(message) if !@clients[p].nil?
-      @clients.delete(p)
+      #@clients.delete(p)
     }
   end
 

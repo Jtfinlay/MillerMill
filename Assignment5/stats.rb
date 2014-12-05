@@ -82,22 +82,22 @@ class Stats
     puts "3. League stats"
     puts "4. Return to main menu"
 
-    choice = gets.to_i
+    choice = $stdin.gets.to_i
     while choice <= 0 || choice > 4
       puts "Please enter a valid number between 1 and 4"
-      choice = gets.to_i
+      choice = $stdin.gets.to_i
     end
 
     return if choice == 4
 
     player_stats = Proc.new{
       puts "Enter the ID of the player for their stats"
-      get_player(gets.strip)
+      get_player($stdin.gets.strip)
     }
 
     game_stats = Proc.new{
       puts "Enter a game ID to see its stats"
-      get_game(gets.strip)
+      get_game($stdin.gets.strip)
     }
 
     functions = [player_stats, \
