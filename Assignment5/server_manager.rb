@@ -97,7 +97,7 @@ class ServerManager < AbstractListener
   def game_over(message,gid)
     @games[gid].game.players.each{ |p|
       @clients[p].game_over(message)
-      @clients.delete(p) if @clients[p].is_a?(ComputerizedOpponent)
+      # @clients.delete(p) if @clients[p].is_a?(ComputerizedOpponent)
     }
   end
 
