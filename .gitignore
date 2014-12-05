@@ -41,4 +41,4 @@ build/
 *.exe
 Makefile
 *.def
-srv.log
+*.log

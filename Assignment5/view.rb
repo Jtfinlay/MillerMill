@@ -16,6 +16,7 @@ class View
   @window
   @pics
   @controller
+  @dialog
 
   def initialize(controller)
     @controller = controller
@@ -25,11 +26,11 @@ class View
   #
   # Populate board
   #
-  def setup(width, height, inputs)
+  def setup(width, height, inputs, name)
     Gtk.init
     @window = Gtk::Window.new
     @window.signal_connect("destroy"){Gtk.main_quit}
-    @window.title = "FourPlay with Friends"
+    @window.title = "FourPlay with Friends - " + name
 
     v = Gtk::VBox.new
     v.add(create_toolbar)
@@ -63,30 +64,25 @@ class View
   def game_over(message)
     pre_game_over(message)
 
-   dialog = Gtk::Dialog.new(
+    return if !@dialog.nil?
+    @dialog = Gtk::Dialog.new(
       "Game Over",
       @window,
       Gtk::Dialog::MODAL
     )
 
-    btnRestart = Gtk::Button.new("New Game")
-    btnRestart.signal_connect("clicked"){
-      @controller.restart
-      dialog.close
-    }
     btnExit = Gtk::Button.new("Quit")
     btnExit.signal_connect("clicked"){
       @controller.quit
     }
 
     hbox = Gtk::HBox.new
-  #  hbox.pack_start(btnRestart)
     hbox.pack_start(btnExit)
 
-    dialog.vbox.add(Gtk::Label.new(message))
-    dialog.vbox.add(hbox)
+    @dialog.vbox.add(Gtk::Label.new(message))
+    @dialog.vbox.add(hbox)
 
-    dialog.show_all
+    @dialog.show_all
 
   end
 

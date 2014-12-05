@@ -38,8 +38,9 @@ class Game
   def add_to_column(column, value)
     row = @board.col(column).find_index(0)
     @board[row,column] = value
-    @observers.each{|o| o.game_over("P1 wins!")} if check_win_conditions(@win_conditions[0])
-    @observers.each{|o| o.game_over("P2 wins!")} if check_win_conditions(@win_conditions[1])
+
+    @observers.each{|o| o.game_over("P1 wins!", @gameID)} if check_win_conditions(@win_conditions[0])
+    @observers.each{|o| o.game_over("P2 wins!", @gameID)} if check_win_conditions(@win_conditions[1])
     @observers.each{|o| o.game_over("Draw!")} if check_board_full?
     @observers.each{|o| o.update_value(column,row,@board[row,column], @gameID)}
   end
@@ -90,12 +91,14 @@ class Game
         return []
       end
     else
-      return [[2,"O"], [3,"X"]];
+      return [[2,"O"], [3,"T"]];
     end
   end
 
   def player_win_conditions(pid)
-    return @win_conditions[@players.find_index(pid)]
+    index = @players.find_index(pid)
+    return [] if index.nil?
+    return @win_conditions[index]
   end
 
   #

@@ -3,6 +3,8 @@ require 'xmlrpc/client'
 require './model_controller'
 require './abstract_listener'
 require './game_save'
+require './computerized_opponent'
+
 
 class ServerManager < AbstractListener
 
@@ -11,7 +13,7 @@ class ServerManager < AbstractListener
   def initialize(port)
     @games = Hash.new
     @clients = Hash.new
-    @save = GameSave.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
+    #@save = GameSave.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
 
     s = XMLRPC::Server.new(port, "localhost", 10, "srv.log")
     s.add_handler("manager", self)
@@ -20,10 +22,13 @@ class ServerManager < AbstractListener
 
   def connect(player_name, ip_addr, port)
 
+    if (@clients.keys.include?(player_name))
+      return false
+    end
+
     s = XMLRPC::Client.new(ip_addr, "/", port)
     @clients[player_name] = s.proxy("client")
 
-    # TODO - Ensure player DNE
     # TODO - If not connected, throws ERRNO:ECONNREFUSED
 
     return [true, "Connection established"]
@@ -45,6 +50,20 @@ class ServerManager < AbstractListener
     return 0
   end
 
+  def create_bot(pid, type)
+    gid = SecureRandom.uuid
+
+    @games[gid] = ModelController.new(gid, type)
+    @games[gid].subscribe(self)
+    @games[gid].add_player(pid)
+
+    bot = ComputerizedOpponent.new(gid,self)
+    @clients[bot.pid] = bot
+    @games[gid].add_player(bot.pid)
+
+    return gid
+  end
+
   def players(gid)
     return @games[gid].game.players
   end
@@ -64,6 +83,7 @@ class ServerManager < AbstractListener
   def column_press(gid, pid, col, value)
     success, msg = @games[gid].column_press(pid, col, value)
     @clients[pid].message(msg)
+    @games[gid].game.players.each{|p| @clients[p].turn_change} if success
     return success
   end
 
@@ -75,9 +95,16 @@ class ServerManager < AbstractListener
   end
 
   def game_over(message,gid)
-    @games[gid].game.players.each{
-      |p| @clients[p].game_over(message)
+    @games[gid].game.players.each{ |p|
+      @clients[p].game_over(message)
+      # @clients.delete(p) if @clients[p].is_a?(ComputerizedOpponent)
     }
+  end
+
+  def disconnect(pid, gid=nil)
+    game_over(pid+' has left the game', gid) if !gid.nil?
+    @clients.delete(pid)
+    return 0
   end
 
   def save(gid, pid)

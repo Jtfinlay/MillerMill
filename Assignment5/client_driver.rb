@@ -2,8 +2,12 @@ require 'xmlrpc/server'
 require 'xmlrpc/client'
 require 'socket'
 require './view'
+<<<<<<< HEAD
 require './stats'
 require './game_save'
+=======
+require './stats.rb'
+>>>>>>> 8475ac62a48d20a35816058fde24d9e5c0452556
 
 class ClientDriver
 
@@ -31,7 +35,10 @@ class ClientDriver
     # Launch client server
     port = launch_listener
     # TODO - Return ip address, isn't always 'localhost'
-    @server.connect(@pname, "localhost", port)
+    while (!@server.connect(@pname, "localhost", port))
+      print "Username is currently in use.\n"
+      @pname = ask_player_name.chomp
+    end
     # TODO - 'connect' may fail and return false
 
     main_menu
@@ -39,7 +46,7 @@ class ClientDriver
 
   def ask_player_name
     puts "Please enter your username:"
-    return gets
+    return gets.chomp
   end
 
   def main_menu
@@ -60,7 +67,7 @@ class ClientDriver
                  method(:new_bot), \
                  method(:new_saved_multiplayer), \
                  method(:load_leaderboards), \
-                 method(:exit)]
+                 method(:quit)]
     functions[choice-1].call
   end
 
@@ -70,15 +77,7 @@ class ClientDriver
 
     # Create game if DNE
     if !@server.join(@gameID, @pname)
-      puts "What type of game would you like to play?"
-      puts "Enter 1 for normal and 2 for OTTO/TOOT"
-
-
-      type = gets.to_i
-      while type < 1 || type > 2
-        puts "Please enter 1 or 2"
-        type = gets.to_i
-      end
+      type = ask_game_type
       @server.create(@gameID, @pname, type)
     end
 
@@ -88,19 +87,18 @@ class ClientDriver
       sleep(3)
     end
 
-    # Get current game state
-    w, h, turn, data = @server.current_state(@gameID)
-    inputs, win_condition = @server.player_info(@gameID, @pname)
-
-    setup_view(w, h, inputs)
-    reset_model(data)
-
     start_match
   end
 
+  def turn_change
+    # really just needed for bot
+    return 0
+  end
 
   def new_bot
-
+    type = ask_game_type
+    @gameID = @server.create_bot(@pname, type)
+    start_match
   end
 
   def new_saved_multiplayer
@@ -137,22 +135,33 @@ class ClientDriver
   end
 
   def start_match
+
+    # Get current game state
+    w, h, turn, data = @server.current_state(@gameID)
+    inputs, cond = @server.player_info(@gameID, @pname)
     players = @server.players(@gameID)
+
+    setup_view(w, h, inputs)
+    reset_model(data)
+
     puts "Match begins: #{players[0]} vs #{players[1]}!"
+    goal = []
+    cond.each{|v| goal << inputs.flatten[inputs.flatten.find_index(v)+1]}
+    puts "Your goal is: " + goal.to_s
     @view.start_game
   end
 
   def reset_model(data)
     data.each_with_index{
       |row,y| row.each_with_index{
-#        |v,x| update_value(x,y,v)
+        |v,x| update_value(x,y,v)
       }
     }
   end
 
   def setup_view(width, height, inputs)
     @view = View.new(self)
-    @view.setup(width, height, inputs)
+    @view.setup(width, height, inputs, @pname)
   end
 
   def launch_listener
@@ -166,8 +175,22 @@ class ClientDriver
       s = XMLRPC::Server.new(port)
       s.add_handler("client", self)
       s.serve
+      exit
     }
     return port
+  end
+
+  def ask_game_type
+    puts "What type of game would you like to play?"
+    puts "Enter 1 for normal and 2 for OTTO/TOOT"
+
+    type = gets.to_i
+    while type < 1 || type > 2
+      puts "Please enter 1 or 2"
+      type = gets.to_i
+    end
+
+    return type
   end
 
 
@@ -179,9 +202,14 @@ class ClientDriver
 
   def save
     @server.save(@gameID, @pname)
+    Stats.menu
+    main_menu
   end
 
   def quit
+    @view.kill if !@view.nil?
+    @server.disconnect(@pname, @gameID)
+    exit
   end
 
   ### from Server ###
