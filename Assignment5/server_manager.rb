@@ -34,6 +34,11 @@ class ServerManager < AbstractListener
     return [true, "Connection established"]
   end
 
+  def num_players(gid)
+    return 0 if !@games.has_key?(gid)
+    return players(gid).size
+  end
+
   def join(gid, pid)
     return false if !@games.has_key?(gid)
 
@@ -96,10 +101,9 @@ class ServerManager < AbstractListener
 
   def game_over(message,gid)
     @games[gid].game.players.each{ |p|
-      @clients[p].game_over(message)
-      # @clients.delete(p) if @clients[p].is_a?(ComputerizedOpponent)
+      @clients[p].game_over(message) if !@clients[p].nil?
+      @clients.delete(p)
     }
-    #@games.delete(gid)
   end
 
   def disconnect(pid, gid=nil)
@@ -111,6 +115,7 @@ class ServerManager < AbstractListener
   def save(gid, pid)
     if @save.save_game(gid, @games[gid].game.board, @games[gid].game.turn, @games[gid].game.game_type)
       game_over("Game '#{gid}' has been saved and can be resumed at a later time", gid)
+      @games.delete(gid)    
     else
       @clients[pid].message("Save with gameID already exists!")
     end

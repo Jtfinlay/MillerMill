@@ -10,13 +10,14 @@
 require "./computerized_opponent"
 require './game_board'
 require './contracts/contract_game'
+require './stats'
 
 class Game
   include ContractGame
 
   attr_accessor :board, :turn, :players, :game_type, :gameID
   @win_conditions
-
+  @stats
   @observers
 
   def initialize(gid, game_type)
@@ -25,6 +26,7 @@ class Game
     @observers = []
     @players = []
     @turn = 0
+    @stats = Stats.new("mysqlsrv.ece.ualberta.ca", "ece421grp7", "Afbgt7oE", "ece421grp7", 13010)
   end
 
   def setup_game(win_condition1, win_condition2)
@@ -38,9 +40,13 @@ class Game
   def add_to_column(column, value)
     row = @board.col(column).find_index(0)
     @board[row,column] = value
-
-    @observers.each{|o| o.game_over("#{players[0]} wins!", @gameID)} if check_win_conditions(@win_conditions[0])
-    @observers.each{|o| o.game_over("#{players[1]} wins!", @gameID)} if check_win_conditions(@win_conditions[1])
+    if check_win_conditions(@win_conditions[0])
+      @observers.each{|o| o.game_over("#{players[0]} wins!", @gameID)}
+      @stats.add_stat(@gameID, players[0], players[1], players[0])
+    elsif check_win_conditions(@win_conditions[1])
+      @observers.each{|o| o.game_over("#{players[1]} wins!", @gameID)} 
+      @stats.add_stat(@gameID, players[0], players[1], players[1])
+    end
     @observers.each{|o| o.game_over("Draw!")} if check_board_full?
     @observers.each{|o| o.update_value(column,row,@board[row,column], @gameID)}
   end

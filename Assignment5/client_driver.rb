@@ -71,6 +71,13 @@ class ClientDriver
     puts "Enter game identifier:"
     @gameID = gets.chomp
 
+    if @server.num_players(@gameID) > 1
+      puts "Game already has 2 players"
+      @gameID = nil
+      main_menu
+      return
+    end
+    
     # Create game if DNE
     if !@server.join(@gameID, @pname)
       type = ask_game_type
@@ -199,7 +206,11 @@ class ClientDriver
 
   def quit
     @view.kill if !@view.nil?
-    @server.disconnect(@pname, @gameID)
+    if @gameID.nil?
+      @server.disconnect(@pname)
+    else  
+      @server.disconnect(@pname, @gameID)
+    end
     exit
   end
 
