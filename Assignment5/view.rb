@@ -16,6 +16,7 @@ class View
   @window
   @pics
   @controller
+  @dialog
 
   def initialize(controller)
     @controller = controller
@@ -63,7 +64,8 @@ class View
   def game_over(message)
     pre_game_over(message)
 
-   dialog = Gtk::Dialog.new(
+    return if !@dialog.nil?
+    @dialog = Gtk::Dialog.new(
       "Game Over",
       @window,
       Gtk::Dialog::MODAL
@@ -77,10 +79,10 @@ class View
     hbox = Gtk::HBox.new
     hbox.pack_start(btnExit)
 
-    dialog.vbox.add(Gtk::Label.new(message))
-    dialog.vbox.add(hbox)
+    @dialog.vbox.add(Gtk::Label.new(message))
+    @dialog.vbox.add(hbox)
 
-    dialog.show_all
+    @dialog.show_all
 
   end
 

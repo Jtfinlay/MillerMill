@@ -41,3 +41,4 @@ build/
 *.exe
 Makefile
 *.def
+*.log

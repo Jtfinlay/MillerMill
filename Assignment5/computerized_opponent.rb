@@ -6,33 +6,46 @@
 #
 # Authors: Evan Degraff, James Finlay
 ##
-
+require './game_board'
 require './contracts/contract_computerized_opponent'
+require 'securerandom'
 
 
 class ComputerizedOpponent
   include ContractComputerizedOpponent
 
-  def initialize
-    pre_initialize
-    post_initialize
-    class_invariant
+  attr_accessor :gid, :pid, :board, :server
+
+  def initialize(gid, server)
+    @server = server
+    @pid = SecureRandom.uuid
+    @gid = gid
+    w, h, turn, data = @server.current_state(@gid)
+    @board = GameBoard.new(w,h)
   end
 
-  def make_move(game_board)
-    pre_make_move(game_board)
-    result = rand_move(game_board)
-    post_make_move(result)
-    class_invariant
+  def message(msg)
+    # ignore
+    return 0
+  end
+
+  def update_value(x, y, v)
+    @board[y,x] = v
+  end
+
+  def turn_change
+    if @server.whos_turn(@gid) == @pid
+      @server.column_press(@gid, @pid, rand_move, 2)
+    end
+  end
+
+  def game_over(msg)
+    return 0
+  end
+
+  def rand_move
+    r = rand(0..@board.row(0).size - 1)
+    result = @board.col_full?(r) ? rand_move(@board) : r
     return result
-  end
-
-  def rand_move(game_board)
-    pre_rand_move(game_board)
-    r = rand(0..game_board.row(0).size - 1)
-    result = game_board.col_full?(r) ? rand_move(game_board) : r
-    post_rand_move(result)
-    class_invariant
-    return r
   end
 end
