@@ -23,8 +23,6 @@ class ClientDriver
     s = XMLRPC::Client.new(host, "/", port)
     @server = s.proxy("manager")
 
-    # TODO - If not connected, throws ERRNO:ECONNREFUSED
-
     # Get user name
     @pname = ask_player_name.chomp
 
@@ -34,7 +32,6 @@ class ClientDriver
       print "Username is currently in use.\n"
       @pname = ask_player_name.chomp
     end
-    # TODO - 'connect' may fail and return false
 
     main_menu
   end

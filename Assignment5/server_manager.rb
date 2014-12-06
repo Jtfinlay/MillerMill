@@ -28,7 +28,6 @@ class ServerManager < AbstractListener
 
     s = XMLRPC::Client.new(ip_addr, "/", port)
     @clients[player_name] = s.proxy("client")
-    # TODO - If not connected, throws ERRNO:ECONNREFUSED
 
     return [true, "Connection established"]
   end
@@ -101,7 +100,6 @@ class ServerManager < AbstractListener
   def game_over(message,gid)
     @games[gid].game.players.each{ |p|
       @clients[p].game_over(message) if !@clients[p].nil?
-      #@clients.delete(p)
     }
   end
 

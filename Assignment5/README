@@ -1,0 +1,5 @@
+First start server like so:
+ruby run_server.rb E5-05-14.ece.ualberta.ca 50520
+
+Then connect to the server with the clients (The second port is for the server to send requests to the client):
+ruby run_client.rb E5-05-14.ece.ualberta.ca 50520 50521
